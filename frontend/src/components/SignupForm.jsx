@@ -4,12 +4,14 @@ function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
   const [pwValidated, setPwValidated] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(false)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
   const [uppercase, setUppercase] = useState(false)
   const [lowercase, setLowercase] = useState(false)
   const [number, setNumber] = useState(false)
+  const [confirmPassword, setConfirmPassword] = useState(true)
 
   function verifyUsername(e) {
     //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 20 characters
@@ -81,8 +83,18 @@ function SignupForm() {
       e.target.signupPassword.value === e.target.signupConfirmPassword.value
     ) {
       console.log('yay! new account')
+      setErrorMessage(false)
     } else {
+      //see if passwords are match, update state to pop error msg
+      if (
+        e.target.signupPassword.value !== e.target.signupConfirmPassword.value
+      ) {
+        setConfirmPassword(false)
+      } else {
+        setConfirmPassword(true)
+      }
       console.log('infomation not completed')
+      setErrorMessage(true)
     }
   }
 
@@ -97,6 +109,12 @@ function SignupForm() {
             placeholder="username"
             required
           />
+          {errorMessage && !usernameValidate && (
+            <p>
+              Username must between 3 to 20 characters, only letters, numbers
+              and underscore is allowed
+            </p>
+          )}
           <input
             onChange={verifyEmail}
             type="email"
@@ -104,6 +122,7 @@ function SignupForm() {
             placeholder="email@email.com"
             required
           />
+          {errorMessage && !emailValidated && <p>Email format is incorrect</p>}
           <input
             onChange={verifyPassword}
             type="password"
@@ -124,6 +143,7 @@ function SignupForm() {
             Password must contain 1 number
           </p>
           <input type="password" name="signupConfirmPassword" required />
+          {errorMessage && !confirmPassword && <p>Passwords are not match</p>}
           <input type="submit" value="SIGNUP" />
         </form>
       </div>
