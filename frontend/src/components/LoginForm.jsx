@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import '../styles/loginForm.css'
 
 function LoginForm() {
   const email = useRef()
@@ -49,18 +50,20 @@ function LoginForm() {
 
   return (
     <>
-      <form onSubmit={handleLogin}>
-        <input
-          ref={email}
-          type="email"
-          name="loginEmail"
-          placeholder="email@email.com"
-          required
-        />
-        <input ref={password} type="password" name="loginPassword" required />
-        {error && <p>This is an error message</p>}
-        <input type="submit" value="LOGIN" />
-      </form>
+      <div className="loginForm">
+        <form onSubmit={handleLogin}>
+          <input
+            ref={email}
+            type="email"
+            name="loginEmail"
+            placeholder="email@email.com"
+            required
+          />
+          <input ref={password} type="password" name="loginPassword" required />
+          {error && <p>wrong email or wrong password</p>}
+          <input type="submit" value="LOGIN" />
+        </form>
+      </div>
     </>
   )
 }

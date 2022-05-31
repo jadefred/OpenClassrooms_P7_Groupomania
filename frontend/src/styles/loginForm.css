@@ -1,0 +1,18 @@
+.loginForm {
+  outline: 1px black solid;
+}
+
+.loginForm form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.loginForm input {
+  margin-top: 2rem;
+}
+
+.loginForm p {
+  margin: 0;
+  margin-top: 2rem;
+}
