@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 //components
 import HomeNavBar from '../components/HomeNavBar'
+import LoginForm from '../components/LoginForm'
 
 function Home() {
   const [guest, setGuest] = useState(true)
@@ -14,6 +15,9 @@ function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
           aperiam.
         </p>
+        <div>
+          <LoginForm />
+        </div>
       </div>
     </>
   )
