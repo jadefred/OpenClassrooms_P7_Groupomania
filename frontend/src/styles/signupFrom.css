@@ -1,0 +1,17 @@
+.signupForm {
+  outline: 1px black solid;
+}
+
+.signupForm form {
+  display: flex;
+  flex-direction: column;
+}
+
+.signupForm p {
+  margin: 0;
+}
+
+.signupForm input,
+.signupForm p {
+  margin-top: 1rem;
+}

@@ -14,4 +14,12 @@ export const handlers = [
 
     return res(ctx.json({ userId: '1234', token: 'jwt' }))
   }),
+  rest.post('/api/auth/signup', (req, res, ctx) => {
+    const { email } = req.body
+    if (email !== 'email@email.com') {
+      return res(ctx.status(401), ctx.json({ message: 'signup failed' }))
+    }
+
+    return res(ctx.json({ message: 'signup success' }))
+  }),
 ]

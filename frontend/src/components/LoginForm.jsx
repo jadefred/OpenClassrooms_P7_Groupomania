@@ -31,7 +31,7 @@ function LoginForm() {
         )
         //res not ok, throw error
         if (!response.ok) {
-          throw Error('testing')
+          throw Error('testing error login')
         }
 
         //res ok, save token and username, then redirect to feed

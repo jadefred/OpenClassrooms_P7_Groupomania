@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import '../styles/signupFrom.css'
 
 function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
   const [pwValidated, setPwValidated] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
+  const [serverError, setServerError] = useState(false)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -82,10 +84,44 @@ function SignupForm() {
       pwValidated &&
       e.target.signupPassword.value === e.target.signupConfirmPassword.value
     ) {
-      console.log('yay! new account')
+      //object of signup info
+      const signupInfo = {
+        username: e.target.signupUsername.value,
+        email: e.target.signupEmail.value,
+        password: e.target.signupPassword.value,
+      }
+
+      //Prepare post object
+      const signupForm = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signupInfo),
+      }
+
+      //async POST data to server
+      async function signup() {
+        try {
+          const response = await fetch(
+            'http://localhost:3000/api/auth/signup',
+            signupForm
+          )
+          //res not ok, throw error
+          if (!response.ok) {
+            throw Error('testing error signup')
+          }
+          console.log('signup successfully')
+        } catch (err) {
+          //catch block, console error and show server error message
+          console.log(err)
+          setServerError(true)
+        }
+      }
+
+      signup()
       setErrorMessage(false)
-    } else {
-      //see if passwords are match, update state to pop error msg
+    }
+    //see if passwords are match, update state to pop error msg
+    else {
       if (
         e.target.signupPassword.value !== e.target.signupConfirmPassword.value
       ) {
@@ -93,13 +129,13 @@ function SignupForm() {
       } else {
         setConfirmPassword(true)
       }
-      console.log('infomation not completed')
       setErrorMessage(true)
     }
   }
 
   return (
     <>
+      {serverError && <p>Server Error, please try again later</p>}
       <div className="signupForm">
         <form onSubmit={handleSignup}>
           <input
@@ -127,6 +163,7 @@ function SignupForm() {
             onChange={verifyPassword}
             type="password"
             name="signupPassword"
+            placeholder="password"
             style={pwValidated ? { color: 'green' } : { color: 'red' }}
             required
           />
@@ -142,7 +179,12 @@ function SignupForm() {
           <p style={number ? { color: 'green' } : { color: 'red' }}>
             Password must contain 1 number
           </p>
-          <input type="password" name="signupConfirmPassword" required />
+          <input
+            type="password"
+            name="signupConfirmPassword"
+            placeholder="confirm password"
+            required
+          />
           {errorMessage && !confirmPassword && <p>Passwords are not match</p>}
           <input type="submit" value="SIGNUP" />
         </form>
