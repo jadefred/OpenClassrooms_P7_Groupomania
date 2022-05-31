@@ -1,8 +1,9 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 function LoginForm() {
   const email = useRef()
   const password = useRef()
+  const [error, setError] = useState(false)
 
   function handleLogin(e) {
     e.preventDefault()
@@ -23,11 +24,23 @@ function LoginForm() {
     //async POST data to server
     async function login() {
       try {
-        const response = await fetch('http://localhost:3000/login', options)
+        const response = await fetch(
+          'http://localhost:3000/api/auth/login',
+          options
+        )
+        //res not ok, throw error
+        if (!response.ok) {
+          throw Error('testing')
+        }
+
+        //res ok, save token and username, then redirect to feed
         const data = await response.json()
-        console.log('this is after POST : ' + data)
-      } catch (e) {
-        console.log(e)
+        localStorage.setItem('authentication', data.token)
+        localStorage.setItem('userid', data.userId)
+      } catch (err) {
+        //catch block, console error and display error message
+        console.log(err)
+        setError(true)
       }
     }
 
@@ -45,6 +58,7 @@ function LoginForm() {
           required
         />
         <input ref={password} type="password" name="loginPassword" required />
+        {error && <p>This is an error message</p>}
         <input type="submit" value="LOGIN" />
       </form>
     </>
