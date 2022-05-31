@@ -6,8 +6,32 @@ function LoginForm() {
 
   function handleLogin(e) {
     e.preventDefault()
-    console.log(email.current.value)
-    console.log(password.current.value)
+
+    //user login ready to be stringify
+    const userInfo = {
+      email: email.current.value,
+      password: password.current.value,
+    }
+
+    //Prepare post object
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userInfo),
+    }
+
+    //async POST data to server
+    async function login() {
+      try {
+        const response = await fetch('http://localhost:3000/login', options)
+        const data = await response.json()
+        console.log('this is after POST : ' + data)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    login()
   }
 
   return (
