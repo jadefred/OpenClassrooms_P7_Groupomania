@@ -12,7 +12,7 @@ export const handlers = [
       return res(ctx.status(401), ctx.json({ message: 'user not exist' }))
     }
 
-    return res(ctx.json({ userId: '1234', token: 'jwt' }))
+    return res(ctx.json({ username: 'doge', token: 'jwt' }))
   }),
   rest.post('/api/auth/signup', (req, res, ctx) => {
     const { email } = req.body
