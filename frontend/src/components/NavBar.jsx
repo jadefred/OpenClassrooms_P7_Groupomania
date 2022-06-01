@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import '../styles/navBar.css'
 import Context from '../Context'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router-dom'
 
 function NavBar() {
   const { setLoggedin } = useContext(Context)
@@ -17,7 +17,9 @@ function NavBar() {
   return (
     <>
       <div className="NavBar">
-        <p>GROUPOMANIA</p>
+        <Link to="/feed">
+          <p>GROUPOMANIA</p>
+        </Link>
         <div>
           <button>Profile</button>
           <button onClick={logout}>Logout</button>
