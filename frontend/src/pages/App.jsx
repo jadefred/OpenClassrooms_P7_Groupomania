@@ -12,7 +12,10 @@ import Home from './Home.jsx'
 import Feed from './Feed.jsx'
 
 function App() {
-  const [loggedin, setLoggedin] = useState(true)
+  //search LS to set initial loggedin state
+  const [loggedin, setLoggedin] = useState(
+    Boolean(localStorage.getItem('authentication'))
+  )
   return (
     <>
       <Context.Provider value={{ loggedin, setLoggedin }}>
