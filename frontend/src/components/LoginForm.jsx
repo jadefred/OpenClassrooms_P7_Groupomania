@@ -1,14 +1,12 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import '../styles/loginForm.css'
-import Context from '../Context'
 
 function LoginForm() {
   const email = useRef()
   const password = useRef()
   const [error, setError] = useState(false)
-  const { setLoggedin } = useContext(Context)
-  let navigate = useNavigate()
+  const navigate = useNavigate()
 
   function handleLogin(e) {
     e.preventDefault()
@@ -40,10 +38,9 @@ function LoginForm() {
 
         //res ok, save token and username, then redirect to feed
         const data = await response.json()
-        setLoggedin(true)
-        navigate('/feed')
         localStorage.setItem('username', data.username)
         localStorage.setItem('authentication', data.token)
+        navigate('/feed')
       } catch (err) {
         //catch block, console error and display error message
         console.log(err)

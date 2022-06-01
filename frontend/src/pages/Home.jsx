@@ -7,7 +7,7 @@ import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
 
 function Home() {
-  const [guest, setGuest] = useState(true)
+  const [guest, setGuest] = useState(false)
   return (
     <>
       <HomeNavBar guest={guest} setGuest={setGuest} />

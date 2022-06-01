@@ -26,7 +26,10 @@ function App() {
               path="/"
               element={loggedin ? <Navigate to="/feed" /> : <Home />}
             />
-            <Route path="/feed" element={<Feed />} />
+            <Route
+              path="/feed"
+              element={loggedin ? <Feed /> : <Navigate to="/" />}
+            />
           </Routes>
         </Router>
       </Context.Provider>
