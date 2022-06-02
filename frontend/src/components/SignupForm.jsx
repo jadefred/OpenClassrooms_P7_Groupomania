@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
-import Context from '../Context'
+import { UserContext } from '../Context'
 
 function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
@@ -10,7 +10,7 @@ function SignupForm() {
   const [errorMessage, setErrorMessage] = useState(false)
   const [serverError, setServerError] = useState(false)
   const navigate = useNavigate()
-  const { setLoggedin } = useContext(Context)
+  const { user, setUser } = useContext(UserContext)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -151,12 +151,12 @@ function SignupForm() {
           const data = await response.json()
           localStorage.setItem('username', data.username)
           localStorage.setItem('authentication', data.token)
-          setLoggedin(true)
+          setUser((prev) => ({ userId: data._id, auth: true }))
           navigate('/feed')
         } catch (err) {
           //catch block, console error and display error message
           console.log(err)
-          setLoggedin(false)
+          setUser((prev) => ({ userId: '', auth: false }))
         }
       }
 

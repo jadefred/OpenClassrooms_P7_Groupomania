@@ -4,20 +4,20 @@ import { rest } from 'msw'
 //mock post data
 const allPost = [
   {
-    _id: 'post1',
+    _id: 'id of post 1',
     userId: 'user1',
     username: 'normal_user1',
     title: 'Cutest dog',
     content: 'Bla bla bla....',
     imageUrl:
       'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-889552354-e1606774439626.jpg',
-    like: 10,
+    like: 1,
     likeUserId: ['user1', 'user2'],
     totalComment: 1,
     comment: [{ userId: 'user1', commentBody: 'I love dog' }],
   },
   {
-    _id: 'post2',
+    _id: 'id of post 2',
     userId: 'user2',
     username: 'normal_user2',
     title: 'Cutest cat',
@@ -42,7 +42,7 @@ export const handlers = [
       return res(ctx.status(401), ctx.json({ message: 'user not exist' }))
     }
 
-    return res(ctx.json({ username: 'doge', token: 'jwt' }))
+    return res(ctx.json({ _id: 'user1', username: 'doge', token: 'jwt' }))
   }),
 
   ///////////////////signup///////////////////

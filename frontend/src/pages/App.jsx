@@ -1,39 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from 'react-router-dom'
-import Context from '../Context.jsx'
+//import Context from '../Context.jsx'
+import { UserContext } from '../Context'
 
 //pages - components
 import Home from './Home.jsx'
 import Feed from './Feed.jsx'
 
 function App() {
-  //search LS to set initial loggedin state
-  const [loggedin, setLoggedin] = useState(
-    Boolean(localStorage.getItem('authentication'))
-  )
+  const { user, setUser } = useContext(UserContext)
 
   return (
     <>
-      <Context.Provider value={{ loggedin, setLoggedin }}>
         <Router>
           <Routes>
             {/* if user is logged in, redirect him to feed */}
             <Route
               path="/"
-              element={loggedin ? <Navigate to="/feed" /> : <Home />}
+              element={user.auth ? <Navigate to="/feed" /> : <Home />}
             />
             <Route
               path="/feed"
-              element={loggedin ? <Feed /> : <Navigate to="/" />}
+              element={user.auth ? <Feed /> : <Navigate to="/" />}
             />
           </Routes>
         </Router>
-      </Context.Provider>
     </>
   )
 }

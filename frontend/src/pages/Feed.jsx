@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import NavBar from '../components/NavBar.jsx'
+import '../styles/feed.css'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -20,40 +21,65 @@ function Feed() {
     getAllPosts()
   }, [])
 
-  console.log(allPosts)
+  function likePost(postId, userId) {
+    console.log(postId)
+  }
+
   return (
     <>
       <NavBar />
-      {isLoaded && error && <p>Something went wrong...</p>}
+      <div className="Feed">
+        {isLoaded && error && <p>Something went wrong...</p>}
 
-      {isLoaded && !error && (
-        <div>
-          {allPosts.map((post) => {
-            return (
-              <div key={post._id}>
-                <div>
-                  <h2>{post.title}</h2>
+        {isLoaded && !error && (
+          <div className="Feed__all-posts-wrapper">
+            {/* map throught allPosts state to display all content */}
+            {allPosts.map((post) => {
+              return (
+                <div key={post._id} className="Feed__one-post-wrapper">
+                  <div>
+                    <h2>{post.title}</h2>
+                  </div>
+                  <div>
+                    <p>{post.content}</p>
+                    {/* appear only when imageUrl is added */}
+                    {post.imageUrl !== '' && (
+                      <img
+                        style={{ width: '100px' }}
+                        src={post.imageUrl}
+                        alt={post.title}
+                      />
+                    )}
+                  </div>
+                  <div className="Feed__one-post--like-comment-box">
+                    {/* number of people liked this post, hide p whee like is 0 */}
+                    {post.like > 0 && post.like <= 1 && <p>{post.like} Like</p>}
+                    {post.like > 1 && <p>{post.like} Likes</p>}
+
+                    {/* number of comment on this post, hide p when no comment */}
+                    {post.totalComment > 0 && post.totalComment <= 1 && (
+                      <p>{post.totalComment} Commentaire</p>
+                    )}
+                    {post.totalComment > 1 && (
+                      <p>{post.totalComment} Commentaire</p>
+                    )}
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => {
+                        likePost(post._id)
+                      }}
+                    >
+                      J'aime
+                    </button>
+                    <button>Commenter</button>
+                  </div>
                 </div>
-                <div>
-                  <p>{post.content}</p>
-                  {post.imageUrl !== '' && (
-                    <img
-                      style={{ width: '100px' }}
-                      src={post.imageUrl}
-                      alt={post.title}
-                    />
-                  )}
-                </div>
-                <div>
-                  <p>{post.like} Likes</p>
-                  {post.totalComment <= 1 && <p>{post.totalComment} Comment</p>}
-                  {post.totalComment > 1 && <p>{post.totalComment} Comments</p>}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
+              )
+            })}
+          </div>
+        )}
+      </div>
     </>
   )
 }
