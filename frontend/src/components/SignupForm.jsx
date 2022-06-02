@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import '../styles/signupFrom.css'
+import { useNavigate } from 'react-router'
+import Context from '../Context'
 
 function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
@@ -7,6 +9,8 @@ function SignupForm() {
   const [pwValidated, setPwValidated] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
   const [serverError, setServerError] = useState(false)
+  const navigate = useNavigate()
+  const { setLoggedin } = useContext(Context)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -91,7 +95,7 @@ function SignupForm() {
         password: e.target.signupPassword.value,
       }
 
-      //Prepare post object
+      //Prepare post object - signup
       const signupForm = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -107,7 +111,7 @@ function SignupForm() {
           )
           //res not ok, throw error
           if (!response.ok) {
-            throw Error('testing error signup')
+            throw Error('Signup failed')
           }
           console.log('signup successfully')
         } catch (err) {
@@ -117,7 +121,47 @@ function SignupForm() {
         }
       }
 
+      //auto signup after sucessfully signed up
+      //object of login info
+      const loginInfo = {
+        email: e.target.signupEmail.value,
+        password: e.target.signupPassword.value,
+      }
+
+      //Prepare post object - login
+      const loginForm = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginInfo),
+      }
+
+      //async POST data to server
+      async function login() {
+        try {
+          const response = await fetch(
+            'http://localhost:3000/api/auth/login',
+            loginForm
+          )
+          //res not ok, throw error
+          if (!response.ok) {
+            throw Error('Login Failed')
+          }
+
+          //res ok, save token and username, then redirect to feed
+          const data = await response.json()
+          localStorage.setItem('username', data.username)
+          localStorage.setItem('authentication', data.token)
+          setLoggedin(true)
+          navigate('/feed')
+        } catch (err) {
+          //catch block, console error and display error message
+          console.log(err)
+          setLoggedin(false)
+        }
+      }
+
       signup()
+      login()
       setErrorMessage(false)
     }
     //see if passwords are match, update state to pop error msg

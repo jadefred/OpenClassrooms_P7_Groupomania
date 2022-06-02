@@ -35,7 +35,7 @@ function LoginForm() {
         )
         //res not ok, throw error
         if (!response.ok) {
-          throw Error('testing error login')
+          throw Error('Login Failed')
         }
 
         //res ok, save token and username, then redirect to feed
@@ -48,6 +48,7 @@ function LoginForm() {
         //catch block, console error and display error message
         console.log(err)
         setError(true)
+        setLoggedin(false)
       }
     }
 

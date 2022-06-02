@@ -16,6 +16,7 @@ function App() {
   const [loggedin, setLoggedin] = useState(
     Boolean(localStorage.getItem('authentication'))
   )
+
   return (
     <>
       <Context.Provider value={{ loggedin, setLoggedin }}>
