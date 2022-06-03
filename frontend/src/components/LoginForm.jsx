@@ -11,7 +11,6 @@ function LoginForm() {
   const navigate = useNavigate()
   const { setUser } = useContext(UserContext)
 
-  //--------------TEST BELOW--------------------------
   async function verifyToken() {
     const accessToken = Cookies.get('accessToken')
     const refreshToken = Cookies.get('refreshToken')
@@ -90,8 +89,6 @@ function LoginForm() {
     }
   }
 
-  //--------------TEST ABOVE--------------------------
-
   function handleLogin(e) {
     e.preventDefault()
 
@@ -121,11 +118,12 @@ function LoginForm() {
           throw Error('Login Failed')
         }
 
-        //res ok, save token and username, then redirect to feed
         const data = await response.json()
         const { accessToken, refreshToken } = data
         Cookies.set('accessToken', accessToken)
         Cookies.set('refreshToken', refreshToken)
+
+        //verify token, return false if it is not validate
         const tokenValid = await verifyToken()
         if (tokenValid === false) {
           throw Error('failed to login')
