@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
 import { UserContext } from '../Context'
+import Cookies from 'js-cookie'
 
 function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
@@ -10,7 +11,7 @@ function SignupForm() {
   const [errorMessage, setErrorMessage] = useState(false)
   const [serverError, setServerError] = useState(false)
   const navigate = useNavigate()
-  const { user, setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -149,9 +150,14 @@ function SignupForm() {
 
           //res ok, save token and username, then redirect to feed
           const data = await response.json()
-          localStorage.setItem('username', data.username)
-          localStorage.setItem('authentication', data.token)
-          setUser((prev) => ({ userId: data._id, auth: true }))
+          const { accessToken, refreshToken } = data
+          Cookies.set('accessToken', accessToken)
+          Cookies.set('refreshToken', refreshToken)
+          setUser((prev) => ({
+            userId: data._id,
+            auth: true,
+            token: accessToken,
+          }))
           navigate('/feed')
         } catch (err) {
           //catch block, console error and display error message
