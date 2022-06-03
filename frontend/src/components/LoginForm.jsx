@@ -12,30 +12,37 @@ function LoginForm() {
   const { setUser } = useContext(UserContext)
 
   //--------------TEST BELOW--------------------------
-  async function protect() {
+  async function verifyToken() {
     const accessToken = Cookies.get('accessToken')
     const refreshToken = Cookies.get('refreshToken')
 
     //validate both token
     const checkToken = await hasAccess(accessToken, refreshToken)
 
-    if (!checkToken) {
-      //user has no refresh token, deny login and request him to re-login
+    if (checkToken === null) {
+      //user has no refresh token, send result as false
       console.log('protect function failed, need to re-login')
+      return false
     } else {
+      const updatedAccessToken = Cookies.get('accessToken')
+      const updatedRefreshToken = Cookies.get('refreshToken')
       //token is valid, send both value to continue login  process
       console.log('redirecting to request login function')
-      await requestLogin(accessToken, refreshToken)
+      await requestLogin(updatedAccessToken, updatedRefreshToken)
     }
   }
 
   async function hasAccess(accessToken, refreshToken) {
     //if no refresh token, return null
-    if (!refreshToken) return null
+    if (refreshToken === 'null' || refreshToken === 'undefined') {
+      console.log('enter to return null')
+      return null
+    }
 
     //if access token is undefined, use refresh token to request a new access token from server, then return it
-    if (accessToken === undefined) {
-      accessToken = await refresh(refreshToken)
+    if (accessToken === 'undefined' || accessToken === 'null') {
+      await refresh(refreshToken)
+      accessToken = Cookies.get('accessToken')
       return accessToken
     }
 
@@ -63,6 +70,7 @@ function LoginForm() {
     //set new access token as cookie if ok
     const { accessToken } = data
     Cookies.set('accessToken', accessToken)
+    console.log('updated token')
   }
 
   async function requestLogin(accessToken, refreshToken) {
@@ -78,7 +86,7 @@ function LoginForm() {
       //either access token is expired -> use refresh function, sent refresh token to generate a new access token again
     } else {
       //token is okay, can redirect user to protected page
-      console.log('this is protected content')
+      console.log('successfully set headers')
     }
   }
 
@@ -118,7 +126,11 @@ function LoginForm() {
         const { accessToken, refreshToken } = data
         Cookies.set('accessToken', accessToken)
         Cookies.set('refreshToken', refreshToken)
-        protect()
+        const tokenValid = await verifyToken()
+        if (tokenValid === false) {
+          throw Error('failed to login')
+        }
+
         setUser((prev) => ({
           userId: data._id,
           auth: true,
@@ -129,7 +141,7 @@ function LoginForm() {
         //catch block, console error and display error message
         console.log(err)
         setError(true)
-        setUser((prev) => ({ userId: '', auth: false }))
+        setUser((prev) => ({ userId: '', auth: false, token: '' }))
       }
     }
 

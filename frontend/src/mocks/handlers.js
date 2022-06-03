@@ -49,8 +49,8 @@ export const handlers = [
         _id: 'user1',
         username: 'doge',
         token: 'jwt',
-        accessToken: 'this-is-an-accessToken',
-        refreshToken: 'this-is-a-refreshToken',
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken',
       })
     )
   }),
@@ -63,7 +63,10 @@ export const handlers = [
         ctx.json({ message: 'Refresh token not found, try again' })
       )
     }
-    return res(ctx.json({ accessToken: 'refreshed new access token' }))
+    return res(
+      ctx.status(200),
+      ctx.json({ accessToken: 'refreshed-new-access-token' })
+    )
   }),
 
   //check if the
