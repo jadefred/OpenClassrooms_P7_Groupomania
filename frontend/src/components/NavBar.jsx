@@ -2,15 +2,16 @@ import React, { useContext } from 'react'
 import '../styles/navBar.css'
 import { UserContext } from '../Context'
 import { useNavigate, Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 function NavBar() {
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
   function logout() {
-    localStorage.removeItem('username')
-    localStorage.removeItem('authentication')
-    setUser((prev) => ({ userId: '', auth: false }))
+    Cookies.remove('accessToken')
+    Cookies.remove('refreshToken')
+    setUser((prev) => ({ userId: '', auth: false, token: '' }))
     navigate('/')
   }
 
