@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { UserContext } from '../Context'
 import NavBar from '../components/NavBar.jsx'
 import '../styles/feed.css'
 
@@ -6,6 +7,7 @@ function Feed() {
   const [error, setError] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [allPosts, setAllPosts] = useState([])
+  const { user } = useContext(UserContext)
 
   //fetch to get all post
   useEffect(() => {
@@ -21,8 +23,18 @@ function Feed() {
     getAllPosts()
   }, [])
 
-  function likePost(postId, userId) {
-    console.log(postId)
+  async function likePost(postId, userId, likeUserId) {
+    //use some to determine if the user has already liked this post
+    //send 0 if he already liked -> retrieve the like
+    //send 1 if he hasn't react to the post
+    const userliked = likeUserId.some((i) => i === userId) ? 0 : 1
+    const response = await fetch('http://localhost:3000/api/posts/like', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, like: userliked }),
+    })
+    const data = await response.json()
+    console.log(data)
   }
 
   return (
@@ -67,8 +79,13 @@ function Feed() {
                   <div>
                     <button
                       onClick={() => {
-                        likePost(post._id)
+                        likePost(post._id, user.userId, post.likeUserId)
                       }}
+                      style={
+                        post.likeUserId.some((i) => i === user.userId)
+                          ? { color: 'green' }
+                          : {}
+                      }
                     >
                       J'aime
                     </button>

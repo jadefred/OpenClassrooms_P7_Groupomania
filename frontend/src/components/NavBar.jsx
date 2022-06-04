@@ -11,7 +11,9 @@ function NavBar() {
   function logout() {
     Cookies.remove('accessToken')
     Cookies.remove('refreshToken')
-    setUser((prev) => ({ userId: '', auth: false, token: '' }))
+    localStorage.removeItem('username')
+    localStorage.removeItem('userId')
+    setUser((prev) => ({ userId: '', username: '', auth: false, token: '' }))
     navigate('/')
   }
 
