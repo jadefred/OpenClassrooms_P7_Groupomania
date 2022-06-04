@@ -122,6 +122,8 @@ function LoginForm() {
         const { accessToken, refreshToken } = data
         Cookies.set('accessToken', accessToken)
         Cookies.set('refreshToken', refreshToken)
+        localStorage.setItem('username', data.username)
+        localStorage.setItem('userId', data._id)
 
         //verify token, return false if it is not validate
         const tokenValid = await verifyToken()
@@ -129,8 +131,10 @@ function LoginForm() {
           throw Error('failed to login')
         }
 
+        //update context
         setUser((prev) => ({
           userId: data._id,
+          username: data.username,
           auth: true,
           token: accessToken,
         }))
@@ -139,7 +143,12 @@ function LoginForm() {
         //catch block, console error and display error message
         console.log(err)
         setError(true)
-        setUser((prev) => ({ userId: '', auth: false, token: '' }))
+        setUser((prev) => ({
+          userId: '',
+          username: '',
+          auth: false,
+          token: '',
+        }))
       }
     }
 

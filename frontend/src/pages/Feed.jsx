@@ -7,6 +7,7 @@ function Feed() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [allPosts, setAllPosts] = useState([])
 
+  //fetch to get all post
   useEffect(() => {
     async function getAllPosts() {
       const response = await fetch('http://localhost:3000/api/posts')
@@ -17,7 +18,6 @@ function Feed() {
       setAllPosts(data)
       setIsLoaded(true)
     }
-
     getAllPosts()
   }, [])
 
@@ -61,7 +61,7 @@ function Feed() {
                       <p>{post.totalComment} Commentaire</p>
                     )}
                     {post.totalComment > 1 && (
-                      <p>{post.totalComment} Commentaire</p>
+                      <p>{post.totalComment} Commentaires</p>
                     )}
                   </div>
                   <div>

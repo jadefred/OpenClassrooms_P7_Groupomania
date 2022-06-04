@@ -153,6 +153,10 @@ function SignupForm() {
           const { accessToken, refreshToken } = data
           Cookies.set('accessToken', accessToken)
           Cookies.set('refreshToken', refreshToken)
+          localStorage.setItem('username', data.username)
+          localStorage.setItem('userId', data._id)
+
+          //update context
           setUser((prev) => ({
             userId: data._id,
             auth: true,
