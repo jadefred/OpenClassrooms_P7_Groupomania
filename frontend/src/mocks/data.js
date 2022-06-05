@@ -1,6 +1,6 @@
 export const allPost = [
   {
-    _id: 'id of post 1',
+    _id: 'post1',
     userId: 'user1',
     username: 'normal_user1',
     title: 'Cutest dog',
@@ -22,7 +22,7 @@ export const allPost = [
     ],
   },
   {
-    _id: 'id of post 2',
+    _id: 'post2',
     userId: 'user2',
     username: 'normal_user2',
     title: 'Cutest cat',

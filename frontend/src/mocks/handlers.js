@@ -23,6 +23,7 @@ export const handlers = [
         token: 'jwt',
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
+        admin: true,
       })
     )
   }),

@@ -6,6 +6,7 @@ export const UserContext = createContext({
   username: '',
   auth: false,
   token: '',
+  admin: false,
 })
 
 export const UserProvider = ({ children }) => {
@@ -14,6 +15,7 @@ export const UserProvider = ({ children }) => {
     username: localStorage.getItem('username'),
     auth: Boolean(Cookies.get('accessToken')),
     token: Cookies.get('accessToken'),
+    admin: false,
   })
   return (
     <UserContext.Provider value={{ user, setUser }}>

@@ -137,6 +137,7 @@ function LoginForm() {
           username: data.username,
           auth: true,
           token: accessToken,
+          admin: data.admin,
         }))
         navigate('/feed')
       } catch (err) {

@@ -10,7 +10,15 @@ function Feed() {
   const [error, setError] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [allPosts, setAllPosts] = useState([])
+  const [showComment, setShowComment] = useState({})
   const { user } = useContext(UserContext)
+
+  //toggle comment block, map id key to target clicked element
+  function toggleComment(id) {
+    setShowComment((prev) =>
+      Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
+    )
+  }
 
   //fetch to get all post
   useEffect(() => {
@@ -26,7 +34,7 @@ function Feed() {
     getAllPosts()
   }, [])
 
-  async function likePost(postId, userId, likeUserId) {
+  async function likePost(userId, likeUserId) {
     //use some to determine if the user has already liked this post
     //send 0 if he already liked -> retrieve the like
     //send 1 if he hasn't react to the post
@@ -76,16 +84,20 @@ function Feed() {
 
                       {/* number of comment on this post, hide p when no comment */}
                       {post.totalComment > 0 && post.totalComment <= 1 && (
-                        <p>{post.totalComment} Commentaire</p>
+                        <p onClick={() => toggleComment(post._id)}>
+                          {post.totalComment} Commentaire
+                        </p>
                       )}
                       {post.totalComment > 1 && (
-                        <p>{post.totalComment} Commentaires</p>
+                        <p onClick={() => toggleComment(post._id)}>
+                          {post.totalComment} Commentaires
+                        </p>
                       )}
                     </div>
                     <div>
                       <button
                         onClick={() => {
-                          likePost(post._id, user.userId, post.likeUserId)
+                          likePost(user.userId, post.likeUserId)
                         }}
                         style={
                           post.likeUserId.some((i) => i === user.userId)
@@ -98,7 +110,9 @@ function Feed() {
                       <button>Commenter</button>
                     </div>
                   </div>
-                  <Comment comment={post.comment} />
+                  {showComment[post._id] ? (
+                    <Comment comment={post.comment} />
+                  ) : null}
                 </>
               )
             })}

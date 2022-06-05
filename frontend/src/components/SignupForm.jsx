@@ -161,6 +161,8 @@ function SignupForm() {
             userId: data._id,
             auth: true,
             token: accessToken,
+            username: data.username,
+            admin: data.admin,
           }))
           navigate('/feed')
         } catch (err) {
