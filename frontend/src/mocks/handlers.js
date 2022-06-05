@@ -2,6 +2,7 @@
 import { rest } from 'msw'
 import Cookies from 'js-cookie'
 import { allPost } from './data'
+import { allUsers } from './data'
 
 //mock post data
 
@@ -90,5 +91,13 @@ export const handlers = [
     if (!like) {
       return res(ctx.status(401), ctx.json({ message: 'Like undefined' }))
     }
+  }),
+
+  ///////////////////get one user data///////////////////
+  rest.get('/api/users', (req, res, ctx) => {
+    const id = req.url.searchParams.get('id')
+    const oneUser = allUsers.filter((i) => i._id === id)
+
+    return res(ctx.status(200),ctx.json(oneUser))
   }),
 ]
