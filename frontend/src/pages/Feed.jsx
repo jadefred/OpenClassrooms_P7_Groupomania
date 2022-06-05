@@ -5,6 +5,7 @@ import '../styles/feed.css'
 //components
 import NavBar from '../components/NavBar.jsx'
 import Comment from '../components/Comment.jsx'
+import NewPost from '../components/NewPost'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -51,6 +52,7 @@ function Feed() {
   return (
     <>
       <NavBar />
+      <NewPost />
       <div className="Feed">
         {isLoaded && error && <p>Something went wrong...</p>}
 

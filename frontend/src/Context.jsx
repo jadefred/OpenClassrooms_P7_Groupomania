@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 
 export const UserContext = createContext({
   userId: '',
-  username: '',
+  username: 'Guest',
   auth: false,
   token: '',
   admin: false,

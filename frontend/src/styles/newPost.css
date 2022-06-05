@@ -1,0 +1,27 @@
+body.active-modal {
+  overflow-y: hidden;
+}
+
+.NewPost--modal,
+.NewPost--overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+}
+
+.NewPost--overlay {
+  background: rgba(49, 49, 49, 0.8);
+}
+.NewPost--modal-content {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f1f1f1;
+  border-radius: 3px;
+  width: 60%;
+}
