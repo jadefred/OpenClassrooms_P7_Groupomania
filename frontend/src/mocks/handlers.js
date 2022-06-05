@@ -98,6 +98,18 @@ export const handlers = [
     const id = req.url.searchParams.get('id')
     const oneUser = allUsers.filter((i) => i._id === id)
 
-    return res(ctx.status(200),ctx.json(oneUser))
+    return res(ctx.status(200), ctx.json(oneUser))
+  }),
+
+  ///////////////////delete comment///////////////////
+  rest.delete('/api/comments', (req, res, ctx) => {
+    if (req.body.commentId === '1') {
+      return res(
+        ctx.status(500),
+        ctx.json({ message: 'failed to delete this comment' })
+      )
+    }
+
+    return res(ctx.status(200), ctx.json({ message: 'deleted comment' }))
   }),
 ]
