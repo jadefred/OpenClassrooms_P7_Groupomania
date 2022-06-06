@@ -2,7 +2,8 @@ export const allPost = [
   {
     _id: 'post1',
     userId: 'user1',
-    username: 'normal_user1',
+    username: 'username1',
+    avatarUrl: 'https://cdn.wallpapersafari.com/82/44/1eWzS9.jpg',
     title: 'Cutest dog',
     content: 'Bla bla bla....',
     imageUrl:
@@ -24,7 +25,9 @@ export const allPost = [
   {
     _id: 'post2',
     userId: 'user2',
-    username: 'normal_user2',
+    username: 'username2',
+    avatarUrl:
+      'https://knowtechie.com/wp-content/uploads/2021/03/dogecoin-meme-1000x600.jpg',
     title: 'Cutest cat',
     content: 'Bla bla bla....',
     imageUrl: '',

@@ -64,6 +64,18 @@ function Feed() {
                 <>
                   <div key={post._id} className="Feed__one-post-wrapper">
                     <div>
+                      <p>{post.username}</p>
+                      <img
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          objectFit: 'cover',
+                        }}
+                        src={post.avatarUrl}
+                        alt={`l'avatar de ${post.username}`}
+                      />
+                    </div>
+                    <div>
                       <h2>{post.title}</h2>
                     </div>
                     <div>

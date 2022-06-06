@@ -10,6 +10,7 @@ function NewPost() {
     setModal((prev) => !prev)
   }
 
+  //freeze background body scrolling when modal is actived
   if (modal) {
     document.body.classList.add('active-modal')
   } else {
