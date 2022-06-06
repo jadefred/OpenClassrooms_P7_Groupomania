@@ -9,6 +9,7 @@ function NewPost() {
   const contentRef = useRef()
   const [image, setImage] = useState()
   const [preview, setPreview] = useState()
+  const [formNotComplete, setFormNotComplete] = useState(false)
 
   //useEffect to render the preview of image
   useEffect(() => {
@@ -57,7 +58,30 @@ function NewPost() {
 
   function createNewPost(e) {
     e.preventDefault()
-    console.log(e)
+
+    if (titleRef === '' || contentRef === '') {
+      setFormNotComplete(true)
+    }
+
+    console.log(image)
+
+    const formData = new FormData()
+    formData.append('userId', user.userId)
+    formData.append('title', titleRef.current.value)
+    formData.append('content', contentRef.current.value)
+
+    if (image) {
+      formData.append('image', image)
+    }
+
+    async function createPost() {
+      await fetch('http://localhost:3000/api/posts', {
+        method: 'POST',
+        body: formData,
+      })
+      setModal(false)
+    }
+    createPost()
   }
 
   return (
@@ -84,6 +108,7 @@ function NewPost() {
                   name="content"
                   cols="30"
                   rows="10"
+                  required
                 ></textarea>
               </div>
               <div>
@@ -106,6 +131,9 @@ function NewPost() {
                   />
                 )}
               </div>
+              {formNotComplete && (
+                <p>Veuillez remplir le titre et le contenu</p>
+              )}
               <div>
                 <input type="submit" value="Envoyer" />
                 <button onClick={toggleModal}>Annuler</button>

@@ -113,4 +113,9 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json({ message: 'deleted comment' }))
   }),
+
+  rest.post('/api/posts', (req, res, ctx) => {
+    console.log(req.body)
+    return res(ctx.status(200), ctx.json({ message: 'created post' }))
+  }),
 ]
