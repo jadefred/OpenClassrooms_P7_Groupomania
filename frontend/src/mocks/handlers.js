@@ -2,12 +2,10 @@
 import { rest } from 'msw'
 import Cookies from 'js-cookie'
 import { allPost } from './data'
-import { allUsers } from './data'
-
-//mock post data
 
 export const handlers = [
-  ///////////////////login///////////////////
+  //Usert
+  //POST - login
   rest.post('/api/auth/login', (req, res, ctx) => {
     const { email } = req.body
 
@@ -20,7 +18,6 @@ export const handlers = [
       ctx.json({
         _id: 'user1',
         username: 'doge',
-        token: 'jwt',
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
         admin: true,
@@ -28,6 +25,7 @@ export const handlers = [
     )
   }),
 
+  //POST - refresh access token
   rest.post('/api/auth/refresh', (req, res, ctx) => {
     const { refreshToken } = req.body
     if (!refreshToken) {
@@ -42,6 +40,7 @@ export const handlers = [
     )
   }),
 
+  //POST - confirm header is set
   rest.post('/api/auth/protected', (req, res, ctx) => {
     let token = req.headers.headers['authorization']
     if (!token) {
@@ -50,7 +49,7 @@ export const handlers = [
     return res(ctx.json({ message: 'protected content' }))
   }),
 
-  ///////////////////signup///////////////////
+  //POST - signup
   rest.post('/api/auth/signup', (req, res, ctx) => {
     const { email } = req.body
     if (email !== 'email@email.com') {
@@ -60,7 +59,7 @@ export const handlers = [
     return res(ctx.json({ message: 'signup success' }))
   }),
 
-  ///////////////////all posts///////////////////
+  //GET - get all posts
   rest.get('/api/posts', (req, res, ctx) => {
     const isAuthenticated = Cookies.get('accessToken')
     if (!isAuthenticated) {
@@ -76,7 +75,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(allPost))
   }),
 
-  ///////////////////like one post///////////////////
+  //POST - Like post
   rest.post('/api/posts/like', (req, res, ctx) => {
     const like = req.body.like
 
@@ -94,16 +93,8 @@ export const handlers = [
     }
   }),
 
-  ///////////////////get one user data///////////////////
-  rest.get('/api/users', (req, res, ctx) => {
-    const id = req.url.searchParams.get('id')
-    const oneUser = allUsers.filter((i) => i._id === id)
-
-    return res(ctx.status(200), ctx.json(oneUser))
-  }),
-
-  ///////////////////delete comment///////////////////
-  rest.delete('/api/comments', (req, res, ctx) => {
+  //POST - delete comment
+  rest.delete('/api/posts/comments', (req, res, ctx) => {
     if (req.body.commentId === '1') {
       return res(
         ctx.status(500),

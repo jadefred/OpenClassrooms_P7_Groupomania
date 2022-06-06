@@ -21,7 +21,7 @@ function Feed() {
     )
   }
 
-  //fetch to get all post
+  //fetch to get all postu
   useEffect(() => {
     async function getAllPosts() {
       const response = await fetch('http://localhost:3000/api/posts')

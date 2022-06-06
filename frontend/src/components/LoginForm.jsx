@@ -149,6 +149,7 @@ function LoginForm() {
           username: '',
           auth: false,
           token: '',
+          admin: false,
         }))
       }
     }
