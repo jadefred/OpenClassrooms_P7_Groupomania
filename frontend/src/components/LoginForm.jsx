@@ -15,38 +15,16 @@ function LoginForm() {
     const accessToken = Cookies.get('accessToken')
     const refreshToken = Cookies.get('refreshToken')
 
-    //validate both token
-    const checkToken = await hasAccess(accessToken, refreshToken)
-
-    if (checkToken === null) {
-      //user has no refresh token, send result as false
-      console.log('protect function failed, need to re-login')
+    //if access token is null, return function
+    if (accessToken === null) {
+      console.log('Access token invalid, please login again')
       return false
     } else {
-      const updatedAccessToken = Cookies.get('accessToken')
-      const updatedRefreshToken = Cookies.get('refreshToken')
-      //token is valid, send both value to continue login  process
-      console.log('redirecting to request login function')
-      await requestLogin(updatedAccessToken, updatedRefreshToken)
+      if (accessToken === undefined) {
+        await refresh(refreshToken)
+      }
+      await requestLogin(accessToken, refreshToken)
     }
-  }
-
-  async function hasAccess(accessToken, refreshToken) {
-    //if no refresh token, return null
-    if (refreshToken === 'null' || refreshToken === 'undefined') {
-      console.log('enter to return null')
-      return null
-    }
-
-    //if access token is undefined, use refresh token to request a new access token from server, then return it
-    if (accessToken === 'undefined' || accessToken === 'null') {
-      await refresh(refreshToken)
-      accessToken = Cookies.get('accessToken')
-      return accessToken
-    }
-
-    //else, just return origin access token
-    return accessToken
   }
 
   async function refresh(refreshToken) {
@@ -120,7 +98,7 @@ function LoginForm() {
 
         const data = await response.json()
         const { accessToken, refreshToken } = data
-        Cookies.set('accessToken', accessToken)
+        //Cookies.set('accessToken', accessToken)
         Cookies.set('refreshToken', refreshToken)
         localStorage.setItem('username', data.username)
         localStorage.setItem('userId', data._id)

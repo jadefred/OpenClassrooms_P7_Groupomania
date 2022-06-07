@@ -61,16 +61,19 @@ function NewPost() {
   function createNewPost(e) {
     e.preventDefault()
 
+    //pop error message if title / body content is empty and return function
     if (titleRef.current.value === '' || contentRef.current.value === '') {
       setFormNotComplete(true)
       return
     }
+
     //create form data, append image when user added
     const formData = new FormData()
     formData.append('userId', user.userId)
     formData.append('title', titleRef.current.value)
     formData.append('content', contentRef.current.value)
 
+    //append image if it exists
     if (image) {
       formData.append('image', image)
     }
@@ -116,7 +119,7 @@ function NewPost() {
             <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input ref={titleRef} type="text" name="title" />
+                <input ref={titleRef} type="text" name="title" required />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
@@ -125,6 +128,7 @@ function NewPost() {
                   name="content"
                   cols="30"
                   rows="10"
+                  required
                 ></textarea>
               </div>
               <div>
