@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { UserContext } from '../Context'
-import { FlashMessageContext } from '../Context'
 import '../styles/newPost.css'
+import FlashMessage from './FlashMessage'
 
 function NewPost() {
   const { user } = useContext(UserContext)
@@ -11,7 +11,7 @@ function NewPost() {
   const [image, setImage] = useState()
   const [preview, setPreview] = useState()
   const [formNotComplete, setFormNotComplete] = useState(false)
-  const { flashMessage, setFlashMessage } = useContext(FlashMessageContext)
+  const [flashMessage, setFlashMessage] = useState('')
 
   //useEffect to render the preview of image
   useEffect(() => {
@@ -81,8 +81,19 @@ function NewPost() {
         body: formData,
       })
       setModal(false)
+      // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez créé un post')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
+      }
+      //fail flash message
+      else {
+        setFlashMessage('Un problème a apparu..')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
       }
     }
     createPost()
@@ -95,9 +106,7 @@ function NewPost() {
         <button onClick={toggleModal}>Nouveau Post</button>
       </div>
 
-      <div>
-        <p>{flashMessage}</p>
-      </div>
+      {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
 
       {modal && (
         <div className="NewPost--modal">

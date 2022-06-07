@@ -24,16 +24,3 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   )
 }
-
-//Flash message
-export const FlashMessageContext = createContext()
-
-export const FlashMessageProvider = ({ children }) => {
-  const [flashMessage, setFlashMessage] = useState([])
-
-  return (
-    <FlashMessageContext.Provider value={{ flashMessage, setFlashMessage }}>
-      {children}
-    </FlashMessageContext.Provider>
-  )
-}
