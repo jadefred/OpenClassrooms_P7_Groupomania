@@ -21,6 +21,8 @@ export const handlers = [
         accessToken: 'accessToken',
         refreshToken: 'refreshToken',
         admin: true,
+        avatarUrl:
+          'https://i.pinimg.com/originals/7f/a7/c8/7fa7c83d9fa9c44cb774a08b0b596219.jpg',
       })
     )
   }),
@@ -102,7 +104,7 @@ export const handlers = [
       )
     }
 
-    return res(ctx.status(200), ctx.json({ message: 'deleted comment' }))
+    return res(ctx.status(200), ctx.json({ message: 'comment deleted' }))
   }),
 
   rest.post('/api/posts', (req, res, ctx) => {

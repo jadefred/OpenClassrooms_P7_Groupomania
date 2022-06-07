@@ -31,6 +31,7 @@ function NewPost() {
     if (!modal) {
       setPreview(null)
       setImage(null)
+      setFormNotComplete(false)
     }
   }
 
@@ -62,7 +63,12 @@ function NewPost() {
     e.preventDefault()
 
     //pop error message if title / body content is empty and return function
-    if (titleRef.current.value === '' || contentRef.current.value === '') {
+    if (
+      titleRef.current.value === '' ||
+      (titleRef.current.value !== '' &&
+        contentRef.current.value === '' &&
+        !image)
+    ) {
       setFormNotComplete(true)
       return
     }
@@ -119,7 +125,7 @@ function NewPost() {
             <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input ref={titleRef} type="text" name="title" required />
+                <input ref={titleRef} type="text" name="title" />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
@@ -128,7 +134,6 @@ function NewPost() {
                   name="content"
                   cols="30"
                   rows="10"
-                  required
                 ></textarea>
               </div>
               <div>

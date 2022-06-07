@@ -7,11 +7,14 @@ function Comment(props) {
   const { user } = useContext(UserContext)
 
   async function deleteComment(commentId) {
-    await fetch('http://localhost:3000/api/posts/comments', {
+    const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ commentId }),
     })
+
+    const data = await response.json()
+    console.log(data)
   }
 
   return (

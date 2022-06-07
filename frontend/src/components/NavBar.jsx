@@ -13,7 +13,14 @@ function NavBar() {
     Cookies.remove('refreshToken')
     localStorage.removeItem('username')
     localStorage.removeItem('userId')
-    setUser((prev) => ({ userId: '', username: '', auth: false, token: '' }))
+    setUser((prev) => ({
+      userId: '',
+      username: '',
+      auth: false,
+      token: '',
+      admin: false,
+      avatarUrl: '',
+    }))
     navigate('/')
   }
 
