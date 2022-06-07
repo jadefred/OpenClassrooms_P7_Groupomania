@@ -34,7 +34,7 @@ function NewPost() {
     }
   }
 
-  //freeze background body scrolling when modal is actived
+  //freeze background body from scrolling when modal is actived
   if (modal) {
     document.body.classList.add('active-modal')
   } else {
@@ -61,10 +61,10 @@ function NewPost() {
   function createNewPost(e) {
     e.preventDefault()
 
-    if (titleRef === '' || contentRef === '') {
+    if (titleRef.current.value === '' || contentRef.current.value === '') {
       setFormNotComplete(true)
+      return
     }
-
     //create form data, append image when user added
     const formData = new FormData()
     formData.append('userId', user.userId)
@@ -116,7 +116,7 @@ function NewPost() {
             <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input ref={titleRef} type="text" name="title" required />
+                <input ref={titleRef} type="text" name="title" />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
@@ -125,7 +125,6 @@ function NewPost() {
                   name="content"
                   cols="30"
                   rows="10"
-                  required
                 ></textarea>
               </div>
               <div>

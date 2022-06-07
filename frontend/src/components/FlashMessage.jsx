@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FlashMsg(props) {
+function FlashMessage(props) {
   return (
     <div>
       <p>{props.flashMessage}</p>
@@ -8,4 +8,4 @@ function FlashMsg(props) {
   )
 }
 
-export default FlashMsg
+export default FlashMessage
