@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react'
 import Cookies from 'js-cookie'
 
+//user information
 export const UserContext = createContext({
   userId: '',
   username: 'Guest',
@@ -21,5 +22,18 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
+  )
+}
+
+//Flash message
+export const FlashMessageContext = createContext()
+
+export const FlashMessageProvider = ({ children }) => {
+  const [flashMessage, setFlashMessage] = useState([])
+
+  return (
+    <FlashMessageContext.Provider value={{ flashMessage, setFlashMessage }}>
+      {children}
+    </FlashMessageContext.Provider>
   )
 }

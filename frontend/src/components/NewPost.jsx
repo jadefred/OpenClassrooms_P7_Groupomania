@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { UserContext } from '../Context'
+import { FlashMessageContext } from '../Context'
 import '../styles/newPost.css'
 
 function NewPost() {
@@ -10,6 +11,7 @@ function NewPost() {
   const [image, setImage] = useState()
   const [preview, setPreview] = useState()
   const [formNotComplete, setFormNotComplete] = useState(false)
+  const { flashMessage, setFlashMessage } = useContext(FlashMessageContext)
 
   //useEffect to render the preview of image
   useEffect(() => {
@@ -63,8 +65,7 @@ function NewPost() {
       setFormNotComplete(true)
     }
 
-    console.log(image)
-
+    //create form data, append image when user added
     const formData = new FormData()
     formData.append('userId', user.userId)
     formData.append('title', titleRef.current.value)
@@ -75,11 +76,14 @@ function NewPost() {
     }
 
     async function createPost() {
-      await fetch('http://localhost:3000/api/posts', {
+      const response = await fetch('http://localhost:3000/api/posts', {
         method: 'POST',
         body: formData,
       })
       setModal(false)
+      if (response.ok) {
+        setFlashMessage('Vous avez créé un post')
+      }
     }
     createPost()
   }
@@ -89,6 +93,10 @@ function NewPost() {
       <div>
         <p>{user.username}, écrivez quelque chose ...</p>
         <button onClick={toggleModal}>Nouveau Post</button>
+      </div>
+
+      <div>
+        <p>{flashMessage}</p>
       </div>
 
       {modal && (
