@@ -5,7 +5,8 @@ import '../styles/feed.css'
 //components
 import NavBar from '../components/NavBar.jsx'
 import Comment from '../components/Comment.jsx'
-import NewPost from '../components/NewPost'
+import NewPost from '../components/NewPost.jsx'
+import EditPost from '../components/EditPost.jsx'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -64,16 +65,21 @@ function Feed() {
                 <>
                   <div key={post._id} className="Feed__one-post-wrapper">
                     <div>
-                      <p>{post.username}</p>
-                      <img
-                        style={{
-                          width: '50px',
-                          height: '50px',
-                          objectFit: 'cover',
-                        }}
-                        src={post.avatarUrl}
-                        alt={`l'avatar de ${post.username}`}
-                      />
+                      <div>
+                        <p>{post.username}</p>
+                        <img
+                          style={{
+                            width: '50px',
+                            height: '50px',
+                            objectFit: 'cover',
+                          }}
+                          src={post.avatarUrl}
+                          alt={`l'avatar de ${post.username}`}
+                        />
+                      </div>
+                      <div>
+                        <EditPost post={post} />
+                      </div>
                     </div>
                     <div>
                       <h2>{post.title}</h2>

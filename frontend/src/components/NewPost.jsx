@@ -125,7 +125,7 @@ function NewPost() {
             <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input ref={titleRef} type="text" name="title" />
+                <input ref={titleRef} type="text" name="title" required />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
@@ -156,9 +156,7 @@ function NewPost() {
                   />
                 )}
               </div>
-              {formNotComplete && (
-                <p>Veuillez remplir le titre et le contenu</p>
-              )}
+              {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
                 <input type="submit" value="Envoyer" />
                 <button onClick={toggleModal}>Annuler</button>
