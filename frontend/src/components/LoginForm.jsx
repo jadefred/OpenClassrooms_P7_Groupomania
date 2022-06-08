@@ -11,56 +11,28 @@ function LoginForm() {
   const navigate = useNavigate()
   const { setUser } = useContext(UserContext)
 
+  //Check if access token exist, if so pass to requestLogin function, if not return
   async function verifyToken() {
     const accessToken = Cookies.get('accessToken')
-    const refreshToken = Cookies.get('refreshToken')
 
-    //if access token is null, return function
-    if (accessToken === null) {
+    if (accessToken === null || accessToken === undefined) {
       console.log('Access token invalid, please login again')
       return false
     } else {
-      if (accessToken === undefined) {
-        await refresh(refreshToken)
-      }
-      await requestLogin(accessToken, refreshToken)
+      await requestLogin(accessToken)
     }
   }
 
-  async function refresh(refreshToken) {
-    //use refresh token which sent by the function hasAccess to request a new access token from server
-    console.log('refreshing token')
-
-    //this api will verify if the refresh token is valid, if so, the serve will send a new access token as response
-    const response = await fetch('http://localhost:3000/api/auth/refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
-    })
-
-    //if server reject its action, ask user to re-login
-    if (!response.ok) {
-      //pop error msg to remind re-login
-      console.log('refresh token not valid')
-    }
-    const data = await response.json()
-    //set new access token as cookie if ok
-    const { accessToken } = data
-    Cookies.set('accessToken', accessToken)
-    console.log('updated token')
-  }
-
-  async function requestLogin(accessToken, refreshToken) {
-    //send access token to api and set it as headers
-    const response = await fetch('http://localhost:3000/api/auth/protected', {
+  //set access token as headers and fetch to endpoint to verify it
+  async function requestLogin(accessToken) {
+    const response = await fetch('http://localhost:3000/api/auth', {
       method: 'POST',
       headers: { authorization: `Bearer ${accessToken}` },
     })
 
     if (!response.ok) {
-      //should have 2 possibilities
-      //either access token is not authorized -> ask to re-login
-      //either access token is expired -> use refresh function, sent refresh token to generate a new access token again
+      //check what error does the server return, to determine actions
+      console.log('Server error / token invalide')
     } else {
       //token is okay, can redirect user to protected page
       console.log('successfully set headers')
@@ -97,9 +69,9 @@ function LoginForm() {
         }
 
         const data = await response.json()
-        const { accessToken, refreshToken } = data
+        const { accessToken } = data
         Cookies.set('accessToken', accessToken)
-        Cookies.set('refreshToken', refreshToken)
+        //Cookies.set('refreshToken', refreshToken)
         localStorage.setItem('username', data.username)
         localStorage.setItem('userId', data._id)
 

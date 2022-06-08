@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 function EditPost({ modal, setModal, postId }) {
   function toggleModal() {

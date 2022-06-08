@@ -19,7 +19,7 @@ export const handlers = [
         _id: 'user1',
         username: 'doge',
         accessToken: 'accessToken',
-        refreshToken: 'refreshToken',
+        //refreshToken: 'refreshToken',
         admin: true,
         avatarUrl:
           'https://i.pinimg.com/originals/7f/a7/c8/7fa7c83d9fa9c44cb774a08b0b596219.jpg',
@@ -27,23 +27,23 @@ export const handlers = [
     )
   }),
 
-  //POST - refresh access token
-  rest.post('/api/auth/refresh', (req, res, ctx) => {
-    const { refreshToken } = req.body
-    if (!refreshToken) {
-      return res(
-        ctx.status(401),
-        ctx.json({ message: 'Refresh token not found, try again' })
-      )
-    }
-    return res(
-      ctx.status(200),
-      ctx.json({ accessToken: 'refreshed-new-access-token' })
-    )
-  }),
+  // //POST - refresh access token
+  // rest.post('/api/auth/refresh', (req, res, ctx) => {
+  //   const { refreshToken } = req.body
+  //   if (!refreshToken) {
+  //     return res(
+  //       ctx.status(401),
+  //       ctx.json({ message: 'Refresh token not found, try again' })
+  //     )
+  //   }
+  //   return res(
+  //     ctx.status(200),
+  //     ctx.json({ accessToken: 'refreshed-new-access-token' })
+  //   )
+  // }),
 
   //POST - confirm header is set
-  rest.post('/api/auth/protected', (req, res, ctx) => {
+  rest.post('/api/auth', (req, res, ctx) => {
     let token = req.headers.headers['authorization']
     if (!token) {
       return res(ctx.status(401), ctx.json({ message: 'Access token expired' }))
