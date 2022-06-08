@@ -48,7 +48,10 @@ function Feed() {
     const userliked = likeUserId.some((i) => i === userId) ? 0 : 1
     const response = await fetch('http://localhost:3000/api/posts/like', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${user.token}`,
+      },
       body: JSON.stringify({ userId, like: userliked }),
     })
     const data = await response.json()

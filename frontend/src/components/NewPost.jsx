@@ -87,6 +87,7 @@ function NewPost() {
     async function createPost() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'POST',
+        headers: { authorization: `Bearer ${user.token}` },
         body: formData,
       })
       setModal(false)

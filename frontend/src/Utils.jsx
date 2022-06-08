@@ -14,7 +14,7 @@ export async function verifyToken() {
 }
 
 //set access token as headers and fetch to endpoint to verify it
-export async function requestLogin(accessToken) {
+async function requestLogin(accessToken) {
   const response = await fetch('http://localhost:3000/api/auth', {
     method: 'POST',
     headers: { authorization: `Bearer ${accessToken}` },
