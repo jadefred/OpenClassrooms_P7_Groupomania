@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 
+//to verify if access token is exist
 export async function verifyToken() {
   const accessToken = Cookies.get('accessToken')
 

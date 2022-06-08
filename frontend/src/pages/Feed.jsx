@@ -27,7 +27,10 @@ function Feed() {
   //fetch to get all postu
   useEffect(() => {
     async function getAllPosts() {
-      const response = await fetch('http://localhost:3000/api/posts')
+      const response = await fetch('http://localhost:3000/api/posts', {
+        method: 'GET',
+        headers: { authorization: `Bearer ${user.token}` },
+      })
       if (response.status !== 200) {
         setError(true)
       }

@@ -153,9 +153,6 @@ function SignupForm() {
           const data = await response.json()
           const { accessToken } = data
           Cookies.set('accessToken', accessToken)
-          // Cookies.set('refreshToken', refreshToken)
-          // localStorage.setItem('username', data.username)
-          // localStorage.setItem('userId', data._id)
 
           const tokenValid = await verifyToken()
           if (tokenValid === false) {
