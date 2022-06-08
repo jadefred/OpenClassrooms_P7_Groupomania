@@ -1,14 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-function EditPost({ modal, setModal, post, postId }) {
+function EditPost({ modal, setModal, post }) {
+  const [input, setInput] = useState({
+    title: post.title,
+    content: post.content,
+  })
+
+  //close modal after clicked overlay
   function toggleModal() {
     setModal((prev) => !prev)
   }
 
+  //freeze body from scrolling when modal is there
   if (modal) {
     document.body.classList.add('active-modal')
   } else {
     document.body.classList.remove('active-modal')
+  }
+
+  function handleEditPost(e) {
+    setInput({ ...input, [e.target.name]: e.target.value })
   }
 
   return (
@@ -21,11 +32,23 @@ function EditPost({ modal, setModal, post, postId }) {
             <form>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input type="text" name="title" required />
+                <input
+                  onChange={handleEditPost}
+                  type="text"
+                  name="title"
+                  value={input.title}
+                  required
+                />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
-                <textarea name="content" cols="30" rows="10"></textarea>
+                <textarea
+                  onChange={handleEditPost}
+                  name="content"
+                  cols="30"
+                  rows="10"
+                  value={input.content}
+                ></textarea>
               </div>
               <div>
                 <label htmlFor="image">Image : </label>
