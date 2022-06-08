@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
-function EditPost({ post }) {
-  const [modal, setModal] = useState(false)
-
+function EditPost({ modal, setModal, postId }) {
   function toggleModal() {
     setModal((prev) => !prev)
   }
@@ -15,8 +13,6 @@ function EditPost({ post }) {
 
   return (
     <>
-      <button onClick={toggleModal}>Modifer</button>
-
       {modal && (
         <div className="NewPost--modal">
           <div onClick={toggleModal} className="NewPost--overlay"></div>

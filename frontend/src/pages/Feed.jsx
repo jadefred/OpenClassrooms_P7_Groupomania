@@ -14,13 +14,17 @@ function Feed() {
   const [allPosts, setAllPosts] = useState([])
   const [showComment, setShowComment] = useState({})
   const { user } = useContext(UserContext)
+  const [modal, setModal] = useState(false)
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
+    console.log(id)
     setShowComment((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
     )
   }
+
+  console.log(showComment)
 
   //fetch to get all postu
   useEffect(() => {
@@ -63,7 +67,7 @@ function Feed() {
             {allPosts.map((post) => {
               return (
                 <>
-                  <div key={post._id} className="Feed__one-post-wrapper">
+                  <div key={post.postId} className="Feed__one-post-wrapper">
                     <div>
                       <div>
                         <p>{post.username}</p>
@@ -78,7 +82,16 @@ function Feed() {
                         />
                       </div>
                       <div>
-                        <EditPost post={post} />
+                        <button onClick={() => setModal((prev) => !prev)}>
+                          Edit
+                        </button>
+                        {modal && (
+                          <EditPost
+                            postId={post.postId}
+                            modal={modal}
+                            setModal={setModal}
+                          />
+                        )}
                       </div>
                     </div>
                     <div>
@@ -104,12 +117,12 @@ function Feed() {
 
                       {/* number of comment on this post, hide p when no comment */}
                       {post.totalComment > 0 && post.totalComment <= 1 && (
-                        <p onClick={() => toggleComment(post._id)}>
+                        <p onClick={() => toggleComment(post.postId)}>
                           {post.totalComment} Commentaire
                         </p>
                       )}
                       {post.totalComment > 1 && (
-                        <p onClick={() => toggleComment(post._id)}>
+                        <p onClick={() => toggleComment(post.postId)}>
                           {post.totalComment} Commentaires
                         </p>
                       )}
@@ -130,7 +143,7 @@ function Feed() {
                       <button>Commenter</button>
                     </div>
                   </div>
-                  {showComment[post._id] ? (
+                  {showComment[post.postId] ? (
                     <Comment comment={post.comment} />
                   ) : null}
                 </>

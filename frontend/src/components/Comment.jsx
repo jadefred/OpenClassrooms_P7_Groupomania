@@ -27,7 +27,7 @@ function Comment(props) {
               <img src={i.avatarUrl} alt={`l'avatar de ${i.username}`} />
             </div>
             <div>{i.commentBody}</div>
-            {user.userId === i.userId && (
+            {(user.userId === i.userId || user.admin) && (
               <button
                 onClick={() => {
                   deleteComment(i.commentId)

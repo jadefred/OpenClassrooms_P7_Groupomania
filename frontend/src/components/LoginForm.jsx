@@ -98,7 +98,7 @@ function LoginForm() {
 
         const data = await response.json()
         const { accessToken, refreshToken } = data
-        //Cookies.set('accessToken', accessToken)
+        Cookies.set('accessToken', accessToken)
         Cookies.set('refreshToken', refreshToken)
         localStorage.setItem('username', data.username)
         localStorage.setItem('userId', data._id)

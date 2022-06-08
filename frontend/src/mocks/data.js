@@ -1,6 +1,6 @@
 export const allPost = [
   {
-    _id: 'post1',
+    postId: 'post1',
     userId: 'user1',
     username: 'username1',
     avatarUrl: 'https://cdn.wallpapersafari.com/82/44/1eWzS9.jpg',
@@ -23,7 +23,7 @@ export const allPost = [
     ],
   },
   {
-    _id: 'post2',
+    postId: 'post2',
     userId: 'user2',
     username: 'username2',
     avatarUrl:

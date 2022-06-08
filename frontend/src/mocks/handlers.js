@@ -77,6 +77,32 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(allPost))
   }),
 
+  //GET - get one post
+  rest.get('/api/posts/:id', (req, res, ctx) => {
+    const postId = req.url.searchParams.get('id')
+    console.log('entered')
+    if (postId === 'post1') {
+      return res(ctx.status(200), ctx.json({ messgae: 'success' }))
+    }
+  }),
+
+  //POST - new post
+  rest.post('/api/posts', (req, res, ctx) => {
+    console.log(req.body)
+    return res(ctx.status(200), ctx.json({ message: 'created post' }))
+  }),
+
+  //PUT - modify one post :id
+  rest.put('/api/posts', (req, res, ctx) => {
+    const postId = req.url.searchParams.get('id')
+    console.log(req.body)
+
+    if (!postId) {
+      return res(ctx.status(404), ctx.json({ message: 'Post not found' }))
+    }
+    return res(ctx.status(201), ctx.json({ message: 'post modified' }))
+  }),
+
   //POST - Like post
   rest.post('/api/posts/like', (req, res, ctx) => {
     const like = req.body.like
@@ -105,10 +131,5 @@ export const handlers = [
     }
 
     return res(ctx.status(200), ctx.json({ message: 'comment deleted' }))
-  }),
-
-  rest.post('/api/posts', (req, res, ctx) => {
-    console.log(req.body)
-    return res(ctx.status(200), ctx.json({ message: 'created post' }))
   }),
 ]
