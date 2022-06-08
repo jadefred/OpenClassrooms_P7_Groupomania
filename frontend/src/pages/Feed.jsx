@@ -14,12 +14,18 @@ function Feed() {
   const [allPosts, setAllPosts] = useState([])
   const [showComment, setShowComment] = useState({})
   const { user } = useContext(UserContext)
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState({})
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
-    console.log(id)
     setShowComment((prev) =>
+      Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
+    )
+  }
+
+  //toggle modal when clicked modifer post button
+  function toggleModal(id) {
+    setModal((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
     )
   }
@@ -86,11 +92,18 @@ function Feed() {
                         />
                       </div>
                       <div>
-                        <button onClick={() => setModal((prev) => !prev)}>
+                        <button
+                          onClick={() => {
+                            toggleModal(post.postId)
+                          }}
+                        >
                           Edit
                         </button>
-                        {modal && (
+
+                        {/* render edit post component when content according postId */}
+                        {modal[post.postId] && (
                           <EditPost
+                            post={post}
                             postId={post.postId}
                             modal={modal}
                             setModal={setModal}

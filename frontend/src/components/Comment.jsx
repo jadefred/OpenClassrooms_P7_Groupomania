@@ -9,7 +9,10 @@ function Comment(props) {
   async function deleteComment(commentId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${user.token}`,
+      },
       body: JSON.stringify({ commentId }),
     })
 

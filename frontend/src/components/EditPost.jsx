@@ -1,6 +1,6 @@
 import React from 'react'
 
-function EditPost({ modal, setModal, postId }) {
+function EditPost({ modal, setModal, post, postId }) {
   function toggleModal() {
     setModal((prev) => !prev)
   }
