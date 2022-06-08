@@ -3,6 +3,7 @@ import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
 import { UserContext } from '../Context'
 import Cookies from 'js-cookie'
+import { verifyToken } from '../Utils.jsx'
 
 function SignupForm() {
   const [usernameValidate, setUsernameValidate] = useState(false)
@@ -150,19 +151,25 @@ function SignupForm() {
 
           //res ok, save token and username, then redirect to feed
           const data = await response.json()
-          const { accessToken, refreshToken } = data
+          const { accessToken } = data
           Cookies.set('accessToken', accessToken)
-          Cookies.set('refreshToken', refreshToken)
-          localStorage.setItem('username', data.username)
-          localStorage.setItem('userId', data._id)
+          // Cookies.set('refreshToken', refreshToken)
+          // localStorage.setItem('username', data.username)
+          // localStorage.setItem('userId', data._id)
+
+          const tokenValid = await verifyToken()
+          if (tokenValid === false) {
+            throw Error('failed to login')
+          }
 
           //update context
           setUser((prev) => ({
             userId: data._id,
+            username: data.username,
             auth: true,
             token: accessToken,
-            username: data.username,
             admin: data.admin,
+            avatarUrl: data.avatarUrl,
           }))
           navigate('/feed')
         } catch (err) {

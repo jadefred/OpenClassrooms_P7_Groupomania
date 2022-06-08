@@ -24,8 +24,6 @@ function Feed() {
     )
   }
 
-  console.log(showComment)
-
   //fetch to get all postu
   useEffect(() => {
     async function getAllPosts() {

@@ -19,7 +19,6 @@ export const handlers = [
         _id: 'user1',
         username: 'doge',
         accessToken: 'accessToken',
-        //refreshToken: 'refreshToken',
         admin: true,
         avatarUrl:
           'https://i.pinimg.com/originals/7f/a7/c8/7fa7c83d9fa9c44cb774a08b0b596219.jpg',

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useContext } from 'react'
 import { useNavigate } from 'react-router'
-import '../styles/loginForm.css'
 import { UserContext } from '../Context'
 import Cookies from 'js-cookie'
+import { verifyToken } from '../Utils.jsx'
+import '../styles/loginForm.css'
 
 function LoginForm() {
   const email = useRef()
@@ -10,34 +11,6 @@ function LoginForm() {
   const [error, setError] = useState(false)
   const navigate = useNavigate()
   const { setUser } = useContext(UserContext)
-
-  //Check if access token exist, if so pass to requestLogin function, if not return
-  async function verifyToken() {
-    const accessToken = Cookies.get('accessToken')
-
-    if (accessToken === null || accessToken === undefined) {
-      console.log('Access token invalid, please login again')
-      return false
-    } else {
-      await requestLogin(accessToken)
-    }
-  }
-
-  //set access token as headers and fetch to endpoint to verify it
-  async function requestLogin(accessToken) {
-    const response = await fetch('http://localhost:3000/api/auth', {
-      method: 'POST',
-      headers: { authorization: `Bearer ${accessToken}` },
-    })
-
-    if (!response.ok) {
-      //check what error does the server return, to determine actions
-      console.log('Server error / token invalide')
-    } else {
-      //token is okay, can redirect user to protected page
-      console.log('successfully set headers')
-    }
-  }
 
   function handleLogin(e) {
     e.preventDefault()
@@ -69,13 +42,11 @@ function LoginForm() {
         }
 
         const data = await response.json()
+        //set access token as cookie once received data
         const { accessToken } = data
         Cookies.set('accessToken', accessToken)
-        //Cookies.set('refreshToken', refreshToken)
-        localStorage.setItem('username', data.username)
-        localStorage.setItem('userId', data._id)
 
-        //verify token, return false if it is not validate
+        //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken()
         if (tokenValid === false) {
           throw Error('failed to login')
@@ -88,7 +59,10 @@ function LoginForm() {
           auth: true,
           token: accessToken,
           admin: data.admin,
+          avatarUrl: data.avatarUrl,
         }))
+
+        //redirect to feed page
         navigate('/feed')
       } catch (err) {
         //catch block, console error and display error message
@@ -100,6 +74,7 @@ function LoginForm() {
           auth: false,
           token: '',
           admin: false,
+          avatarUrl: '',
         }))
       }
     }
