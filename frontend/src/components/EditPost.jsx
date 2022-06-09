@@ -11,6 +11,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
   })
   const [preview, setPreview] = useState(input.imageUrl)
   const [formNotComplete, setFormNotComplete] = useState(false)
+  const [btnDisable, setBtnDisable] = useState(true)
 
   //close modal after clicked overlay
   function toggleModal() {
@@ -27,10 +28,12 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
   //handle title and content input change
   function handleEditPost(e) {
     setInput({ ...input, [e.target.name]: e.target.value })
+    setBtnDisable(false)
   }
 
   //handle image input, check mime type before set to the state
   function handleImage(e) {
+    setBtnDisable(false)
     const file = e.target.files[0]
     const mimeType =
       file.type === 'image/jpg' ||
@@ -149,7 +152,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
               </div>
               {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
-                <input type="submit" value="Envoyer" />
+                <input type="submit" value="Envoyer" disabled={btnDisable} />
                 <button onClick={toggleModal}>Annuler</button>
               </div>
             </form>
