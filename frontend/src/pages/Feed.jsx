@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar.jsx'
 import Comment from '../components/Comment.jsx'
 import NewPost from '../components/NewPost.jsx'
 import EditPost from '../components/EditPost.jsx'
+import FlashMessage from '../components/FlashMessage'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -15,6 +16,7 @@ function Feed() {
   const [showComment, setShowComment] = useState({})
   const { user } = useContext(UserContext)
   const [modal, setModal] = useState({})
+  const [flashMessage, setFlashMessage] = useState('')
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -68,6 +70,10 @@ function Feed() {
     <>
       <NavBar />
       <NewPost />
+
+      {/* flash message pops up after user edited a post */}
+      {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
+
       <div className="Feed">
         {isLoaded && error && <p>Something went wrong...</p>}
 
@@ -107,6 +113,7 @@ function Feed() {
                             postId={post.postId}
                             modal={modal}
                             setModal={setModal}
+                            setFlashMessage={setFlashMessage}
                           />
                         )}
                       </div>

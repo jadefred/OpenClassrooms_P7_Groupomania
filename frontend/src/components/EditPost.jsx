@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { UserContext } from '../Context'
 
-function EditPost({ modal, setModal, post }) {
+function EditPost({ modal, setModal, post, setFlashMessage }) {
   const { user } = useContext(UserContext)
   const [image, setImage] = useState()
   const [input, setInput] = useState({
@@ -24,6 +24,7 @@ function EditPost({ modal, setModal, post }) {
     document.body.classList.remove('active-modal')
   }
 
+  //handle title and content input change
   function handleEditPost(e) {
     setInput({ ...input, [e.target.name]: e.target.value })
   }
@@ -50,9 +51,8 @@ function EditPost({ modal, setModal, post }) {
     }
   }
 
-  function createNewPost(e) {
+  function modifyPost(e) {
     e.preventDefault()
-
     //pop error message if title / body content is empty and return function
     if (
       input.title === '' ||
@@ -81,20 +81,20 @@ function EditPost({ modal, setModal, post }) {
         body: formData,
       })
       setModal(false)
-      // flash success message if res is ok, then reset state to make it disappear
-      // if (response.ok) {
-      //   setFlashMessage('Vous avez créé un post')
-      //   setTimeout(() => {
-      //     setFlashMessage('')
-      //   }, 3000)
-      // }
-      // //fail flash message
-      // else {
-      //   setFlashMessage('Un problème a apparu..')
-      //   setTimeout(() => {
-      //     setFlashMessage('')
-      //   }, 3000)
-      // }
+      //flash success message if res is ok, then reset state to make it disappear
+      if (response.ok) {
+        setFlashMessage('Vous avez modifier un post')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
+      }
+      //fail flash message
+      else {
+        setFlashMessage('Un problème a apparu..')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
+      }
     }
     createPost()
   }
@@ -106,7 +106,7 @@ function EditPost({ modal, setModal, post }) {
           <div onClick={toggleModal} className="NewPost--overlay"></div>
           <div className="NewPost--modal-content">
             <h2>Modifer Post</h2>
-            <form onSubmit={createNewPost}>
+            <form onSubmit={modifyPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
                 <input
@@ -147,6 +147,7 @@ function EditPost({ modal, setModal, post }) {
                   />
                 )}
               </div>
+              {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
                 <input type="submit" value="Envoyer" />
                 <button onClick={toggleModal}>Annuler</button>
