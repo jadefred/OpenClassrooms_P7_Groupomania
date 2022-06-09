@@ -4,6 +4,7 @@ function EditPost({ modal, setModal, post }) {
   const [input, setInput] = useState({
     title: post.title,
     content: post.content,
+    imageUrl: post.imageUrl,
   })
 
   //close modal after clicked overlay
@@ -57,6 +58,17 @@ function EditPost({ modal, setModal, post }) {
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
                 />
+                {input.imageUrl && (
+                  <img
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                    }}
+                    src={input.imageUrl}
+                    alt=""
+                  />
+                )}
               </div>
               <div>
                 <input type="submit" value="Envoyer" />

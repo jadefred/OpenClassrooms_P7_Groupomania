@@ -8,6 +8,7 @@ function NewPost() {
   const [modal, setModal] = useState(false)
   const titleRef = useRef()
   const contentRef = useRef()
+  const imageRef = useRef()
   const [image, setImage] = useState()
   const [preview, setPreview] = useState()
   const [formNotComplete, setFormNotComplete] = useState(false)
@@ -109,6 +110,11 @@ function NewPost() {
     createPost()
   }
 
+  function removeSelectedImg() {
+    setImage(null)
+    imageRef.current.value = null
+  }
+
   return (
     <>
       <div>
@@ -140,21 +146,27 @@ function NewPost() {
               <div>
                 <label htmlFor="image">Image : </label>
                 <input
+                  ref={imageRef}
                   type="file"
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={handleImage}
                 />
                 {image && (
-                  <img
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      objectFit: 'cover',
-                    }}
-                    src={preview}
-                    alt=""
-                  />
+                  <>
+                    <img
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        objectFit: 'cover',
+                      }}
+                      src={preview}
+                      alt=""
+                    />
+                    <button onClick={removeSelectedImg}>
+                      Supprimer l'image
+                    </button>
+                  </>
                 )}
               </div>
               {formNotComplete && <p>Veuillez remplir les informations</p>}
