@@ -75,6 +75,8 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     //append image if it exists
     if (image) {
       formData.append('image', image)
+    } else {
+      formData.append('image', post.imageUrl)
     }
 
     async function createPost() {
