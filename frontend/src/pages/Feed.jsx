@@ -98,13 +98,16 @@ function Feed() {
                         />
                       </div>
                       <div>
-                        <button
-                          onClick={() => {
-                            toggleModal(post.postId)
-                          }}
-                        >
-                          Edit
-                        </button>
+                        {/* render edit button if user is op / admin */}
+                        {(post.userId === user.userId || user.admin) && (
+                          <button
+                            onClick={() => {
+                              toggleModal(post.postId)
+                            }}
+                          >
+                            Edit
+                          </button>
+                        )}
 
                         {/* render edit post component when content according postId */}
                         {modal[post.postId] && (

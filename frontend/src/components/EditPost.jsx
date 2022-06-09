@@ -89,7 +89,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
       setModal(false)
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
-        setFlashMessage('Vous avez modifier un post')
+        setFlashMessage('Vous avez modifié un post')
         setTimeout(() => {
           setFlashMessage('')
         }, 3000)
@@ -111,6 +111,12 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     setPreview(null)
     setInput({ ...input, imageUrl: '' })
     setBtnDisable(false)
+  }
+
+  //alert user, delete post if confirmed, then flash message
+  function deletePost() {
+    console.log(post.postId)
+    console.log(user.userId)
   }
 
   return (
@@ -170,6 +176,9 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
               <div>
                 <input type="submit" value="Envoyer" disabled={btnDisable} />
                 <button onClick={toggleModal}>Annuler</button>
+                <button type="button" onClick={deletePost}>
+                  Supprimer
+                </button>
               </div>
             </form>
           </div>
