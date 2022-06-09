@@ -91,15 +91,10 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ message: 'created post' }))
   }),
 
-  //PUT - modify one post :id
+  //PUT - edit post
   rest.put('/api/posts', (req, res, ctx) => {
-    const postId = req.url.searchParams.get('id')
     console.log(req.body)
-
-    if (!postId) {
-      return res(ctx.status(404), ctx.json({ message: 'Post not found' }))
-    }
-    return res(ctx.status(201), ctx.json({ message: 'post modified' }))
+    return res(ctx.status(200), ctx.json({ message: 'created post' }))
   }),
 
   //POST - Like post

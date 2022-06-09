@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
+import { UserContext } from '../Context'
 
 function EditPost({ modal, setModal, post }) {
-  const imageRef = useRef()
+  const { user } = useContext(UserContext)
   const [image, setImage] = useState()
   const [input, setInput] = useState({
     title: post.title,
@@ -9,6 +10,7 @@ function EditPost({ modal, setModal, post }) {
     imageUrl: post.imageUrl,
   })
   const [preview, setPreview] = useState(input.imageUrl)
+  const [formNotComplete, setFormNotComplete] = useState(false)
 
   //close modal after clicked overlay
   function toggleModal() {
@@ -47,7 +49,56 @@ function EditPost({ modal, setModal, post }) {
       setImage(null)
     }
   }
-  
+
+  function createNewPost(e) {
+    e.preventDefault()
+
+    //pop error message if title / body content is empty and return function
+    if (
+      input.title === '' ||
+      (input.title !== '' && input.content === '' && !image)
+    ) {
+      setFormNotComplete(true)
+      return
+    }
+
+    //create form data, append image when user added
+    const formData = new FormData()
+    formData.append('userId', user.userId)
+    formData.append('title', input.title)
+    formData.append('content', input.content)
+    formData.append('postId', post.postId)
+
+    //append image if it exists
+    if (image) {
+      formData.append('image', image)
+    }
+
+    async function createPost() {
+      const response = await fetch('http://localhost:3000/api/posts', {
+        method: 'PUT',
+        headers: { authorization: `Bearer ${user.token}` },
+        body: formData,
+      })
+      setModal(false)
+      // flash success message if res is ok, then reset state to make it disappear
+      // if (response.ok) {
+      //   setFlashMessage('Vous avez créé un post')
+      //   setTimeout(() => {
+      //     setFlashMessage('')
+      //   }, 3000)
+      // }
+      // //fail flash message
+      // else {
+      //   setFlashMessage('Un problème a apparu..')
+      //   setTimeout(() => {
+      //     setFlashMessage('')
+      //   }, 3000)
+      // }
+    }
+    createPost()
+  }
+
   return (
     <>
       {modal && (
@@ -55,7 +106,7 @@ function EditPost({ modal, setModal, post }) {
           <div onClick={toggleModal} className="NewPost--overlay"></div>
           <div className="NewPost--modal-content">
             <h2>Modifer Post</h2>
-            <form>
+            <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
                 <input
@@ -79,7 +130,6 @@ function EditPost({ modal, setModal, post }) {
               <div>
                 <label htmlFor="image">Image : </label>
                 <input
-                  ref={imageRef}
                   type="file"
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
