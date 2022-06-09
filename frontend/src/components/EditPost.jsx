@@ -124,8 +124,22 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
         },
         body: JSON.stringify({ userId: user.userId, postId: post.postId }),
       })
-      const data = await response.json()
-      console.log(data)
+
+      setModal(false)
+      //flash success message if res is ok, then reset state to make it disappear
+      if (response.ok) {
+        setFlashMessage('Vous avez supprimé un post')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
+      }
+      //fail flash message
+      else {
+        setFlashMessage('Un problème a apparu..')
+        setTimeout(() => {
+          setFlashMessage('')
+        }, 3000)
+      }
     }
 
     deletePost()
