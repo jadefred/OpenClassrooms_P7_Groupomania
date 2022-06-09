@@ -98,7 +98,7 @@ function Feed() {
                         />
                       </div>
                       <div>
-                        {/* render edit button if user is op / admin */}
+                        {/* render edit button if user is op / admin  */}
                         {(post.userId === user.userId || user.admin) && (
                           <button
                             onClick={() => {

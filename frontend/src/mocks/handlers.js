@@ -94,7 +94,13 @@ export const handlers = [
   //PUT - edit post
   rest.put('/api/posts', (req, res, ctx) => {
     console.log(req.body)
-    return res(ctx.status(200), ctx.json({ message: 'created post' }))
+    return res(ctx.status(200), ctx.json({ message: 'modified post' }))
+  }),
+
+  //DELETE - edit post
+  rest.delete('/api/posts', (req, res, ctx) => {
+    console.log(req.body)
+    return res(ctx.status(200), ctx.json({ message: 'deleted post' }))
   }),
 
   //POST - Like post

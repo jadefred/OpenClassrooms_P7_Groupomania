@@ -114,9 +114,21 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
   }
 
   //alert user, delete post if confirmed, then flash message
-  function deletePost() {
-    console.log(post.postId)
-    console.log(user.userId)
+  function handleDeletePost() {
+    async function deletePost() {
+      const response = await fetch('http://localhost:3000/api/posts', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ userId: user.userId, postId: post.postId }),
+      })
+      const data = await response.json()
+      console.log(data)
+    }
+
+    deletePost()
   }
 
   return (
@@ -176,7 +188,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
               <div>
                 <input type="submit" value="Envoyer" disabled={btnDisable} />
                 <button onClick={toggleModal}>Annuler</button>
-                <button type="button" onClick={deletePost}>
+                <button type="button" onClick={handleDeletePost}>
                   Supprimer
                 </button>
               </div>
