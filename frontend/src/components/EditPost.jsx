@@ -54,12 +54,13 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     }
   }
 
-  function modifyPost(e) {
+  function handleModifyPost(e) {
     e.preventDefault()
     //pop error message if title / body content is empty and return function
     if (
       input.title === '' ||
-      (input.title !== '' && input.content === '' && !image)
+      (input.title !== '' && input.content === '' && !image) ||
+      (input.title !== '' && input.content === '' && input.imageUrl === '')
     ) {
       setFormNotComplete(true)
       return
@@ -76,10 +77,10 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     if (image) {
       formData.append('image', image)
     } else {
-      formData.append('image', post.imageUrl)
+      formData.append('image', input.imageUrl)
     }
 
-    async function createPost() {
+    async function modifyPost() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'PUT',
         headers: { authorization: `Bearer ${user.token}` },
@@ -101,7 +102,15 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
         }, 3000)
       }
     }
-    createPost()
+    modifyPost()
+  }
+
+  //remove selected image / the image from server
+  function removeSelectedImg() {
+    setImage(null)
+    setPreview(null)
+    setInput({ ...input, imageUrl: '' })
+    setBtnDisable(false)
   }
 
   return (
@@ -111,7 +120,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
           <div onClick={toggleModal} className="NewPost--overlay"></div>
           <div className="NewPost--modal-content">
             <h2>Modifer Post</h2>
-            <form onSubmit={modifyPost}>
+            <form onSubmit={handleModifyPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
                 <input
@@ -141,15 +150,20 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
                   onChange={handleImage}
                 />
                 {preview && (
-                  <img
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      objectFit: 'cover',
-                    }}
-                    src={preview}
-                    alt=""
-                  />
+                  <>
+                    <img
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        objectFit: 'cover',
+                      }}
+                      src={preview}
+                      alt=""
+                    />
+                    <button type="button" onClick={removeSelectedImg}>
+                      Supprimer l'image
+                    </button>
+                  </>
                 )}
               </div>
               {formNotComplete && <p>Veuillez remplir les informations</p>}
