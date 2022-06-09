@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 function EditPost({ modal, setModal, post }) {
+  const imageRef = useRef()
+  const [image, setImage] = useState()
   const [input, setInput] = useState({
     title: post.title,
     content: post.content,
     imageUrl: post.imageUrl,
   })
+  const [preview, setPreview] = useState(input.imageUrl)
 
   //close modal after clicked overlay
   function toggleModal() {
@@ -23,6 +26,28 @@ function EditPost({ modal, setModal, post }) {
     setInput({ ...input, [e.target.name]: e.target.value })
   }
 
+  //handle image input, check mime type before set to the state
+  function handleImage(e) {
+    const file = e.target.files[0]
+    const mimeType =
+      file.type === 'image/jpg' ||
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png'
+        ? true
+        : false
+
+    if (file && mimeType) {
+      setImage(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setImage(null)
+    }
+  }
+  
   return (
     <>
       {modal && (
@@ -54,18 +79,20 @@ function EditPost({ modal, setModal, post }) {
               <div>
                 <label htmlFor="image">Image : </label>
                 <input
+                  ref={imageRef}
                   type="file"
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
+                  onChange={handleImage}
                 />
-                {input.imageUrl && (
+                {preview && (
                   <img
                     style={{
                       width: '50px',
                       height: '50px',
                       objectFit: 'cover',
                     }}
-                    src={input.imageUrl}
+                    src={preview}
                     alt=""
                   />
                 )}
