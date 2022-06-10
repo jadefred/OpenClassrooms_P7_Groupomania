@@ -13,6 +13,7 @@ function NewPost() {
   const [preview, setPreview] = useState()
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [flashMessage, setFlashMessage] = useState('')
+  const [btnDisable, setBtnDisable] = useState(true)
 
   //useEffect to render the preview of image
   useEffect(() => {
@@ -33,6 +34,7 @@ function NewPost() {
       setPreview(null)
       setImage(null)
       setFormNotComplete(false)
+      setBtnDisable(true)
     }
   }
 
@@ -41,6 +43,14 @@ function NewPost() {
     document.body.classList.add('active-modal')
   } else {
     document.body.classList.remove('active-modal')
+  }
+
+  function handleTitle() {
+    if (titleRef.current.value !== '') {
+      setBtnDisable(false)
+    } else {
+      setBtnDisable(true)
+    }
   }
 
   //handle image input, check mime type before set to the state
@@ -132,7 +142,13 @@ function NewPost() {
             <form onSubmit={createNewPost}>
               <div>
                 <label htmlFor="title">Titre :</label>
-                <input ref={titleRef} type="text" name="title" required />
+                <input
+                  onChange={handleTitle}
+                  ref={titleRef}
+                  type="text"
+                  name="title"
+                  required
+                />
               </div>
               <div>
                 <label htmlFor="content">Contenu :</label>
@@ -171,7 +187,7 @@ function NewPost() {
               </div>
               {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
-                <input type="submit" value="Envoyer" />
+                <input type="submit" value="Envoyer" disabled={btnDisable} />
                 <button onClick={toggleModal}>Annuler</button>
               </div>
             </form>
