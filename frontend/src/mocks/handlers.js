@@ -121,7 +121,7 @@ export const handlers = [
     }
   }),
 
-  //POST - delete comment
+  //DELETE - delete comment
   rest.delete('/api/posts/comments', (req, res, ctx) => {
     if (req.body.commentId === '1') {
       return res(
@@ -131,5 +131,11 @@ export const handlers = [
     }
 
     return res(ctx.status(200), ctx.json({ message: 'comment deleted' }))
+  }),
+
+  //POST - post comment
+  rest.post('/api/posts/comments', (req, res, ctx) => {
+    console.log(req.body)
+    return res(ctx.status(200), ctx.json({ message: 'comment posted' }))
   }),
 ]

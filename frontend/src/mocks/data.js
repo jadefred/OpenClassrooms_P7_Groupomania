@@ -19,6 +19,8 @@ export const allPost = [
         username: 'user2',
         avatarUrl:
           'https://knowtechie.com/wp-content/uploads/2021/03/dogecoin-meme-1000x600.jpg',
+        imageUrl:
+          'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-889552354-e1606774439626.jpg',
       },
     ],
   },
