@@ -8,6 +8,7 @@ import Comment from '../components/Comment.jsx'
 import NewPost from '../components/NewPost.jsx'
 import EditPost from '../components/EditPost.jsx'
 import FlashMessage from '../components/FlashMessage'
+import CommentButton from '../components/CommentButton'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -167,7 +168,7 @@ function Feed() {
                       >
                         J'aime
                       </button>
-                      <button>Commenter</button>
+                      <CommentButton postId={post.postId} />
                     </div>
                   </div>
                   {showComment[post.postId] ? (
