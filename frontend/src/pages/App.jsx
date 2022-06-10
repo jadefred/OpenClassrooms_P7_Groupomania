@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom'
-//import Context from '../Context.jsx'
 import { UserContext } from '../Context'
 
 //pages - components

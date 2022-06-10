@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
     userId: '',
     username: '',
-    auth: '',
+    auth: false,
     token: '',
     admin: false,
   })

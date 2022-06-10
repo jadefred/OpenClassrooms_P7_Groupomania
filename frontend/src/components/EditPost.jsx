@@ -115,6 +115,12 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
 
   //alert user, delete post if confirmed, then flash message
   function handleDeletePost() {
+    if (window.confirm('Vous êtes sûr de supprimer ce post ?')) {
+      deletePost()
+    } else {
+      return
+    }
+
     async function deletePost() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'DELETE',
@@ -141,8 +147,6 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
         }, 3000)
       }
     }
-
-    deletePost()
   }
 
   return (

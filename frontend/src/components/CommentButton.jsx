@@ -4,8 +4,8 @@ import { UserContext } from '../Context'
 function CommentButton({ postId, setFlashMessage }) {
   const { user } = useContext(UserContext)
   const [modal, setModal] = useState(false)
-  const [image, setImage] = useState()
-  const [preview, setPreview] = useState()
+  const [image, setImage] = useState(null)
+  const [preview, setPreview] = useState(null)
   const imageRef = useRef()
   const contentRef = useRef()
   const [formNotComplete, setFormNotComplete] = useState(false)
