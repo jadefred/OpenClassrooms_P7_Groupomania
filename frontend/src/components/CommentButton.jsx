@@ -9,6 +9,7 @@ function CommentButton({ postId, setFlashMessage }) {
   const imageRef = useRef()
   const contentRef = useRef()
   const [formNotComplete, setFormNotComplete] = useState(false)
+  const [btnDisable, setBtnDisable] = useState(true)
 
   function toggleModal() {
     setModal((prev) => !prev)
@@ -16,6 +17,7 @@ function CommentButton({ postId, setFlashMessage }) {
       setPreview(null)
       setImage(null)
       setFormNotComplete(false)
+      setBtnDisable(true)
     }
   }
 
@@ -26,8 +28,17 @@ function CommentButton({ postId, setFlashMessage }) {
     document.body.classList.remove('active-modal')
   }
 
+  function handleInput() {
+    if (contentRef.current.value !== '') {
+      setBtnDisable(false)
+    } else {
+      setBtnDisable(true)
+    }
+  }
+
   //handle image input, check mime type before set to the state, and render preview image
   function handleImage(e) {
+    setBtnDisable(false)
     const file = e.target.files[0]
     const mimeType =
       file.type === 'image/jpg' ||
@@ -113,6 +124,7 @@ function CommentButton({ postId, setFlashMessage }) {
               <div>
                 <label htmlFor="content">Contenu :</label>
                 <textarea
+                  onChange={handleInput}
                   ref={contentRef}
                   name="content"
                   cols="30"
@@ -147,7 +159,7 @@ function CommentButton({ postId, setFlashMessage }) {
               </div>
               {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
-                <input type="submit" value="Commenter" />
+                <input type="submit" value="Commenter" disabled={btnDisable} />
                 <button onClick={toggleModal}>Annuler</button>
               </div>
             </form>
