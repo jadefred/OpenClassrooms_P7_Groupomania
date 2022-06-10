@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { UserContext } from '../Context'
 import '../styles/newPost.css'
 import FlashMessage from './FlashMessage'
@@ -14,19 +14,6 @@ function NewPost() {
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [flashMessage, setFlashMessage] = useState('')
   const [btnDisable, setBtnDisable] = useState(true)
-
-  //useEffect to render the preview of image
-  useEffect(() => {
-    if (image) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreview(reader.result)
-      }
-      reader.readAsDataURL(image)
-    } else {
-      setPreview(null)
-    }
-  }, [image])
 
   function toggleModal() {
     setModal((prev) => !prev)
@@ -45,6 +32,7 @@ function NewPost() {
     document.body.classList.remove('active-modal')
   }
 
+  //enable submit button when title is detected
   function handleTitle() {
     if (titleRef.current.value !== '') {
       setBtnDisable(false)
@@ -53,7 +41,7 @@ function NewPost() {
     }
   }
 
-  //handle image input, check mime type before set to the state
+  //handle image input, check mime type before set to the state, set image local url as preview
   function handleImage(e) {
     const file = e.target.files[0]
     const mimeType =
@@ -65,6 +53,11 @@ function NewPost() {
 
     if (file && mimeType) {
       setImage(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result)
+      }
+      reader.readAsDataURL(file)
     } else {
       setImage(null)
     }
@@ -72,7 +65,6 @@ function NewPost() {
 
   function createNewPost(e) {
     e.preventDefault()
-
     //pop error message if title / body content is empty and return function
     if (
       titleRef.current.value === '' ||
