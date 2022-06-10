@@ -168,7 +168,10 @@ function Feed() {
                       >
                         J'aime
                       </button>
-                      <CommentButton postId={post.postId} />
+                      <CommentButton
+                        postId={post.postId}
+                        setFlashMessage={setFlashMessage}
+                      />
                     </div>
                   </div>
                   {showComment[post.postId] ? (

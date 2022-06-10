@@ -1,8 +1,7 @@
 import React, { useContext, useState, useRef } from 'react'
 import { UserContext } from '../Context'
-import FlashMessage from './FlashMessage'
 
-function CommentButton({ postId }) {
+function CommentButton({ postId, setFlashMessage }) {
   const { user } = useContext(UserContext)
   const [modal, setModal] = useState(false)
   const [image, setImage] = useState()
@@ -10,13 +9,13 @@ function CommentButton({ postId }) {
   const imageRef = useRef()
   const contentRef = useRef()
   const [formNotComplete, setFormNotComplete] = useState(false)
-  const [flashMessage, setFlashMessage] = useState('')
 
   function toggleModal() {
     setModal((prev) => !prev)
     if (!modal) {
       setPreview(null)
       setImage(null)
+      setFormNotComplete(false)
     }
   }
 
@@ -146,6 +145,7 @@ function CommentButton({ postId }) {
                   </>
                 )}
               </div>
+              {formNotComplete && <p>Veuillez remplir les informations</p>}
               <div>
                 <input type="submit" value="Commenter" />
                 <button onClick={toggleModal}>Annuler</button>
