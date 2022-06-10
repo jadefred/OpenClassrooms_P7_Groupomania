@@ -105,6 +105,7 @@ export const handlers = [
 
   //POST - Like post
   rest.post('/api/posts/like', (req, res, ctx) => {
+    console.log(req.body)
     const like = req.body.like
 
     if (like === 1) {

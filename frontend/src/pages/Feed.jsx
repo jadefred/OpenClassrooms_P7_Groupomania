@@ -9,6 +9,7 @@ import NewPost from '../components/NewPost.jsx'
 import EditPost from '../components/EditPost.jsx'
 import FlashMessage from '../components/FlashMessage'
 import CommentButton from '../components/CommentButton'
+import LikePost from '../components/LikePost'
 
 function Feed() {
   const [error, setError] = useState(null)
@@ -33,7 +34,7 @@ function Feed() {
     )
   }
 
-  //fetch to get all postu
+  //fetch to get all posts
   useEffect(() => {
     async function getAllPosts() {
       const response = await fetch('http://localhost:3000/api/posts', {
@@ -49,23 +50,6 @@ function Feed() {
     }
     getAllPosts()
   }, [])
-
-  async function likePost(userId, likeUserId) {
-    //use some to determine if the user has already liked this post
-    //send 0 if he already liked -> retrieve the like
-    //send 1 if he hasn't react to the post
-    const userliked = likeUserId.some((i) => i === userId) ? 0 : 1
-    const response = await fetch('http://localhost:3000/api/posts/like', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({ userId, like: userliked }),
-    })
-    const data = await response.json()
-    console.log(data)
-  }
 
   return (
     <>
@@ -156,18 +140,10 @@ function Feed() {
                       )}
                     </div>
                     <div>
-                      <button
-                        onClick={() => {
-                          likePost(user.userId, post.likeUserId)
-                        }}
-                        style={
-                          post.likeUserId.some((i) => i === user.userId)
-                            ? { color: 'green' }
-                            : {}
-                        }
-                      >
-                        J'aime
-                      </button>
+                      <LikePost
+                        likeUserId={post.likeUserId}
+                        postId={post.postId}
+                      />
                       <CommentButton
                         postId={post.postId}
                         setFlashMessage={setFlashMessage}

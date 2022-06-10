@@ -28,6 +28,7 @@ function CommentButton({ postId, setFlashMessage }) {
     document.body.classList.remove('active-modal')
   }
 
+  //enable submit button when content is detected
   function handleInput() {
     if (contentRef.current.value !== '') {
       setBtnDisable(false)
@@ -36,7 +37,7 @@ function CommentButton({ postId, setFlashMessage }) {
     }
   }
 
-  //handle image input, check mime type before set to the state, and render preview image
+  //handle image input, check mime type before set to the state, and render preview image, enable submit if image is there
   function handleImage(e) {
     setBtnDisable(false)
     const file = e.target.files[0]
@@ -86,7 +87,7 @@ function CommentButton({ postId, setFlashMessage }) {
       formData.append('content', contentRef.current.value)
     }
 
-    async function createPost() {
+    async function createComment() {
       const response = await fetch('http://localhost:3000/api/posts/comments', {
         method: 'POST',
         headers: { authorization: `Bearer ${user.token}` },
@@ -108,7 +109,7 @@ function CommentButton({ postId, setFlashMessage }) {
         }, 3000)
       }
     }
-    createPost()
+    createComment()
   }
 
   return (
