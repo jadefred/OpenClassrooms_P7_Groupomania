@@ -63,7 +63,7 @@ export const allUsers = [
     avatarUrl: 'testavatar.img',
     email: 'email@email.com',
     password: 'PASSword1234',
-    admin: true,
+    admin: false,
   },
   {
     _id: 'user2',

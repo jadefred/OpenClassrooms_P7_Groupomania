@@ -1,8 +1,7 @@
-import React, { useContext, useState, useRef } from 'react'
-import { UserContext } from '../Context'
+import React, { useState, useRef } from 'react'
+import useLogStatus from '../Context'
 
 function CommentButton({ postId, setFlashMessage }) {
-  const { user } = useContext(UserContext)
   const [modal, setModal] = useState(false)
   const [image, setImage] = useState(null)
   const [preview, setPreview] = useState(null)
@@ -10,6 +9,7 @@ function CommentButton({ postId, setFlashMessage }) {
   const contentRef = useRef()
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const { userId, token } = useLogStatus()
 
   function toggleModal() {
     setModal((prev) => !prev)
@@ -77,7 +77,7 @@ function CommentButton({ postId, setFlashMessage }) {
 
     //create form data, append image when user added
     const formData = new FormData()
-    formData.append('userId', user.userId)
+    formData.append('userId', userId)
     formData.append('postId', postId)
 
     if (image) {
@@ -90,7 +90,7 @@ function CommentButton({ postId, setFlashMessage }) {
     async function createComment() {
       const response = await fetch('http://localhost:3000/api/posts/comments', {
         method: 'POST',
-        headers: { authorization: `Bearer ${user.token}` },
+        headers: { authorization: `Bearer ${token}` },
         body: formData,
       })
       setModal(false)

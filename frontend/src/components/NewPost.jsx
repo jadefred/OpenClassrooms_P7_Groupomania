@@ -1,11 +1,11 @@
-import React, { useContext, useState, useRef } from 'react'
-import { UserContext } from '../Context'
+import React, { useState, useRef } from 'react'
 import '../styles/newPost.css'
 import FlashMessage from './FlashMessage'
 import useFlashMessage from '../useFlashMessage'
+import useLogStatus from '../Context'
 
 function NewPost() {
-  const { user } = useContext(UserContext)
+  //const { user } = useContext(UserContext)
   const [modal, setModal] = useState(false)
   const titleRef = useRef()
   const contentRef = useRef()
@@ -15,6 +15,7 @@ function NewPost() {
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
+  const { userId, username, token } = useLogStatus()
 
   function toggleModal() {
     setModal((prev) => !prev)
@@ -79,7 +80,7 @@ function NewPost() {
 
     //create form data, append image when user added
     const formData = new FormData()
-    formData.append('userId', user.userId)
+    formData.append('userId', userId)
     formData.append('title', titleRef.current.value)
     formData.append('content', contentRef.current.value)
 
@@ -91,7 +92,7 @@ function NewPost() {
     async function createPost() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'POST',
-        headers: { authorization: `Bearer ${user.token}` },
+        headers: { authorization: `Bearer ${token}` },
         body: formData,
       })
       setModal(false)
@@ -117,7 +118,7 @@ function NewPost() {
   return (
     <>
       <div>
-        <p>{user.username}, écrivez quelque chose ...</p>
+        <p>{username}, écrivez quelque chose ...</p>
         <button onClick={toggleModal}>Nouveau Post</button>
       </div>
 

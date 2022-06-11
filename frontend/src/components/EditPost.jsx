@@ -1,8 +1,7 @@
-import React, { useState, useContext } from 'react'
-import { UserContext } from '../Context'
+import React, { useState } from 'react'
+import useLogStatus from '../Context'
 
 function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
-  const { user } = useContext(UserContext)
   const [image, setImage] = useState()
   const [input, setInput] = useState({
     title: post.title,
@@ -12,6 +11,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
   const [preview, setPreview] = useState(input.imageUrl)
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
+  const { userId, token } = useLogStatus()
 
   //close modal after clicked overlay
   function toggleModal() {
@@ -68,7 +68,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
 
     //create form data, append image when user added
     const formData = new FormData()
-    formData.append('userId', user.userId)
+    formData.append('userId', userId)
     formData.append('title', input.title)
     formData.append('content', input.content)
     formData.append('postId', post.postId)
@@ -83,7 +83,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
     async function modifyPost() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'PUT',
-        headers: { authorization: `Bearer ${user.token}` },
+        headers: { authorization: `Bearer ${token}` },
         body: formData,
       })
       setModal(false)
@@ -122,9 +122,9 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${user.token}`,
+          authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId: user.userId, postId: post.postId }),
+        body: JSON.stringify({ userId: userId, postId: post.postId }),
       })
 
       setModal(false)

@@ -1,26 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import '../styles/navBar.css'
-import { UserContext } from '../Context'
 import { useNavigate, Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
+//test
+import useLogStatus from '../Context'
 
 function NavBar() {
-  const { setUser } = useContext(UserContext)
+  const { dispatchLogout } = useLogStatus()
+  //const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
-  function logout() {
+  function toLogout() {
     Cookies.remove('accessToken')
     Cookies.remove('refreshToken')
     localStorage.removeItem('username')
     localStorage.removeItem('userId')
-    setUser((prev) => ({
-      userId: '',
-      username: '',
-      auth: false,
-      token: '',
-      admin: false,
-      avatarUrl: '',
-    }))
+    dispatchLogout()
     navigate('/')
   }
 
@@ -32,7 +27,7 @@ function NavBar() {
         </Link>
         <div>
           <button>Profile</button>
-          <button onClick={logout}>Logout</button>
+          <button onClick={toLogout}>Logout</button>
         </div>
       </div>
     </>

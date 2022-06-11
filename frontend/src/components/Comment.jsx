@@ -1,17 +1,18 @@
-import React, { useContext } from 'react'
-import { UserContext } from '../Context'
+import React from 'react'
 import '../styles/comment.css'
+import useLogStatus from '../Context'
 
 function Comment(props) {
   const comment = [...props.comment]
-  const { user } = useContext(UserContext)
+  //const { user } = useContext(UserContext)
+  const { userId, token, admin } = useLogStatus()
 
   async function deleteComment(commentId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${user.token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ commentId }),
     })
@@ -30,7 +31,7 @@ function Comment(props) {
               <img src={i.avatarUrl} alt={`l'avatar de ${i.username}`} />
             </div>
             <div>{i.commentBody}</div>
-            {(user.userId === i.userId || user.admin) && (
+            {(userId === i.userId || admin) && (
               <button
                 onClick={() => {
                   deleteComment(i.commentId)

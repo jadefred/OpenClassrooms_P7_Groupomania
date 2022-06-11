@@ -1,16 +1,16 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { UserContext } from '../Context'
 import Cookies from 'js-cookie'
 import { verifyToken } from '../Utils.jsx'
 import '../styles/loginForm.css'
+import useLogStatus from '../Context'
 
 function LoginForm() {
   const email = useRef()
   const password = useRef()
   const [error, setError] = useState(false)
   const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
+  const { dispatchLogin, dispatchLogout } = useLogStatus()
 
   function handleLogin(e) {
     e.preventDefault()
@@ -52,15 +52,17 @@ function LoginForm() {
           throw Error('failed to login')
         }
 
-        //update context
-        setUser((prev) => ({
+        //object for useLogStatus hook
+        const loginInfo = {
           userId: data._id,
           username: data.username,
           auth: true,
           token: accessToken,
           admin: data.admin,
           avatarUrl: data.avatarUrl,
-        }))
+        }
+        
+        dispatchLogin(loginInfo)
 
         //redirect to feed page
         navigate('/feed')
@@ -68,14 +70,7 @@ function LoginForm() {
         //catch block, console error and display error message
         console.log(err)
         setError(true)
-        setUser((prev) => ({
-          userId: '',
-          username: '',
-          auth: false,
-          token: '',
-          admin: false,
-          avatarUrl: '',
-        }))
+        dispatchLogout()
       }
     }
 

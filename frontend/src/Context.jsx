@@ -1,26 +1,51 @@
-import { createContext, useState } from 'react'
+import { createContext, useContext, useReducer } from 'react'
+import userReducer, { initialState } from './useLoginReducer'
 
 //user information
-export const UserContext = createContext({
-  userId: '',
-  username: 'Guest',
-  auth: false,
-  token: '',
-  admin: false,
-})
+const UserContext = createContext({ initialState })
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    userId: '',
-    username: '',
-    auth: false,
-    token: '',
-    admin: false,
-  })
+  const [state, dispatch] = useReducer(userReducer, initialState)
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  )
+  const dispatchLogin = (loginInfo) => {
+    dispatch({
+      type: 'LOGIN',
+      payload: {
+        userId: loginInfo.userId,
+        username: loginInfo.username,
+        token: loginInfo.token,
+        admin: loginInfo.admin,
+        avatarUrl: loginInfo.avatarUrl,
+      },
+    })
+  }
+
+  const dispatchLogout = () => {
+    dispatch({ type: 'LOGOUT' })
+  }
+
+  const value = {
+    userId: state.userId,
+    username: state.username,
+    auth: state.auth,
+    token: state.token,
+    admin: state.admin,
+    avatarUrl: state.avatarUrl,
+    dispatchLogin,
+    dispatchLogout,
+  }
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
+
+const useLogStatus = () => {
+  const context = useContext(UserContext)
+
+  if (context === undefined) {
+    throw new Error('useLogStatus must be used within UserContext')
+  }
+
+  return context
+}
+
+export default useLogStatus

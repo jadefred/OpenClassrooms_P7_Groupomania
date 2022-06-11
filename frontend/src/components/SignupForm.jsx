@@ -1,18 +1,20 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
-import { UserContext } from '../Context'
 import Cookies from 'js-cookie'
 import { verifyToken } from '../Utils.jsx'
+//test
+import useLogStatus from '../Context'
 
 function SignupForm() {
+  const { dispatchLogin, dispatchLogout } = useLogStatus()
   const [usernameValidate, setUsernameValidate] = useState(false)
   const [emailValidated, setEmailValidated] = useState(false)
   const [pwValidated, setPwValidated] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
   const [serverError, setServerError] = useState(false)
   const navigate = useNavigate()
-  const { setUser } = useContext(UserContext)
+  //const { setUser } = useContext(UserContext)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -159,20 +161,21 @@ function SignupForm() {
             throw Error('failed to login')
           }
 
-          //update context
-          setUser((prev) => ({
+          //object for useLogStatus hook
+          const loginInfo = {
             userId: data._id,
             username: data.username,
             auth: true,
             token: accessToken,
             admin: data.admin,
-            avatarUrl: data.avatarUrl,
-          }))
+            avatartUrl: data.avatartUrl,
+          }
+          dispatchLogin(loginInfo)
           navigate('/feed')
         } catch (err) {
           //catch block, console error and display error message
           console.log(err)
-          setUser((prev) => ({ userId: '', auth: false }))
+          dispatchLogout()
         }
       }
 

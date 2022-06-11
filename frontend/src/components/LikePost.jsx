@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
-import { UserContext } from '../Context'
+import React from 'react'
+import useLogStatus from '../Context'
 
 function LikePost({ likeUserId, postId }) {
-  const { user } = useContext(UserContext)
+  const { userId, token } = useLogStatus()
+  //const { user } = useContext(UserContext)
 
   async function likePost(userId, likeUserId) {
     //use some to determine if the user has already liked this post
@@ -13,7 +14,7 @@ function LikePost({ likeUserId, postId }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${user.token}`,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ userId, postId, like: userliked }),
     })
@@ -25,7 +26,7 @@ function LikePost({ likeUserId, postId }) {
     <>
       <button
         onClick={() => {
-          likePost(user.userId, likeUserId)
+          likePost(userId, likeUserId)
         }}
       >
         J'aime

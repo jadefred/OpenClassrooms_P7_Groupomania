@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { UserContext } from '../Context'
+import React, { useState, useEffect } from 'react'
 import '../styles/feed.css'
 import useFlashMessage from '../useFlashMessage'
+import useLogStatus from '../Context'
 
 //components
 import NavBar from '../components/NavBar.jsx'
@@ -17,10 +17,9 @@ function Feed() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [allPosts, setAllPosts] = useState([])
   const [showComment, setShowComment] = useState({})
-  const { user } = useContext(UserContext)
   const [modal, setModal] = useState({})
-  //const [flashMessage, setFlashMessage] = useState('')
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
+  const { userId, token, admin } = useLogStatus()
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -41,7 +40,7 @@ function Feed() {
     async function getAllPosts() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'GET',
-        headers: { authorization: `Bearer ${user.token}` },
+        headers: { authorization: `Bearer ${token}` },
       })
       if (response.status !== 200) {
         setError(true)
@@ -86,7 +85,7 @@ function Feed() {
                       </div>
                       <div>
                         {/* render edit button if user is op / admin  */}
-                        {(post.userId === user.userId || user.admin) && (
+                        {(post.userId === userId || admin) && (
                           <button
                             onClick={() => {
                               toggleModal(post.postId)
