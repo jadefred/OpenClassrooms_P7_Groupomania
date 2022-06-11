@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef } from 'react'
 import { UserContext } from '../Context'
 import '../styles/newPost.css'
 import FlashMessage from './FlashMessage'
+import useFlashMessage from '../useFlashMessage'
 
 function NewPost() {
   const { user } = useContext(UserContext)
@@ -12,8 +13,8 @@ function NewPost() {
   const [image, setImage] = useState()
   const [preview, setPreview] = useState()
   const [formNotComplete, setFormNotComplete] = useState(false)
-  const [flashMessage, setFlashMessage] = useState('')
   const [btnDisable, setBtnDisable] = useState(true)
+  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
 
   function toggleModal() {
     setModal((prev) => !prev)
@@ -97,16 +98,12 @@ function NewPost() {
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez créé un post')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
     }
     createPost()
