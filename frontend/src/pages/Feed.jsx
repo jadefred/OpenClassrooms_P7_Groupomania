@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { UserContext } from '../Context'
 import '../styles/feed.css'
+import useFlashMessage from '../useFlashMessage'
 
 //components
 import NavBar from '../components/NavBar.jsx'
@@ -18,7 +19,8 @@ function Feed() {
   const [showComment, setShowComment] = useState({})
   const { user } = useContext(UserContext)
   const [modal, setModal] = useState({})
-  const [flashMessage, setFlashMessage] = useState('')
+  //const [flashMessage, setFlashMessage] = useState('')
+  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -102,6 +104,7 @@ function Feed() {
                             modal={modal}
                             setModal={setModal}
                             setFlashMessage={setFlashMessage}
+                            timeOutMessage={timeOutMessage}
                           />
                         )}
                       </div>

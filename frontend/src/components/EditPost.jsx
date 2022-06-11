@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { UserContext } from '../Context'
 
-function EditPost({ modal, setModal, post, setFlashMessage }) {
+function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
   const { user } = useContext(UserContext)
   const [image, setImage] = useState()
   const [input, setInput] = useState({
@@ -90,16 +90,12 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez modifié un post')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
     }
     modifyPost()
@@ -135,16 +131,12 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez supprimé un post')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..')
-        setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+        timeOutMessage()
       }
     }
   }
