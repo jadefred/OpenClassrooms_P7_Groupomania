@@ -2,12 +2,10 @@ import React from 'react'
 import '../styles/navBar.css'
 import { useNavigate, Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
-//test
 import useLogStatus from '../Context'
 
 function NavBar() {
   const { dispatchLogout } = useLogStatus()
-  //const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
 
   function toLogout() {

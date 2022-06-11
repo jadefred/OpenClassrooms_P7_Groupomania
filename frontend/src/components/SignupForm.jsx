@@ -154,7 +154,7 @@ function SignupForm() {
           //res ok, save token and username, then redirect to feed
           const data = await response.json()
           const { accessToken } = data
-          Cookies.set('accessToken', accessToken)
+          Cookies.set('accessToken', accessToken, { expires: 1 })
 
           const tokenValid = await verifyToken()
           if (tokenValid === false) {

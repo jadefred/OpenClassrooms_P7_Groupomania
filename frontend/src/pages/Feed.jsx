@@ -50,6 +50,7 @@ function Feed() {
       setIsLoaded(true)
     }
     getAllPosts()
+    console.log('getAllPost')
   }, [])
 
   return (

@@ -44,7 +44,7 @@ function LoginForm() {
         const data = await response.json()
         //set access token as cookie once received data
         const { accessToken } = data
-        Cookies.set('accessToken', accessToken)
+        Cookies.set('accessToken', accessToken, { expires: 1 })
 
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken()
