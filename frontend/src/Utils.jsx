@@ -9,7 +9,8 @@ export async function verifyToken() {
     return false
   } else {
     console.log('ready to set to request login')
-    await requestLogin(accessToken)
+    const validToken = await requestLogin(accessToken)
+    return validToken
   }
 }
 
@@ -23,8 +24,10 @@ async function requestLogin(accessToken) {
   if (!response.ok) {
     //check what error does the server return, to determine actions
     console.log('Server error / token invalide')
+    return false
   } else {
     //token is okay, can redirect user to protected page
     console.log('successfully set headers')
+    return true
   }
 }

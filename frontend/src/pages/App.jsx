@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,14 +6,20 @@ import {
   Navigate,
 } from 'react-router-dom'
 import useLogStatus from '../Context'
+import Cookies from 'js-cookie'
 
 //pages - components
 import Home from './Home.jsx'
 import Feed from './Feed.jsx'
 
 function App() {
-  //const { user } = useContext(UserContext)
-  const { auth } = useLogStatus()
+  const { auth, persistLogin } = useLogStatus()
+
+  useEffect(() => {
+    if (Cookies.get('accessToken')) {
+      persistLogin(Cookies.get('accessToken'))
+    }
+  }, [])
 
   return (
     <>

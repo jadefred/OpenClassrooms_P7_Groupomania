@@ -33,6 +33,13 @@ const userReducer = (state, action) => {
         avatarUrl: '',
       }
 
+    case 'PERSIST_LOGIN':
+      return {
+        ...state,
+        auth: true,
+        token: payload.token,
+      }
+
     default:
       throw new Error(`No case for type ${type} found in shopReducer.`)
   }

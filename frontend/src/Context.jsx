@@ -24,6 +24,13 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' })
   }
 
+  const persistLogin = (token) => {
+    dispatch({
+      type: 'PERSIST_LOGIN',
+      payload: { token: token },
+    })
+  }
+
   const value = {
     userId: state.userId,
     username: state.username,
@@ -33,6 +40,7 @@ export const UserProvider = ({ children }) => {
     avatarUrl: state.avatarUrl,
     dispatchLogin,
     dispatchLogout,
+    persistLogin,
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

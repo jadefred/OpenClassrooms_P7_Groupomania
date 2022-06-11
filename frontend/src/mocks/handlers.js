@@ -26,28 +26,13 @@ export const handlers = [
     )
   }),
 
-  // //POST - refresh access token
-  // rest.post('/api/auth/refresh', (req, res, ctx) => {
-  //   const { refreshToken } = req.body
-  //   if (!refreshToken) {
-  //     return res(
-  //       ctx.status(401),
-  //       ctx.json({ message: 'Refresh token not found, try again' })
-  //     )
-  //   }
-  //   return res(
-  //     ctx.status(200),
-  //     ctx.json({ accessToken: 'refreshed-new-access-token' })
-  //   )
-  // }),
-
   //POST - confirm header is set
   rest.post('/api/auth', (req, res, ctx) => {
     let token = req.headers.headers['authorization']
     if (!token) {
       return res(ctx.status(401), ctx.json({ message: 'Access token expired' }))
     }
-    return res(ctx.json({ message: 'protected content' }))
+    return res(ctx.status(200), ctx.json({ message: 'protected content' }))
   }),
 
   //POST - signup
