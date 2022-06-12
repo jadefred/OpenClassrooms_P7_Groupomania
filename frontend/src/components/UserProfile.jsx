@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import useFetch from '../hooks/useFetch'
 import { Link } from 'react-router-dom'
+import defaultProfil from '../assets/defaultProfil.svg'
 
 function UserProfile() {
   const { data, loading, error } = useFetch(
@@ -52,6 +53,12 @@ function UserProfile() {
     }
   }
 
+  //remove selected image / the image from server
+  function removeSelectedImg() {
+    setImage(null)
+    setInput({ ...input, avatarUrl: '' })
+  }
+
   return (
     <>
       {error && <p>Un problème apparu... Veuillez re-essayez plus tard</p>}
@@ -59,17 +66,28 @@ function UserProfile() {
       {!error && data && (
         <div>
           <form>
-            <img
-              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-              src={input.avatarUrl}
-              alt="l'avatar d'utilisateur"
-            />
+            {input.avatarUrl ? (
+              <img
+                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                src={input.avatarUrl}
+                alt="l'avatar d'utilisateur"
+              />
+            ) : (
+              <img
+                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                src={defaultProfil}
+                alt="l'avatar d'utilisateur"
+              />
+            )}
             <input
               type="file"
               name="image"
               accept="image/png, image/jpeg, image/jpg"
               onChange={handleImage}
             />
+            <button type="button" onClick={removeSelectedImg}>
+              Supprimer l'image
+            </button>
             <label htmlFor="username">Nom d'utilisateur :</label>
             <input
               onChange={handleInput}
