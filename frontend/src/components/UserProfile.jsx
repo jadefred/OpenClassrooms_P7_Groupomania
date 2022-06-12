@@ -89,6 +89,7 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
       formData.append('image', input.avatarUrl)
     }
 
+    //use async function to finish post request
     const data = asyncFetch(
       'http://localhost:3000/api/user',
       'PUT',
@@ -96,6 +97,8 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
       formData,
       true
     )
+
+    //pop flash message according fetch status
     if (data) {
       setFlashMessage('Vous avez modifié votre profil')
       timeOutMessage()
@@ -112,6 +115,7 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
       {!error && data && (
         <div>
           <form onSubmit={handleUserAccount}>
+            {/* if avatarUrl is not empty, display image. Display default svg profile picture when avatarUrl is empty */}
             {input.avatarUrl ? (
               <img
                 style={{ width: '100px', height: '100px', objectFit: 'cover' }}
@@ -131,6 +135,8 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
               accept="image/png, image/jpeg, image/jpg"
               onChange={handleImage}
             />
+
+            {/* button to remove avatar or selected image */}
             <button type="button" onClick={removeSelectedImg}>
               Supprimer l'image
             </button>
@@ -142,10 +148,19 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
               value={input.username}
               required
             />
+
+            {/* email input field can't be modified, display address only */}
             <label htmlFor="email">L'adresse mail : </label>
             <input type="text" name="email" value={input.email} disabled />
+
+            {/* user data will decide p value - admin / normal user */}
             <p>Type de compte : </p>
             {input.admin ? <p>Administrateur</p> : <p>Utilisateur</p>}
+
+            {/* warning message pops up when form is username is empty */}
+            {formNotComplete && <p>Veuillez remplir les informations</p>}
+
+            {/* buttons to submit, disable by default when no change is detected. return button back to feed */}
             <input type="submit" value="Modifier" disabled={btnDisable} />
             <Link to="/feed">
               <button type="button">Retourner</button>
