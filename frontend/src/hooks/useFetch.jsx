@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useLogStatus from '../Context'
 
-function useFetch(url, method, body) {
+function useFetch(url) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -11,12 +11,10 @@ function useFetch(url, method, body) {
     setLoading(true)
 
     fetch(url, {
-      method: method,
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
     })
       .then((response) => {
         response.json().then((result) => {

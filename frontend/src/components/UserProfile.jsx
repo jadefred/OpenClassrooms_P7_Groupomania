@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom'
 import defaultProfil from '../assets/defaultProfil.svg'
 
 function UserProfile() {
-  const { data, loading, error } = useFetch(
-    'http://localhost:3000/api/user',
-    'GET'
-  )
+  const { data, loading, error } = useFetch('http://localhost:3000/api/user')
   const [image, setImage] = useState(null)
+  const [btnDisable, setBtnDisable] = useState(true)
   const [input, setInput] = useState({
     username: '',
     email: '',
@@ -16,6 +14,7 @@ function UserProfile() {
     admin: false,
   })
 
+  //once fetch's data is loaded, update state
   useEffect(() => {
     if (data) {
       setInput({
@@ -27,8 +26,10 @@ function UserProfile() {
     }
   }, [data])
 
+  //update username state
   const handleInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
+    setBtnDisable(false)
   }
 
   //handle image input, check mime type before set to the state
@@ -48,6 +49,7 @@ function UserProfile() {
         setInput({ ...input, avatarUrl: reader.result })
       }
       reader.readAsDataURL(file)
+      setBtnDisable(false)
     } else {
       setImage(null)
     }
@@ -57,15 +59,20 @@ function UserProfile() {
   function removeSelectedImg() {
     setImage(null)
     setInput({ ...input, avatarUrl: '' })
+    setBtnDisable(false)
+  }
+
+  function handleUserAccount(e) {
+    e.preventDefault()
   }
 
   return (
     <>
-      {error && <p>Un problème apparu... Veuillez re-essayez plus tard</p>}
+      {error && <h2>Un problème apparu... Veuillez re-essayez plus tard</h2>}
 
       {!error && data && (
         <div>
-          <form>
+          <form onSubmit={handleUserAccount}>
             {input.avatarUrl ? (
               <img
                 style={{ width: '100px', height: '100px', objectFit: 'cover' }}
@@ -99,7 +106,7 @@ function UserProfile() {
             <input type="text" name="email" value={input.email} disabled />
             <p>Type de compte : </p>
             {input.admin ? <p>Administrateur</p> : <p>Utilisateur</p>}
-            <input type="submit" value="Modifier" />
+            <input type="submit" value="Modifier" disabled={btnDisable} />
             <Link to="/feed">
               <button type="button">Retourner</button>
             </Link>
