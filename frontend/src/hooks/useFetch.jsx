@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useLogStatus from '../Context'
 
 function useFetch(url, method, body) {
