@@ -61,10 +61,10 @@ export const allUsers = [
     _id: 'user1',
     username: 'smart doge',
     avatarUrl:
-      'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-889552354-e1606774439626.jpg',
+      'https://i.pinimg.com/originals/46/88/a7/4688a7597e5dd8b925da5374251d6df1.jpg',
     email: 'email@email.com',
     password: 'PASSword1234',
-    admin: false,
+    admin: true,
   },
   {
     _id: 'user2',

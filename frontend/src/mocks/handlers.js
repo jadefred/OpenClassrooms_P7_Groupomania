@@ -126,8 +126,8 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ message: 'comment posted' }))
   }),
 
-  //GET - get user infor
+  //GET - get user info
   rest.get('/api/user', (req, res, ctx) => {
-    return res(ctx.status(200).ctx.json(allUsers[0]))
+    return res(ctx.status(200), ctx.json(allUsers[0]))
   }),
 ]
