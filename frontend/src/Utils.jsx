@@ -31,3 +31,29 @@ async function requestLogin(accessToken) {
     return true
   }
 }
+
+//async function for POST, POST, DELETE request
+export const asyncFetch = async (url, method, token, body, image) => {
+  //headers content will depended on image, if it is true no json header will be added, vice versa
+  const header = image
+    ? {
+        authorization: `Bearer ${token}`,
+      }
+    : {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+      }
+
+  try {
+    const response = await fetch(url, {
+      method: method,
+      headers: header,
+      body: body,
+    })
+
+    const data = await response.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}

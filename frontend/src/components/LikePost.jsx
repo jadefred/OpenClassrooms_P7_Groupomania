@@ -3,7 +3,6 @@ import useLogStatus from '../Context'
 
 function LikePost({ likeUserId, postId }) {
   const { userId, token } = useLogStatus()
-  //const { user } = useContext(UserContext)
 
   async function likePost(userId, likeUserId) {
     //use some to determine if the user has already liked this post

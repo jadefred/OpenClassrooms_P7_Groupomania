@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import '../styles/newPost.css'
 import FlashMessage from './FlashMessage'
-import useFlashMessage from '../useFlashMessage'
+import useFlashMessage from '../hooks/useFlashMessage'
 import useLogStatus from '../Context'
 
 function NewPost() {

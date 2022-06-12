@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/feed.css'
-import useFlashMessage from '../useFlashMessage'
+import useFlashMessage from '../hooks/useFlashMessage'
 import useLogStatus from '../Context'
 
 //components

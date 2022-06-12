@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import useFetch from '../hooks/useFetch'
 import { Link } from 'react-router-dom'
 import defaultProfil from '../assets/defaultProfil.svg'
+import { asyncFetch } from '../Utils'
 
-function UserProfile() {
+//custom hooks
+import useFetch from '../hooks/useFetch'
+import useLogStatus from '../Context'
+
+function UserProfile({ setFlashMessage, timeOutMessage }) {
+  const { userId, token } = useLogStatus()
   const { data, loading, error } = useFetch('http://localhost:3000/api/user')
   const [image, setImage] = useState(null)
+  const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const [input, setInput] = useState({
     username: '',
@@ -64,6 +70,39 @@ function UserProfile() {
 
   function handleUserAccount(e) {
     e.preventDefault()
+
+    //pop error message if title / body content is empty and return function
+    if (input.username === '') {
+      setFormNotComplete(true)
+      return
+    }
+
+    //create form data, append image when user added
+    const formData = new FormData()
+    formData.append('userId', userId)
+    formData.append('username', input.username)
+
+    //append image if it exists
+    if (image) {
+      formData.append('image', image)
+    } else {
+      formData.append('image', input.avatarUrl)
+    }
+
+    const data = asyncFetch(
+      'http://localhost:3000/api/user',
+      'PUT',
+      token,
+      formData,
+      true
+    )
+    if (data) {
+      setFlashMessage('Vous avez modifié votre profil')
+      timeOutMessage()
+    } else {
+      setFlashMessage('Un problème a apparu..')
+      timeOutMessage()
+    }
   }
 
   return (
@@ -101,6 +140,7 @@ function UserProfile() {
               type="text"
               name="username"
               value={input.username}
+              required
             />
             <label htmlFor="email">L'adresse mail : </label>
             <input type="text" name="email" value={input.email} disabled />

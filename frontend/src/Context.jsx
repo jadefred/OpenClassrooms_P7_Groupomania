@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react'
-import userReducer, { initialState } from './useLoginReducer'
+import userReducer, { initialState } from './hooks/useLoginReducer'
 
 //user information
 const UserContext = createContext({ initialState })
