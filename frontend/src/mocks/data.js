@@ -60,7 +60,8 @@ export const allUsers = [
   {
     _id: 'user1',
     username: 'smart doge',
-    avatarUrl: 'testavatar.img',
+    avatarUrl:
+      'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-889552354-e1606774439626.jpg',
     email: 'email@email.com',
     password: 'PASSword1234',
     admin: false,

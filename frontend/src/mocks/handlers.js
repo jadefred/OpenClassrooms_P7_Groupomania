@@ -2,6 +2,7 @@
 import { rest } from 'msw'
 import Cookies from 'js-cookie'
 import { allPost } from './data'
+import { allUsers } from './data'
 
 export const handlers = [
   //Usert
@@ -123,5 +124,10 @@ export const handlers = [
   rest.post('/api/posts/comments', (req, res, ctx) => {
     console.log(req.body)
     return res(ctx.status(200), ctx.json({ message: 'comment posted' }))
+  }),
+
+  //GET - get user infor
+  rest.get('/api/user', (req, res, ctx) => {
+    return res(ctx.status(200).ctx.json(allUsers[0]))
   }),
 ]

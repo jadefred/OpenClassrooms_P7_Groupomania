@@ -10,9 +10,6 @@ function NavBar() {
 
   function toLogout() {
     Cookies.remove('accessToken')
-    Cookies.remove('refreshToken')
-    localStorage.removeItem('username')
-    localStorage.removeItem('userId')
     dispatchLogout()
     navigate('/')
   }
@@ -24,7 +21,9 @@ function NavBar() {
           <p>GROUPOMANIA</p>
         </Link>
         <div>
-          <button>Profile</button>
+          <Link to="/profile">
+            <button>Profile</button>
+          </Link>
           <button onClick={toLogout}>Logout</button>
         </div>
       </div>
