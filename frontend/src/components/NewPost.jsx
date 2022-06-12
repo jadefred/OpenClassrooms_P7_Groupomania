@@ -118,7 +118,11 @@ function NewPost() {
   return (
     <>
       <div>
-        <p>{username}, écrivez quelque chose ...</p>
+        {username ? (
+          <p>{username}, partargez nous quelque chose ...</p>
+        ) : (
+          <p>Écrivez quelque chose...</p>
+        )}
         <button onClick={toggleModal}>Nouveau Post</button>
       </div>
 
