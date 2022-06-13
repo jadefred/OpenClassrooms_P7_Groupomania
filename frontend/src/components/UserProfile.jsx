@@ -36,6 +36,10 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
   const handleInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
     setBtnDisable(false)
+    //remove warning message when user entred something in the field of username
+    if (input.username !== '') {
+      setFormNotComplete(false)
+    }
   }
 
   //handle image input, check mime type before set to the state
@@ -89,23 +93,23 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
       formData.append('image', input.avatarUrl)
     }
 
-    //use async function to finish post request
-    const data = asyncFetch(
-      'http://localhost:3000/api/user',
-      'PUT',
-      token,
-      formData,
-      true
-    )
-
-    //pop flash message according fetch status
-    if (data) {
-      setFlashMessage('Vous avez modifié votre profil')
-      timeOutMessage()
-    } else {
-      setFlashMessage('Un problème a apparu..')
-      timeOutMessage()
-    }
+    //async function from Utils to do POST request
+    //last argument (true) represents this fetch will passing file, asyncFetch will change headers accordingly
+    //assign flashMessage based on the response
+    asyncFetch('http://localhost:3000/api/user', 'PUT', token, formData, true)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('rejected by server')
+        }
+        console.log(response)
+        setFlashMessage('Vous avez modifié votre profil')
+        timeOutMessage()
+      })
+      .catch(
+        (err) => console.log(err),
+        setFlashMessage('Un problème a apparu..'),
+        timeOutMessage()
+      )
   }
 
   return (
@@ -146,7 +150,6 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
               type="text"
               name="username"
               value={input.username}
-              required
             />
 
             {/* email input field can't be modified, display address only */}
@@ -158,7 +161,7 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
             {input.admin ? <p>Administrateur</p> : <p>Utilisateur</p>}
 
             {/* warning message pops up when form is username is empty */}
-            {formNotComplete && <p>Veuillez remplir les informations</p>}
+            {formNotComplete && <p>Veuillez saisir un nom d'utilisateur</p>}
 
             {/* buttons to submit, disable by default when no change is detected. return button back to feed */}
             <input type="submit" value="Modifier" disabled={btnDisable} />
