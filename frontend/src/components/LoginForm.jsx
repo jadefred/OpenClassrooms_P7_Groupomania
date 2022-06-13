@@ -38,7 +38,7 @@ function LoginForm() {
         //response not ok, throw error
         if (!response.ok) {
           if (response.status === 500) {
-            setError("L'erreur du server, veuillez re-essayer plus tard.")
+            setError("L'erreur du serveur, veuillez réessayer plus tard.")
             throw Error('server error')
           }
           if (response.status === 401) {
@@ -55,7 +55,8 @@ function LoginForm() {
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken()
         if (tokenValid === false) {
-          throw Error('Login failed')
+          setError("L'authentification est expirée, veuillez reconnecter.")
+          throw Error('Access token invalid')
         }
 
         //object for useLogStatus hook
@@ -94,7 +95,7 @@ function LoginForm() {
           />
           <input ref={password} type="password" name="loginPassword" required />
           {error && <p>{error}</p>}
-          <input type="submit" value="LOGIN" />
+          <input type="submit" value="SE CONNECTER" />
         </form>
       </div>
     </>

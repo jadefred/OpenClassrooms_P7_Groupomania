@@ -33,7 +33,7 @@ export const handlers = [
     if (!token) {
       return res(ctx.status(401), ctx.json({ message: 'Access token expired' }))
     }
-    return res(ctx.status(200), ctx.json({ message: 'protected content' }))
+    return res(ctx.status(200), ctx.json({ message: 'Authentication succeed' }))
   }),
 
   //POST - signup

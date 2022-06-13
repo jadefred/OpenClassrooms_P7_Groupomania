@@ -10,14 +10,14 @@ function HomeNavBar({ guest, setGuest }) {
             setGuest(true)
           }}
         >
-          Signup
+          S'INSCRIRE
         </button>
         <button
           onClick={() => {
             setGuest(false)
           }}
         >
-          Login
+          SE CONNECTER
         </button>
       </div>
     </>
