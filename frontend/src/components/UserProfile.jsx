@@ -7,7 +7,7 @@ import { asyncFetch } from '../Utils'
 import useFetch from '../hooks/useFetch'
 import useLogStatus from '../Context'
 
-function UserProfile({ setFlashMessage, timeOutMessage }) {
+function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
   const { userId, token } = useLogStatus()
   const { data, loading, error } = useFetch('http://localhost:3000/api/user')
   const [image, setImage] = useState(null)
@@ -105,11 +105,38 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
         setFlashMessage('Vous avez modifié votre profil')
         timeOutMessage()
       })
-      .catch(
-        (err) => console.log(err),
-        setFlashMessage('Un problème a apparu..'),
+      .catch((err) => {
+        console.log(err)
+        setFlashMessage('Un problème a apparu..')
         timeOutMessage()
+      })
+  }
+
+  //pop up confirm block, setDeleteAccount as true, page will render DeleteUser component
+  //if fetch not success, it will stay in same page and prompt flash error message in the same component
+  function deleteUser() {
+    if (window.confirm('Vous êtes sûr de supprimer ce post ?')) {
+      asyncFetch(
+        'http://localhost:3000/api/user',
+        'DELETE',
+        token,
+        JSON.stringify({ userId: userId })
       )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('rejected by server')
+          }
+          console.log(response)
+          setDeleteAccount(true)
+        })
+        .catch((err) => {
+          console.log(err)
+          setFlashMessage('Un problème a apparu..')
+          timeOutMessage()
+        })
+    } else {
+      return
+    }
   }
 
   return (
@@ -165,10 +192,13 @@ function UserProfile({ setFlashMessage, timeOutMessage }) {
 
             {/* buttons to submit, disable by default when no change is detected. return button back to feed */}
             <input type="submit" value="Modifier" disabled={btnDisable} />
-            <Link to="/feed">
-              <button type="button">Retourner</button>
-            </Link>
           </form>
+          <Link to="/feed">
+            <button type="button">Retourner</button>
+          </Link>
+          <button onClick={deleteUser} type="button">
+            Supprimer Compte
+          </button>
         </div>
       )}
     </>

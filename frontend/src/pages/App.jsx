@@ -13,6 +13,7 @@ import Home from './Home.jsx'
 import Feed from './Feed.jsx'
 import Profile from './Profile.jsx'
 
+
 function App() {
   const { auth, persistLogin } = useLogStatus()
 

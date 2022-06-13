@@ -126,13 +126,19 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ message: 'comment posted' }))
   }),
 
-  //GET - get user info
+  //GET - get user info /:id
   rest.get('/api/user', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(allUsers[0]))
   }),
 
-  //PUT - get user info
+  //PUT - modify user info /:id
   rest.put('/api/user', (req, res, ctx) => {
+    console.log(req.body)
+    return res(ctx.status(200), ctx.json({ message: 'updated user info' }))
+  }),
+
+  //DELETE - delete user account /:id
+  rest.delete('/api/user', (req, res, ctx) => {
     console.log(req.body)
     return res(ctx.status(200), ctx.json({ message: 'updated user info' }))
   }),
