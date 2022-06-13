@@ -8,37 +8,43 @@ import useLogStatus from '../Context'
 function LoginForm() {
   const email = useRef()
   const password = useRef()
-  const [error, setError] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
   const { dispatchLogin, dispatchLogout } = useLogStatus()
 
   function handleLogin(e) {
     e.preventDefault()
 
-    //user login ready to be stringify
+    //object for POST request
     const userInfo = {
-      email: email.current.value,
-      password: password.current.value,
-    }
-
-    //Prepare post object
-    const options = {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify({
+        email: email.current.value,
+        password: password.current.value,
+      }),
     }
 
-    //async POST data to server
+    login()
+
+    //async POST request
     async function login() {
       try {
         const response = await fetch(
           'http://localhost:3000/api/auth/login',
-          options
+          userInfo
         )
-        //res not ok, throw error
+        //response not ok, throw error
         if (!response.ok) {
-          throw Error('Login Failed')
+          if (response.status === 500) {
+            setError("L'erreur du server, veuillez re-essayer plus tard.")
+            throw Error('server error')
+          }
+          if (response.status === 401) {
+            setError("L'adresse mail ou le mot de passe est incorrecte.")
+            throw Error('incorrect email or password')
+          }
         }
 
         const data = await response.json()
@@ -49,7 +55,7 @@ function LoginForm() {
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken()
         if (tokenValid === false) {
-          throw Error('failed to login')
+          throw Error('Login failed')
         }
 
         //object for useLogStatus hook
@@ -61,20 +67,18 @@ function LoginForm() {
           admin: data.admin,
           avatarUrl: data.avatarUrl,
         }
-        
+
         dispatchLogin(loginInfo)
 
         //redirect to feed page
         navigate('/feed')
       } catch (err) {
         //catch block, console error and display error message
-        console.log(err)
-        setError(true)
+        console.log(err.message)
+        //setError(true)
         dispatchLogout()
       }
     }
-
-    login()
   }
 
   return (
@@ -89,7 +93,7 @@ function LoginForm() {
             required
           />
           <input ref={password} type="password" name="loginPassword" required />
-          {error && <p>wrong email or wrong password</p>}
+          {error && <p>{error}</p>}
           <input type="submit" value="LOGIN" />
         </form>
       </div>
