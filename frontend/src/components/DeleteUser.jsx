@@ -7,6 +7,7 @@ function DeleteUser() {
   const { dispatchLogout } = useLogStatus()
   const navigate = useNavigate()
 
+  //2 seconds after landed on this page, user will be logged out and redirect to home page
   useEffect(() => {
     setTimeout(() => {
       Cookies.remove('accessToken')
@@ -17,7 +18,8 @@ function DeleteUser() {
 
   return (
     <>
-      <h1>this is delete page</h1>
+      <h1>On est triste de vous voir partir</h1>
+      <p>Ce page sera re-diregé à la page d'acceuil</p>
     </>
   )
 }
