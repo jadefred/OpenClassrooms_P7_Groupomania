@@ -6,10 +6,11 @@ import { asyncFetch } from '../Utils'
 //custom hooks
 import useFetch from '../hooks/useFetch'
 import useLogStatus from '../Context'
+import Loading from '../components/Loading.jsx'
 
 function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
   const { userId, token } = useLogStatus()
-  const { data, loading, error } = useFetch('http://localhost:3000/api/user')
+  const { data, isLoaded, error } = useFetch('http://localhost:3000/api/user')
   const [image, setImage] = useState(null)
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
@@ -141,9 +142,14 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
 
   return (
     <>
+      {/* Loading page */}
+      {isLoaded && <Loading />}
+
+      {/* Error page */}
       {error && <h2>Un problème apparu... Veuillez re-essayez plus tard</h2>}
 
-      {!error && data && (
+      {/* Profile page when no error and loading is finished */}
+      {!error && !isLoaded && (
         <div>
           <form onSubmit={handleUserAccount}>
             {/* if avatarUrl is not empty, display image. Display default svg profile picture when avatarUrl is empty */}
