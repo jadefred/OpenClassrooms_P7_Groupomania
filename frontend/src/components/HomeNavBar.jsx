@@ -1,7 +1,7 @@
 import React from 'react'
 import '../styles/homeNavBar.css'
 
-function HomeNavBar({ guest, setGuest }) {
+function HomeNavBar({ setGuest }) {
   return (
     <>
       <div className="HomeNavBar">

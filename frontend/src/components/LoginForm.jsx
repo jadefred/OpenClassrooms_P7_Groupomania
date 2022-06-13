@@ -28,14 +28,15 @@ function LoginForm() {
 
     login()
 
-    //async POST request
+    //async POST request - Login
     async function login() {
       try {
         const response = await fetch(
           'http://localhost:3000/api/auth/login',
           userInfo
         )
-        //response not ok, throw error
+
+        //response not ok, throw error, depends on status code
         if (!response.ok) {
           if (response.status === 500) {
             setError("L'erreur du serveur, veuillez réessayer plus tard.")

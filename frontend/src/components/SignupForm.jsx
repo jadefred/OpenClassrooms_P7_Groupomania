@@ -3,7 +3,6 @@ import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
 import Cookies from 'js-cookie'
 import { verifyToken } from '../Utils.jsx'
-//test
 import useLogStatus from '../Context'
 
 function SignupForm() {
@@ -12,9 +11,8 @@ function SignupForm() {
   const [emailValidated, setEmailValidated] = useState(false)
   const [pwValidated, setPwValidated] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
-  const [serverError, setServerError] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
-  //const { setUser } = useContext(UserContext)
 
   //password error message
   const [eightChar, setEightChar] = useState(false)
@@ -121,22 +119,19 @@ function SignupForm() {
         } catch (err) {
           //catch block, console error and show server error message
           console.log(err)
-          setServerError(true)
+          setError(true)
         }
       }
 
       //auto signup after sucessfully signed up
-      //object of login info
-      const loginInfo = {
-        email: e.target.signupEmail.value,
-        password: e.target.signupPassword.value,
-      }
-
-      //Prepare post object - login
+      //Object for login POST request
       const loginForm = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginInfo),
+        body: JSON.stringify({
+          email: e.target.signupEmail.value,
+          password: e.target.signupPassword.value,
+        }),
       }
 
       //async POST data to server
@@ -148,17 +143,22 @@ function SignupForm() {
           )
           //res not ok, throw error
           if (!response.ok) {
-            throw Error('Login Failed')
+            if (response.status === 500) {
+              setError("L'erreur du serveur, veuillez se connecter plus tard.")
+              throw Error('server error')
+            }
           }
 
-          //res ok, save token and username, then redirect to feed
           const data = await response.json()
+          //set access token as cookie once received data
           const { accessToken } = data
           Cookies.set('accessToken', accessToken, { expires: 1 })
 
+          //verify token (function from utils), return false if it is not validate
           const tokenValid = await verifyToken()
           if (tokenValid === false) {
-            throw Error('failed to login')
+            setError("L'authentification est expirée, veuillez reconnecter.")
+            throw Error('Access token invalid')
           }
 
           //object for useLogStatus hook
@@ -168,9 +168,12 @@ function SignupForm() {
             auth: true,
             token: accessToken,
             admin: data.admin,
-            avatartUrl: data.avatartUrl,
+            avatarUrl: data.avatarUrl,
           }
+
           dispatchLogin(loginInfo)
+
+          //redirect to feed page
           navigate('/feed')
         } catch (err) {
           //catch block, console error and display error message
@@ -181,7 +184,7 @@ function SignupForm() {
 
       signup()
       login()
-      setErrorMessage(false)
+      setErrorMessage('')
     }
     //see if passwords are match, update state to pop error msg
     else {
@@ -192,13 +195,13 @@ function SignupForm() {
       } else {
         setConfirmPassword(true)
       }
-      setErrorMessage(true)
+      setErrorMessage('')
     }
   }
 
   return (
     <>
-      {serverError && <p>Server Error, please try again later</p>}
+      {error !== '' && <p>{error}</p>}
       <div className="signupForm">
         <form onSubmit={handleSignup}>
           <input

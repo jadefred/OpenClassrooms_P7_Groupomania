@@ -10,7 +10,7 @@ function Home() {
   const [guest, setGuest] = useState(false)
   return (
     <>
-      <HomeNavBar guest={guest} setGuest={setGuest} />
+      <HomeNavBar setGuest={setGuest} />
       <div className="home__wrapper">
         <div className="home--logo">
           <h1>Groupomania</h1>
