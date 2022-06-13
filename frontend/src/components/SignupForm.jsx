@@ -21,9 +21,9 @@ function SignupForm() {
   const [number, setNumber] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState(true)
 
+  //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 30 characters
   function verifyUsername(e) {
-    //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 20 characters
-    const regexUsername = /[\w]{3,20}$/
+    const regexUsername = /[\w]{3,30}$/
     if (regexUsername.test(e.target.value)) {
       setUsernameValidate(true)
     } else {
@@ -84,46 +84,50 @@ function SignupForm() {
 
   function handleSignup(e) {
     e.preventDefault()
+
+    //Check if all input values are good
     if (
       usernameValidate &&
       emailValidated &&
       pwValidated &&
       e.target.signupPassword.value === e.target.signupConfirmPassword.value
     ) {
-      //object of signup info
-      const signupInfo = {
-        username: e.target.signupUsername.value,
-        email: e.target.signupEmail.value,
-        password: e.target.signupPassword.value,
-      }
-
-      //Prepare post object - signup
+      //Signup info for POST - signup
       const signupForm = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signupInfo),
+        body: JSON.stringify({
+          username: e.target.signupUsername.value,
+          email: e.target.signupEmail.value,
+          password: e.target.signupPassword.value,
+        }),
       }
 
-      //async POST data to server
+      //async POST request to server to create account
       async function signup() {
         try {
           const response = await fetch(
             'http://localhost:3000/api/auth/signup',
             signupForm
           )
-          //res not ok, throw error
+          //response not okay, throw error and display error message
           if (!response.ok) {
-            throw Error('Signup failed')
+            if (response.status === 409) {
+              setError('Cette adresse mail est déjà enregistrée.')
+              throw Error('server error')
+            }
+            setError('Une erreur est apparue, veuillez réessayer plus tard')
+            throw Error('server error')
           }
+
+          //auto signup after sucessfully signed up
           console.log('signup successfully')
+          login()
         } catch (err) {
-          //catch block, console error and show server error message
           console.log(err)
-          setError(true)
         }
       }
 
-      //auto signup after sucessfully signed up
       //Object for login POST request
       const loginForm = {
         method: 'POST',
@@ -141,12 +145,14 @@ function SignupForm() {
             'http://localhost:3000/api/auth/login',
             loginForm
           )
-          //res not ok, throw error
+          //response not okay, throw error and display error message
           if (!response.ok) {
             if (response.status === 500) {
               setError("L'erreur du serveur, veuillez se connecter plus tard.")
-              throw Error('server error')
+              throw Error('server error - cannot login')
             }
+            setError('Une erreur est apparue, veuillez se connecter plus tard.')
+            throw Error('Login error')
           }
 
           const data = await response.json()
@@ -157,7 +163,7 @@ function SignupForm() {
           //verify token (function from utils), return false if it is not validate
           const tokenValid = await verifyToken()
           if (tokenValid === false) {
-            setError("L'authentification est expirée, veuillez reconnecter.")
+            setError("L'authentification est expirée, veuillez se reconnecter.")
             throw Error('Access token invalid')
           }
 
@@ -183,10 +189,10 @@ function SignupForm() {
       }
 
       signup()
-      login()
-      setErrorMessage('')
+      setErrorMessage(false)
     }
-    //see if passwords are match, update state to pop error msg
+    //pop error message if password is not matched
+    //setErrorMessage set as true, the input field which are not correct will prompt error message accordingly
     else {
       if (
         e.target.signupPassword.value !== e.target.signupConfirmPassword.value
@@ -195,7 +201,8 @@ function SignupForm() {
       } else {
         setConfirmPassword(true)
       }
-      setErrorMessage('')
+
+      setErrorMessage(true)
     }
   }
 
@@ -208,51 +215,55 @@ function SignupForm() {
             onChange={verifyUsername}
             type="text"
             name="signupUsername"
-            placeholder="username"
+            placeholder="Pseudo"
             required
           />
           {errorMessage && !usernameValidate && (
             <p>
-              Username must between 3 to 20 characters, only letters, numbers
-              and underscore is allowed
+              Le pseudo doit contenir entre 3 et 30 caractères <br />
+              Utiliser uniquement des lettres minuscules, majuscules, nombres et
+              tiret du bas
             </p>
           )}
           <input
             onChange={verifyEmail}
             type="email"
             name="signupEmail"
-            placeholder="email@email.com"
+            placeholder="Email"
             required
           />
-          {errorMessage && !emailValidated && <p>Email format is incorrect</p>}
+          {errorMessage && !emailValidated && (
+            <p>Le format de l'adresse mail est invalide</p>
+          )}
           <input
             onChange={verifyPassword}
             type="password"
             name="signupPassword"
-            placeholder="password"
+            placeholder="Mot de passe"
             style={pwValidated ? { color: 'green' } : { color: 'red' }}
             required
           />
+          <p>Votre mot de passe doit contenir au moins : </p>
           <p style={eightChar ? { color: 'green' } : { color: 'red' }}>
-            Password must contain 8 characters
+            8 caractères
           </p>
           <p style={uppercase ? { color: 'green' } : { color: 'red' }}>
-            Password must contain 1 uppercase
+            1 majuscule
           </p>
           <p style={lowercase ? { color: 'green' } : { color: 'red' }}>
-            Password must contain 1 lowercase
+            1 minuscule
           </p>
-          <p style={number ? { color: 'green' } : { color: 'red' }}>
-            Password must contain 1 number
-          </p>
+          <p style={number ? { color: 'green' } : { color: 'red' }}>1 nombre</p>
           <input
             type="password"
             name="signupConfirmPassword"
-            placeholder="confirm password"
+            placeholder="Confirmer le mot de passe"
             required
           />
-          {errorMessage && !confirmPassword && <p>Passwords are not match</p>}
-          <input type="submit" value="SIGNUP" />
+          {errorMessage && !confirmPassword && (
+            <p>Veuillez saisir le même mot de passe</p>
+          )}
+          <input type="submit" value="S'INSCRIRE" />
         </form>
       </div>
     </>

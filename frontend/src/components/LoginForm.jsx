@@ -56,7 +56,7 @@ function LoginForm() {
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken()
         if (tokenValid === false) {
-          setError("L'authentification est expirée, veuillez reconnecter.")
+          setError("L'authentification est expirée, veuillez se reconnecter.")
           throw Error('Access token invalid')
         }
 
