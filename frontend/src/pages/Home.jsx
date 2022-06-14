@@ -11,10 +11,14 @@ function Home() {
   return (
     <>
       <HomeNavBar setGuest={setGuest} />
-      <div className="flex px-24 gap-x-20 mt-40">
+      <div className="flex flex-col md:flex-row px-10 md:px-24 gap-x-20 mt-20">
         <div className="basis-1/2">
-          <img src={logoOrange} alt="Logo de groupomania" className="w-8/12" />
-          <h1 className="text-4xl font-bold text-tertiaire mt-10">
+          <img
+            src={logoOrange}
+            alt="Logo de groupomania"
+            className="mx-auto w-auto md:mx-0"
+          />
+          <h1 className="text-2xl text-center md:text-left md:text-4xl font-bold text-tertiaire mt-10 mb-10 md:mb-0">
             Partagez et restez en contact avec vos colleagues.
           </h1>
         </div>

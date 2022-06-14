@@ -43,7 +43,7 @@ export const handlers = [
       return res(ctx.status(401), ctx.json({ message: 'signup failed' }))
     }
 
-    return res(ctx.status(200),ctx.json({ message: 'signup success' }))
+    return res(ctx.status(500), ctx.json({ message: 'signup success' }))
   }),
 
   //GET - get all posts

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import '../styles/signupFrom.css'
 import { useNavigate } from 'react-router'
 import Cookies from 'js-cookie'
 import { verifyToken } from '../Utils.jsx'
@@ -208,18 +207,24 @@ function SignupForm() {
 
   return (
     <>
-      {error !== '' && <p>{error}</p>}
-      <div className="signupForm">
-        <form onSubmit={handleSignup}>
+      <div className="border-2 border-gray-500 rounded-lg text-tertiaire shadow-md shadow-gray-300">
+        {error !== '' && (
+          <p className="text-primaire text-center px-auto pt-5">{error}</p>
+        )}
+        <form
+          onSubmit={handleSignup}
+          className="flex flex-col px-5 py-10 gap-y-5"
+        >
           <input
             onChange={verifyUsername}
             type="text"
             name="signupUsername"
             placeholder="Pseudo"
             required
+            className="border border-gray-500 rounded-md py-2 px-3"
           />
           {errorMessage && !usernameValidate && (
-            <p>
+            <p className="text-primaire">
               Le pseudo doit contenir entre 3 et 30 caractères <br />
               Utiliser uniquement des lettres minuscules, majuscules, nombres et
               tiret du bas
@@ -231,39 +236,63 @@ function SignupForm() {
             name="signupEmail"
             placeholder="Email"
             required
+            className="border border-gray-500 rounded-md py-2 px-3"
           />
           {errorMessage && !emailValidated && (
-            <p>Le format de l'adresse mail est invalide</p>
+            <p className="text-primaire">
+              Le format de l'adresse mail est invalide
+            </p>
           )}
           <input
             onChange={verifyPassword}
             type="password"
             name="signupPassword"
             placeholder="Mot de passe"
-            style={pwValidated ? { color: 'green' } : { color: 'red' }}
             required
+            className={`border border-gray-500 rounded-md py-2 px-3 ${
+              pwValidated ? 'text-tertiaire' : 'text-lightPrimary'
+            }`}
           />
-          <p>Votre mot de passe doit contenir au moins : </p>
-          <p style={eightChar ? { color: 'green' } : { color: 'red' }}>
-            8 caractères
+
+          <p className="font-semibold">
+            Votre mot de passe doit contenir au moins :{' '}
           </p>
-          <p style={uppercase ? { color: 'green' } : { color: 'red' }}>
-            1 majuscule
-          </p>
-          <p style={lowercase ? { color: 'green' } : { color: 'red' }}>
-            1 minuscule
-          </p>
-          <p style={number ? { color: 'green' } : { color: 'red' }}>1 nombre</p>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col gap-y-2">
+              <p className={eightChar ? 'text-green-700' : 'text-lightPrimary'}>
+                {'\u2022'} 8 caractères
+              </p>
+              <p className={uppercase ? 'text-green-700' : 'text-lightPrimary'}>
+                {'\u2022'} 1 majuscule
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <p className={lowercase ? 'text-green-700' : 'text-lightPrimary'}>
+                {'\u2022'} 1 minuscule
+              </p>
+              <p className={number ? 'text-green-700' : 'text-lightPrimary'}>
+                {'\u2022'} 1 nombre
+              </p>
+            </div>
+          </div>
+
           <input
             type="password"
             name="signupConfirmPassword"
             placeholder="Confirmer le mot de passe"
             required
+            className="border border-gray-500 rounded-md py-2 px-3"
           />
           {errorMessage && !confirmPassword && (
-            <p>Veuillez saisir le même mot de passe</p>
+            <p className="text-primaire">
+              Veuillez saisir le même mot de passe
+            </p>
           )}
-          <input type="submit" value="S'INSCRIRE" />
+          <input
+            type="submit"
+            value="S'INSCRIRE"
+            className="bg-lightPrimary text-white font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-primaire"
+          />
         </form>
       </div>
     </>
