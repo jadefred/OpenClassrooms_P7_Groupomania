@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import Cookies from 'js-cookie'
 import { verifyToken } from '../Utils.jsx'
-import '../styles/loginForm.css'
 import useLogStatus from '../Context'
 
 function LoginForm() {
@@ -85,18 +84,33 @@ function LoginForm() {
 
   return (
     <>
-      <div className="loginForm">
-        <form onSubmit={handleLogin}>
+      <div className="border-2 border-gray-500 rounded-lg text-tertiaire shadow-md shadow-gray-300">
+        <form
+          onSubmit={handleLogin}
+          className="flex flex-col px-5 py-10 gap-y-5"
+        >
           <input
             ref={email}
             type="email"
             name="loginEmail"
-            placeholder="email@email.com"
+            placeholder="Email"
             required
+            className="border border-gray-500 rounded-md py-2 px-3"
           />
-          <input ref={password} type="password" name="loginPassword" required />
-          {error && <p>{error}</p>}
-          <input type="submit" value="SE CONNECTER" />
+          <input
+            ref={password}
+            type="password"
+            name="loginPassword"
+            placeholder="Mot de passe"
+            required
+            className="border border-gray-500 rounded-md py-2 px-3"
+          />
+          {error && <p className="text-primaire text-center">{error}</p>}
+          <input
+            type="submit"
+            value="SE CONNECTER"
+            className="bg-lightPrimary text-white font-semibold px-4 py-2 rounded-md cursor-pointer hover:bg-primaire"
+          />
         </form>
       </div>
     </>

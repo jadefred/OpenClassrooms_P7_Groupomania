@@ -3,12 +3,12 @@ import React from 'react'
 function HomeNavBar({ setGuest }) {
   return (
     <>
-      <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-primaire bg-red-50 ">
+      <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-primaire bg-lightRed ">
         <button
           onClick={() => {
             setGuest(true)
           }}
-          className="text-white font-semibold bg-primaire px-4 py-2 rounded-md"
+          className="text-white font-semibold bg-lightPrimary hover:bg-primaire px-4 py-2 rounded-md shadow-md shadow-gray-300"
         >
           S'INSCRIRE
         </button>
@@ -16,7 +16,7 @@ function HomeNavBar({ setGuest }) {
           onClick={() => {
             setGuest(false)
           }}
-          className="text-white font-semibold bg-tertiaire px-4 py-2 rounded-md"
+          className="text-white font-semibold bg-tertiaire hover:bg-darkGray px-4 py-2 rounded-md shadow-md shadow-gray-300"
         >
           SE CONNECTER
         </button>
