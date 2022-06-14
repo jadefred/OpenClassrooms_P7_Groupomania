@@ -1,14 +1,14 @@
 import React from 'react'
-import '../styles/homeNavBar.css'
 
 function HomeNavBar({ setGuest }) {
   return (
     <>
-      <div className="HomeNavBar">
+      <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-primaire bg-red-50 ">
         <button
           onClick={() => {
             setGuest(true)
           }}
+          className="text-white font-semibold bg-primaire px-4 py-2 rounded-md"
         >
           S'INSCRIRE
         </button>
@@ -16,6 +16,7 @@ function HomeNavBar({ setGuest }) {
           onClick={() => {
             setGuest(false)
           }}
+          className="text-white font-semibold bg-tertiaire px-4 py-2 rounded-md"
         >
           SE CONNECTER
         </button>

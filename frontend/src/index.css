@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  height: 100%;
+}
+
 body {
   font-family: 'Lato';
+}
+
+h1 p {
+  color: #4e5166
+  /* tertiaire couleur */
 }
 
 /* body {
