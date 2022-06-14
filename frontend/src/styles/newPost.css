@@ -89,6 +89,14 @@ body.active-modal {
   border-radius: 50%;
 }
 
+.NewPost--delete-btn {
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #fd2d01;
+}
+
 .NewPost--cancel-btn {
   color: white;
   padding: 0.4rem 1rem;
@@ -102,7 +110,7 @@ body.active-modal {
   padding: 0.4rem 1rem;
   font-size: 18px;
   border-radius: 5px;
-  background-color: #fd2d01;
+  background-color: #117627;
 }
 
 .NewPost--submit-btn:disabled {

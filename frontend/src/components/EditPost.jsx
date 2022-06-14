@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import useLogStatus from '../Context'
 
 function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
@@ -12,6 +12,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
   const [formNotComplete, setFormNotComplete] = useState(false)
   const [btnDisable, setBtnDisable] = useState(true)
   const { userId, token } = useLogStatus()
+  const imageRef = useRef()
 
   //close modal after clicked overlay
   function toggleModal() {
@@ -149,7 +150,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
           <div className="NewPost--modal-content">
             <h2>Modifer Post</h2>
             <form onSubmit={handleModifyPost}>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="title">Titre :</label>
                 <input
                   onChange={handleEditPost}
@@ -159,46 +160,65 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
                   required
                 />
               </div>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="content">Contenu :</label>
                 <textarea
                   onChange={handleEditPost}
                   name="content"
-                  cols="30"
-                  rows="10"
+                  cols="40"
+                  rows="3"
                   value={input.content}
                 ></textarea>
               </div>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="image">Image : </label>
                 <input
                   type="file"
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={handleImage}
+                  ref={imageRef}
+                  className="NewPost--hidden-file-input"
                 />
-                {preview && (
-                  <>
-                    <img
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                      }}
-                      src={preview}
-                      alt=""
-                    />
-                    <button type="button" onClick={removeSelectedImg}>
-                      Supprimer l'image
-                    </button>
-                  </>
-                )}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    imageRef.current.click()
+                  }}
+                  className="NewPost--add-image-btn"
+                >
+                  Choisir une image
+                </button>
               </div>
+              {preview && (
+                <div className="NewPost--file">
+                  <img
+                    src={preview}
+                    alt="téléchargement"
+                    className="NewPost--file__image"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeSelectedImg}
+                    className="NewPost--file__btn"
+                  >
+                    Supprimer l'image
+                  </button>
+                </div>
+              )}
+
               {formNotComplete && <p>Veuillez remplir les informations</p>}
-              <div>
-                <input type="submit" value="Envoyer" disabled={btnDisable} />
-                <button onClick={toggleModal}>Annuler</button>
-                <button type="button" onClick={handleDeletePost}>
+              <div className="NewPost--btn-wrapper">
+                <input
+                  type="submit"
+                  value="Envoyer"
+                  disabled={btnDisable}
+                  className="NewPost--submit-btn"
+                />
+                <button onClick={toggleModal} className="NewPost--cancel-btn">
+                  Annuler
+                </button>
+                <button type="button" onClick={handleDeletePost} className="NewPost--delete-btn">
                   Supprimer
                 </button>
               </div>
