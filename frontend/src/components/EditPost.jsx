@@ -151,7 +151,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
             <h2>Modifer Post</h2>
             <form onSubmit={handleModifyPost}>
               <div className="formInputField">
-                <label htmlFor="title">Titre :</label>
+                <label htmlFor="title">Titre : </label>
                 <input
                   onChange={handleEditPost}
                   type="text"
@@ -161,7 +161,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
                 />
               </div>
               <div className="formInputField">
-                <label htmlFor="content">Contenu :</label>
+                <label htmlFor="content">Contenu : </label>
                 <textarea
                   onChange={handleEditPost}
                   name="content"
@@ -207,7 +207,11 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
                 </div>
               )}
 
-              {formNotComplete && <p>Veuillez remplir les informations</p>}
+              {formNotComplete && (
+                <p className="text-primaire">
+                  Veuillez remplir les informations
+                </p>
+              )}
               <div className="NewPost--btn-wrapper">
                 <input
                   type="submit"
@@ -218,7 +222,11 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
                 <button onClick={toggleModal} className="NewPost--cancel-btn">
                   Annuler
                 </button>
-                <button type="button" onClick={handleDeletePost} className="NewPost--delete-btn">
+                <button
+                  type="button"
+                  onClick={handleDeletePost}
+                  className="NewPost--delete-btn"
+                >
                   Supprimer
                 </button>
               </div>

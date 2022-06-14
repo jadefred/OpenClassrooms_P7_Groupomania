@@ -116,7 +116,7 @@ function NewPost() {
 
   return (
     <>
-      <div className="relative text-center flex justify-center items-center gap-x-10 my-4 w-3/5 mx-auto text-tertiaire">
+      <div className="text-center flex justify-center items-center gap-x-10 my-4 w-3/5 mx-auto text-tertiaire">
         {username ? (
           <p className="text-lg italic">
             {username}, partargez nous quelque chose ...
@@ -186,7 +186,7 @@ function NewPost() {
                 </div>
               )}
 
-              {formNotComplete && <p>Veuillez remplir les informations</p>}
+              {formNotComplete && <p className='text-primaire'>Veuillez remplir les informations</p>}
               <div className="NewPost--btn-wrapper">
                 <input type="submit" value="Envoyer" disabled={btnDisable} className="NewPost--submit-btn"/>
                 <button onClick={toggleModal} className="NewPost--cancel-btn">Annuler</button>

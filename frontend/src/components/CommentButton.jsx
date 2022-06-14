@@ -123,7 +123,7 @@ function CommentButton({ postId, setFlashMessage }) {
             <h2>Commenter</h2>
             <form onSubmit={creatComment}>
               <div className="formInputField">
-                <label htmlFor="content">Contenu :</label>
+                <label htmlFor="content">Contenu : </label>
                 <textarea
                   onChange={handleInput}
                   ref={contentRef}
@@ -168,7 +168,7 @@ function CommentButton({ postId, setFlashMessage }) {
                 </div>
               )}
 
-              {formNotComplete && <p>Veuillez remplir les informations</p>}
+              {formNotComplete && <p className='text-primaire'>Veuillez remplir les informations</p>}
               <div className="NewPost--btn-wrapper">
                 <input
                   type="submit"
