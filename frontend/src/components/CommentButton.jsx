@@ -122,17 +122,17 @@ function CommentButton({ postId, setFlashMessage }) {
           <div className="NewPost--modal-content">
             <h2>Commenter</h2>
             <form onSubmit={creatComment}>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="content">Contenu :</label>
                 <textarea
                   onChange={handleInput}
                   ref={contentRef}
                   name="content"
-                  cols="30"
-                  rows="10"
+                  cols="40"
+                  rows="3"
                 ></textarea>
               </div>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="image">Image : </label>
                 <input
                   ref={imageRef}
@@ -140,28 +140,45 @@ function CommentButton({ postId, setFlashMessage }) {
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={handleImage}
+                  className="NewPost--hidden-file-input"
                 />
-                {image && (
-                  <>
-                    <img
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                      }}
-                      src={preview}
-                      alt=""
-                    />
-                    <button onClick={removeSelectedImg}>
-                      Supprimer l'image
-                    </button>
-                  </>
-                )}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    imageRef.current.click()
+                  }}
+                  className="NewPost--add-image-btn"
+                >
+                  Choisir une image
+                </button>
               </div>
+              {image && (
+                <div className="NewPost--file">
+                  <img
+                    src={preview}
+                    alt="téléchargement"
+                    className="NewPost--file__image"
+                  />
+                  <button
+                    onClick={removeSelectedImg}
+                    className="NewPost--file__btn"
+                  >
+                    Supprimer l'image
+                  </button>
+                </div>
+              )}
+
               {formNotComplete && <p>Veuillez remplir les informations</p>}
-              <div>
-                <input type="submit" value="Commenter" disabled={btnDisable} />
-                <button onClick={toggleModal}>Annuler</button>
+              <div className="NewPost--btn-wrapper">
+                <input
+                  type="submit"
+                  value="Commenter"
+                  disabled={btnDisable}
+                  className="NewPost--submit-btn"
+                />
+                <button onClick={toggleModal} className="NewPost--cancel-btn">
+                  Annuler
+                </button>
               </div>
             </form>
           </div>
