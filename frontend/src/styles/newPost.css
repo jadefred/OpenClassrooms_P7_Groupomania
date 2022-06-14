@@ -24,4 +24,93 @@ body.active-modal {
   background: #f1f1f1;
   border-radius: 3px;
   width: 60%;
+  color: #4e5166;
+  text-align: center;
+  border-radius: 30px;
+}
+
+.NewPost--modal-content h2 {
+  font-weight: 700;
+  font-size: 30px;
+  margin-top: 2rem;
+}
+
+.NewPost--modal-content form {
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+  padding: 2rem;
+  margin: auto;
+}
+
+.formInputField {
+  display: flex;
+  width: 100%;
+}
+
+.formInputField label {
+  width: 20%;
+  font-size: 18px;
+}
+
+.formInputField input,
+.formInputField textarea {
+  width: 70%;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
+.NewPost--hidden-file-input {
+  display: none;
+}
+
+.NewPost--add-image-btn,
+.NewPost--file__btn {
+  background-color: #4e5166;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
+.NewPost--file {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.NewPost--file__image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.NewPost--cancel-btn {
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #4e5166;
+}
+
+.NewPost--submit-btn {
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #fd2d01;
+}
+
+.NewPost--submit-btn:disabled {
+  background-color: #a3a3a3;
+}
+
+.NewPost--btn-wrapper {
+  display: flex;
+  column-gap: 2rem;
+  margin: auto;
 }

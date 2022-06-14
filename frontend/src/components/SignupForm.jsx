@@ -207,7 +207,7 @@ function SignupForm() {
 
   return (
     <>
-      <div className="border-2 border-gray-500 rounded-lg text-tertiaire shadow-md shadow-gray-300">
+      <div className="border-2 border-gray-500 rounded-3xl text-tertiaire">
         {error !== '' && (
           <p className="text-primaire text-center px-auto pt-5">{error}</p>
         )}

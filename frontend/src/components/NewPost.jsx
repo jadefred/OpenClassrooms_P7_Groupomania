@@ -5,7 +5,6 @@ import useFlashMessage from '../hooks/useFlashMessage'
 import useLogStatus from '../Context'
 
 function NewPost() {
-  //const { user } = useContext(UserContext)
   const [modal, setModal] = useState(false)
   const titleRef = useRef()
   const contentRef = useRef()
@@ -117,13 +116,20 @@ function NewPost() {
 
   return (
     <>
-      <div>
+      <div className="relative text-center flex justify-center items-center gap-x-10 my-4 w-3/5 mx-auto text-tertiaire">
         {username ? (
-          <p>{username}, partargez nous quelque chose ...</p>
+          <p className="text-lg italic">
+            {username}, partargez nous quelque chose ...
+          </p>
         ) : (
           <p>Écrivez quelque chose...</p>
         )}
-        <button onClick={toggleModal}>Nouveau Post</button>
+        <button
+          onClick={toggleModal}
+          className="bg-tertiaire text-white text-md font-semibold rounded-lg px-5 py-1 shadow-md shadow-gray-200"
+        >
+          Nouveau Post
+        </button>
       </div>
 
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
@@ -134,8 +140,8 @@ function NewPost() {
           <div className="NewPost--modal-content">
             <h2>Nouveau Post</h2>
             <form onSubmit={createNewPost}>
-              <div>
-                <label htmlFor="title">Titre :</label>
+              <div className="formInputField">
+                <label htmlFor="title">Titre : </label>
                 <input
                   onChange={handleTitle}
                   ref={titleRef}
@@ -144,16 +150,16 @@ function NewPost() {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="content">Contenu :</label>
+              <div className="formInputField">
+                <label htmlFor="content">Contenu : </label>
                 <textarea
                   ref={contentRef}
                   name="content"
-                  cols="30"
-                  rows="10"
+                  cols="40"
+                  rows="3"
                 ></textarea>
               </div>
-              <div>
+              <div className="formInputField">
                 <label htmlFor="image">Image : </label>
                 <input
                   ref={imageRef}
@@ -161,28 +167,29 @@ function NewPost() {
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={handleImage}
+                  className="NewPost--hidden-file-input"
                 />
-                {image && (
-                  <>
-                    <img
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                      }}
-                      src={preview}
-                      alt=""
-                    />
-                    <button onClick={removeSelectedImg}>
-                      Supprimer l'image
-                    </button>
-                  </>
-                )}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    imageRef.current.click()
+                  }}
+                  className="NewPost--add-image-btn"
+                >
+                  Choisir une image
+                </button>
               </div>
+              {image && (
+                <div className="NewPost--file">
+                  <img className="NewPost--file__image" src={preview} alt="Téléchargement" />
+                  <button onClick={removeSelectedImg} className="NewPost--file__btn">Supprimer l'image</button>
+                </div>
+              )}
+
               {formNotComplete && <p>Veuillez remplir les informations</p>}
-              <div>
-                <input type="submit" value="Envoyer" disabled={btnDisable} />
-                <button onClick={toggleModal}>Annuler</button>
+              <div className="NewPost--btn-wrapper">
+                <input type="submit" value="Envoyer" disabled={btnDisable} className="NewPost--submit-btn"/>
+                <button onClick={toggleModal} className="NewPost--cancel-btn">Annuler</button>
               </div>
             </form>
           </div>

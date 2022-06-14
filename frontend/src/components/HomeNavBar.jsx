@@ -3,7 +3,7 @@ import React from 'react'
 function HomeNavBar({ setGuest }) {
   return (
     <>
-      <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-primaire bg-lightRed ">
+      <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-lightPrimary bg-lightRed ">
         <button
           onClick={() => {
             setGuest(true)

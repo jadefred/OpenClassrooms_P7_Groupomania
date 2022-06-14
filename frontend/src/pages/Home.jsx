@@ -12,7 +12,7 @@ function Home() {
     <>
       <HomeNavBar setGuest={setGuest} />
       <div className="flex flex-col md:flex-row px-10 md:px-24 gap-x-20 mt-20">
-        <div className="basis-1/2">
+        <div className="basis-1/2 md:self-center">
           <img
             src={logoOrange}
             alt="Logo de groupomania"

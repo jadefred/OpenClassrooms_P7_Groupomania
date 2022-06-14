@@ -84,7 +84,7 @@ function LoginForm() {
 
   return (
     <>
-      <div className="border-2 border-gray-500 rounded-lg text-tertiaire shadow-md shadow-gray-300">
+      <div className="border-2 border-gray-500 rounded-3xl text-tertiaire">
         <form
           onSubmit={handleLogin}
           className="flex flex-col px-5 py-10 gap-y-5"
