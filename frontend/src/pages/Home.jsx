@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '../styles/home.css'
+import "../index.css"
 
 //components
 import HomeNavBar from '../components/HomeNavBar'
@@ -11,7 +12,7 @@ function Home() {
   return (
     <>
       <HomeNavBar setGuest={setGuest} />
-      <div className="home__wrapper">
+      <div className='flex justify-around'>
         <div className="home--logo">
           <h1>Groupomania</h1>
           <p>

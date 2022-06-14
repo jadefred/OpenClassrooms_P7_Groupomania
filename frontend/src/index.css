@@ -1,4 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
+  font-family: 'Lato';
+}
+
+/* body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -8,9 +16,10 @@ body {
   --primaire: #fd2d01;
   --secondaire: #ffd7d7;
   --tertiaire: #4e5166;
-}
+} */
 
-a, button {
+/* a,
+button {
   cursor: pointer;
 }
 
@@ -20,4 +29,4 @@ a:hover,
 a:active {
   color: inherit;
   text-decoration: none;
-}
+} */

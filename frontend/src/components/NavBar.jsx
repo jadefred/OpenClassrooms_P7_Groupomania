@@ -22,9 +22,9 @@ function NavBar() {
         </Link>
         <div>
           <Link to="/profile">
-            <button>Profile</button>
+            <button>Profil</button>
           </Link>
-          <button onClick={toLogout}>Logout</button>
+          <button onClick={toLogout}>Se déconnecter</button>
         </div>
       </div>
     </>
