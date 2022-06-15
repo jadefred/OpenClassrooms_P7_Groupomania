@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import useLogStatus from '../Context'
+import commentIcon from '../assets/commentBtn.svg'
 
 function CommentButton({ postId, setFlashMessage }) {
   const [modal, setModal] = useState(false)
@@ -114,7 +115,13 @@ function CommentButton({ postId, setFlashMessage }) {
 
   return (
     <>
-      <button onClick={toggleModal}>Commenter</button>
+      <button
+        onClick={toggleModal}
+        className="flex mx-auto items-center gap-x-2"
+      >
+        <img src={commentIcon} alt="bouton de commenter" className="w-6 h-6" />
+        <p>Commenter</p>
+      </button>
 
       {modal && (
         <div className="NewPost--modal">
@@ -168,7 +175,11 @@ function CommentButton({ postId, setFlashMessage }) {
                 </div>
               )}
 
-              {formNotComplete && <p className='text-primaire'>Veuillez remplir les informations</p>}
+              {formNotComplete && (
+                <p className="text-primaire">
+                  Veuillez remplir les informations
+                </p>
+              )}
               <div className="NewPost--btn-wrapper">
                 <input
                   type="submit"
