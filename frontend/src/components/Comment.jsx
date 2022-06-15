@@ -1,6 +1,7 @@
 import React from 'react'
 import '../styles/comment.css'
 import useLogStatus from '../Context'
+import deleteBtn from '../assets/deleteBtn.svg'
 
 function Comment(props) {
   const comment = [...props.comment]
@@ -25,21 +26,33 @@ function Comment(props) {
     <>
       {comment.map((i) => {
         return (
-          <div key={i.commentId} className="Comment--box">
-            <div>
+          <div key={i.commentId} className="flex px-4">
+            {/* Username, avatar block */}
+            <div className="flex items-center gap-x-3 basis-1/4">
+              <img
+                src={i.avatarUrl}
+                alt={`l'avatar de ${i.username}`}
+                className="w-8 h-8 object-cover rounded-full"
+              />
               <p>{i.username}</p>
-              <img src={i.avatarUrl} alt={`l'avatar de ${i.username}`} />
             </div>
-            <div>{i.commentBody}</div>
-            {(userId === i.userId || admin) && (
-              <button
-                onClick={() => {
-                  deleteComment(i.commentId)
-                }}
-              >
-                Supprimer
-              </button>
-            )}
+            <div className="flex justify-between items-center basis-3/4 gap-x-2">
+              <div className="basis-3/4">{i.commentBody}</div>
+              {(userId === i.userId || admin) && (
+                <button
+                  onClick={() => {
+                    deleteComment(i.commentId)
+                  }}
+                  className="basis-1/4 text-right"
+                >
+                  <img
+                    src={deleteBtn}
+                    alt="supprimer cette commentaire"
+                    className="w-5 h-5"
+                  />
+                </button>
+              )}
+            </div>
           </div>
         )
       })}

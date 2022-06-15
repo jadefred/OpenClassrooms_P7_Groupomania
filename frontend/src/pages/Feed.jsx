@@ -21,6 +21,7 @@ function Feed() {
   const [modal, setModal] = useState({})
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
   const { userId, token, admin } = useLogStatus()
+  const [clickLike, setClickLike] = useState(true)
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -37,6 +38,7 @@ function Feed() {
   }
 
   //fetch to get all posts
+  //depends on clickLike, once user is clicked LikePost component's button, trigger useEffect to re-render allPost data in order to get latest number of like
   useEffect(() => {
     async function getAllPosts() {
       const response = await fetch('http://localhost:3000/api/posts', {
@@ -51,7 +53,7 @@ function Feed() {
       setIsLoaded(true)
     }
     getAllPosts()
-  }, [])
+  }, [clickLike])
 
   return (
     <>
@@ -158,6 +160,7 @@ function Feed() {
                           <LikePost
                             likeUserId={post.likeUserId}
                             postId={post.postId}
+                            setClickLike={setClickLike}
                           />
                         </div>
                         <div className="basis-1/2 text-center my-1">
