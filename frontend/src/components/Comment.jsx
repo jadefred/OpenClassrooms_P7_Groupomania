@@ -23,10 +23,13 @@ function Comment(props) {
   }
 
   return (
-    <>
+    <div className="bg-gray-200 py-6 flex flex-col gap-y-4">
       {comment.map((i) => {
         return (
-          <div key={i.commentId} className="flex px-4">
+          <div
+            key={i.commentId}
+            className="flex bg-white w-4/5 mx-auto py-2 px-6 rounded-2xl"
+          >
             {/* Username, avatar block */}
             <div className="flex items-center gap-x-3 basis-1/4">
               <img
@@ -34,7 +37,7 @@ function Comment(props) {
                 alt={`l'avatar de ${i.username}`}
                 className="w-8 h-8 object-cover rounded-full"
               />
-              <p>{i.username}</p>
+              <p className="font-semibold">{i.username}</p>
             </div>
             <div className="flex justify-between items-center basis-3/4 gap-x-2">
               <div className="basis-3/4">{i.commentBody}</div>
@@ -43,7 +46,6 @@ function Comment(props) {
                   onClick={() => {
                     deleteComment(i.commentId)
                   }}
-                  className="basis-1/4 text-right"
                 >
                   <img
                     src={deleteBtn}
@@ -56,7 +58,7 @@ function Comment(props) {
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 
