@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import '../styles/feed.css'
+//import '../styles/feed.css'
 import useFlashMessage from '../hooks/useFlashMessage'
 import useLogStatus from '../Context'
+import editPostLogo from '../assets/editPost.svg'
 
 //components
 import NavBar from '../components/NavBar.jsx'
@@ -60,30 +61,27 @@ function Feed() {
       {/* flash message pops up after user edited a post */}
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
 
-      <div className="Feed">
+      <div className="w-8/12 border mx-auto">
         {isLoaded && error && <p>Something went wrong...</p>}
 
         {isLoaded && !error && (
-          <div className="Feed__all-posts-wrapper">
+          <div className="w-full flex flex-col text-tertiaire ">
             {/* map throught allPosts state to display all content */}
             {allPosts.map((post) => {
               return (
                 <>
-                  <div key={post.postId} className="Feed__one-post-wrapper">
+                  <div key={post.postId} className="border">
                     <div>
-                      <div>
-                        <p>{post.username}</p>
-                        <img
-                          style={{
-                            width: '50px',
-                            height: '50px',
-                            objectFit: 'cover',
-                          }}
-                          src={post.avatarUrl}
-                          alt={`l'avatar de ${post.username}`}
-                        />
-                      </div>
-                      <div>
+                      {/* username, avatar and edit button block */}
+                      <div className="border flex justify-between px-3 py-1 ">
+                        <div className="flex items-center gap-x-3">
+                          <img
+                            src={post.avatarUrl}
+                            alt={`l'avatar de ${post.username}`}
+                            className="w-10 h-10 object-cover rounded-full"
+                          />
+                          <p className="font-bold text-md">{post.username}</p>
+                        </div>
                         {/* render edit button if user is op / admin  */}
                         {(post.userId === userId || admin) && (
                           <button
@@ -91,10 +89,15 @@ function Feed() {
                               toggleModal(post.postId)
                             }}
                           >
-                            Edit
+                            <img
+                              src={editPostLogo}
+                              alt="bouton pour modifier le post"
+                              className="w-5 h-5"
+                            />
                           </button>
                         )}
-
+                      </div>
+                      <div>
                         {/* render edit post component when content according postId */}
                         {modal[post.postId] && (
                           <EditPost
@@ -108,48 +111,62 @@ function Feed() {
                         )}
                       </div>
                     </div>
-                    <div>
-                      <h2>{post.title}</h2>
-                    </div>
-                    <div>
-                      <p>{post.content}</p>
-                      {/* appear only when imageUrl is added */}
-                      {post.imageUrl !== '' && (
-                        <img
-                          style={{ width: '100px' }}
-                          src={post.imageUrl}
-                          alt={post.title}
-                        />
-                      )}
-                    </div>
-                    <div className="Feed__one-post--like-comment-box">
-                      {/* number of people liked this post, hide p whee like is 0 */}
-                      {post.like > 0 && post.like <= 1 && (
-                        <p>{post.like} Like</p>
-                      )}
-                      {post.like > 1 && <p>{post.like} Likes</p>}
 
-                      {/* number of comment on this post, hide p when no comment */}
-                      {post.totalComment > 0 && post.totalComment <= 1 && (
-                        <p onClick={() => toggleComment(post.postId)}>
-                          {post.totalComment} Commentaire
-                        </p>
-                      )}
-                      {post.totalComment > 1 && (
-                        <p onClick={() => toggleComment(post.postId)}>
-                          {post.totalComment} Commentaires
-                        </p>
-                      )}
-                    </div>
+                    {/* Block of title, content, like, comment buttons */}
                     <div>
-                      <LikePost
-                        likeUserId={post.likeUserId}
-                        postId={post.postId}
-                      />
-                      <CommentButton
-                        postId={post.postId}
-                        setFlashMessage={setFlashMessage}
-                      />
+                      <div className="flex flex-col gap-y-4 w-9/12 mx-auto my-3">
+                        <h2 className="font-bold text-2xl">{post.title}</h2>
+                        <p>{post.content}</p>
+                        {/* appear only when imageUrl is added */}
+                        {post.imageUrl !== '' && (
+                          <img
+                            src={post.imageUrl}
+                            alt={post.title}
+                            className="w-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <div className="w-full mt-5">
+                        <div className="w-9/12 flex mx-auto justify-evenly ">
+                          {/* number of people liked this post, hide p whee like is 0 */}
+                          {post.like > 0 && post.like <= 1 && (
+                            <p>{post.like} Like</p>
+                          )}
+                          {post.like > 1 && <p>{post.like} Likes</p>}
+
+                          {/* number of comment on this post, hide p when no comment */}
+                          {post.totalComment > 0 && post.totalComment <= 1 && (
+                            <p
+                              onClick={() => toggleComment(post.postId)}
+                              className="cursor-pointer"
+                            >
+                              {post.totalComment} Commentaire
+                            </p>
+                          )}
+                          {post.totalComment > 1 && (
+                            <p
+                              onClick={() => toggleComment(post.postId)}
+                              className="cursor-pointer"
+                            >
+                              {post.totalComment} Commentaires
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex border">
+                        <div className="basis-1/2 text-center my-1">
+                          <LikePost
+                            likeUserId={post.likeUserId}
+                            postId={post.postId}
+                          />
+                        </div>
+                        <div className="basis-1/2 text-center my-1">
+                          <CommentButton
+                            postId={post.postId}
+                            setFlashMessage={setFlashMessage}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   {showComment[post.postId] ? (

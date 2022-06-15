@@ -5,7 +5,8 @@ export const allPost = [
     username: 'username1',
     avatarUrl: 'https://cdn.wallpapersafari.com/82/44/1eWzS9.jpg',
     title: 'Cutest dog',
-    content: 'Bla bla bla....',
+    content:
+      'Bla bla bla Bla bla bla Bla bla bla Bla bla bla Bla bla bla Bla bla bla Bla bla bla Bla bla bla  Bla bla bla Bla bla bla Bla bla bla',
     imageUrl:
       'https://www.rd.com/wp-content/uploads/2020/11/GettyImages-889552354-e1606774439626.jpg',
     like: 1,
