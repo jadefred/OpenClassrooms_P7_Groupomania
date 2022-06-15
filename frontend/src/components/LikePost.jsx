@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import useLogStatus from '../Context'
+import thumbOrange from '../assets/thumbUp-orange.svg'
+import thumbgray from '../assets/thumbUp-gray.svg'
 
 function LikePost({ likeUserId, postId, setClickLike }) {
   const { userId, token } = useLogStatus()
@@ -36,9 +38,14 @@ function LikePost({ likeUserId, postId, setClickLike }) {
         onClick={() => {
           likePost(userId, likeUserId, setClickLike)
         }}
-        className={liked ? 'text-primaire' : 'text-tertiaire'}
+        className={`flex mx-auto items-center gap-x-2 ${liked ? 'text-primaire' : 'text-tertiaire'}`}
       >
-        J'aime
+        {liked ? (
+          <img src={thumbOrange} alt="icône de pouce" className="w-5 h-5" />
+        ) : (
+          <img src={thumbgray} alt="icône de pouce" className="w-5 h-5" />
+        )}{' '}
+        <p>J'aime</p>
       </button>
     </>
   )

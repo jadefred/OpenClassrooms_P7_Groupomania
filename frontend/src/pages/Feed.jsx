@@ -63,19 +63,19 @@ function Feed() {
       {/* flash message pops up after user edited a post */}
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
 
-      <div className="w-11/12 md:w-8/12 border mx-auto">
+      <div className="w-11/12 md:w-8/12 mx-auto ">
         {isLoaded && error && <p>Something went wrong...</p>}
 
         {isLoaded && !error && (
-          <div className="w-full flex flex-col text-tertiaire ">
+          <div className="w-full flex flex-col gap-y-10 text-tertiaire">
             {/* map throught allPosts state to display all content */}
             {allPosts.map((post) => {
               return (
                 <>
-                  <div key={post.postId} className="border">
+                  <div key={post.postId} className="border-2 border-gray-500">
                     <div>
                       {/* username, avatar and edit button block */}
-                      <div className="border flex justify-between px-3 py-1 ">
+                      <div className="flex justify-between px-3 py-1 text-white bg-lightGray">
                         <div className="flex items-center gap-x-3">
                           <img
                             src={post.avatarUrl}
@@ -128,8 +128,8 @@ function Feed() {
                           />
                         )}
                       </div>
-                      <div className="w-full mt-5">
-                        <div className="w-9/12 flex mx-auto justify-evenly ">
+                      <div className="w-full mt-5 mb-2">
+                        <div className="w-9/12 flex mx-auto justify-end gap-x-8 ">
                           {/* number of people liked this post, hide p whee like is 0 */}
                           {post.like > 0 && post.like <= 1 && (
                             <p>{post.like} Like</p>
@@ -170,11 +170,11 @@ function Feed() {
                           />
                         </div>
                       </div>
+                      {showComment[post.postId] ? (
+                        <Comment comment={post.comment} />
+                      ) : null}
                     </div>
                   </div>
-                  {showComment[post.postId] ? (
-                    <Comment comment={post.comment} />
-                  ) : null}
                 </>
               )
             })}
