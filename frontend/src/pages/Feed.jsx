@@ -61,7 +61,7 @@ function Feed() {
       {/* flash message pops up after user edited a post */}
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
 
-      <div className="w-8/12 border mx-auto">
+      <div className="w-11/12 md:w-8/12 border mx-auto">
         {isLoaded && error && <p>Something went wrong...</p>}
 
         {isLoaded && !error && (

@@ -116,7 +116,7 @@ function NewPost() {
 
   return (
     <>
-      <div className="text-center flex justify-center items-center gap-x-10 my-4 w-3/5 mx-auto text-tertiaire">
+      <div className="text-center flex justify-center items-center gap-x-10 my-4 w-11/12 md:w-3/5 mx-auto text-tertiaire">
         {username ? (
           <p className="text-lg italic">
             {username}, partargez nous quelque chose ...
@@ -181,15 +181,35 @@ function NewPost() {
               </div>
               {image && (
                 <div className="NewPost--file">
-                  <img className="NewPost--file__image" src={preview} alt="Téléchargement" />
-                  <button onClick={removeSelectedImg} className="NewPost--file__btn">Supprimer l'image</button>
+                  <img
+                    className="NewPost--file__image"
+                    src={preview}
+                    alt="Téléchargement"
+                  />
+                  <button
+                    onClick={removeSelectedImg}
+                    className="NewPost--file__btn"
+                  >
+                    Supprimer l'image
+                  </button>
                 </div>
               )}
 
-              {formNotComplete && <p className='text-primaire'>Veuillez remplir les informations</p>}
+              {formNotComplete && (
+                <p className="text-primaire">
+                  Veuillez remplir les informations
+                </p>
+              )}
               <div className="NewPost--btn-wrapper">
-                <input type="submit" value="Envoyer" disabled={btnDisable} className="NewPost--submit-btn"/>
-                <button onClick={toggleModal} className="NewPost--cancel-btn">Annuler</button>
+                <input
+                  type="submit"
+                  value="Envoyer"
+                  disabled={btnDisable}
+                  className="NewPost--submit-btn"
+                />
+                <button onClick={toggleModal} className="NewPost--cancel-btn">
+                  Annuler
+                </button>
               </div>
             </form>
           </div>
