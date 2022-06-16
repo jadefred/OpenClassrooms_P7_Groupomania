@@ -40,6 +40,13 @@ const userReducer = (state, action) => {
         token: payload.token,
       }
 
+    case 'KEEP_USER_INFO':
+      return {
+        ...state,
+        username: payload.username,
+        avatarUrl: payload.avatarUrl,
+      }
+
     default:
       throw new Error(`No case for type ${type} found in shopReducer.`)
   }

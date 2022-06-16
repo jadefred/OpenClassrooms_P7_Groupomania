@@ -13,14 +13,20 @@ import Home from './Home.jsx'
 import Feed from './Feed.jsx'
 import Profile from './Profile.jsx'
 
-
 function App() {
-  const { auth, persistLogin } = useLogStatus()
+  const { auth, persistLogin, keepUserInfo } = useLogStatus()
 
   useEffect(() => {
     if (Cookies.get('accessToken')) {
       persistLogin(Cookies.get('accessToken'))
     }
+
+    keepUserInfo({
+      userId: JSON.parse(localStorage.getItem('userId')),
+      username: JSON.parse(localStorage.getItem('username')),
+      admin: JSON.parse(localStorage.getItem('admin')),
+      avatarUrl: JSON.parse(localStorage.getItem('avatarUrl')),
+    })
   }, [])
 
   return (

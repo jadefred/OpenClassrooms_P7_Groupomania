@@ -7,7 +7,7 @@ function Loading() {
       <img
         src={loader}
         alt="chargement"
-        className="animate-spin w-32 h-32 mx-auto mt-32"
+        className="animate-spin w-32 h-32 mx-auto mt-44"
       />
     </>
   )

@@ -31,6 +31,16 @@ export const UserProvider = ({ children }) => {
     })
   }
 
+  const keepUserInfo = (userInfo) => {
+    dispatch({
+      type: 'KEEP_USER_INFO',
+      payload: {
+        username: userInfo.username,
+        avatarUrl: userInfo.avatarUrl,
+      },
+    })
+  }
+
   const value = {
     userId: state.userId,
     username: state.username,
@@ -41,6 +51,7 @@ export const UserProvider = ({ children }) => {
     dispatchLogin,
     dispatchLogout,
     persistLogin,
+    keepUserInfo,
   }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
