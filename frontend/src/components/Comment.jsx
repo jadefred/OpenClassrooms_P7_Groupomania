@@ -1,5 +1,4 @@
 import React from 'react'
-import '../styles/comment.css'
 import useLogStatus from '../Context'
 import deleteBtn from '../assets/deleteBtn.svg'
 
@@ -23,7 +22,7 @@ function Comment(props) {
   }
 
   return (
-    <div className="bg-gray-200 py-6 flex flex-col gap-y-4">
+    <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
       {comment.map((i) => {
         return (
           <div

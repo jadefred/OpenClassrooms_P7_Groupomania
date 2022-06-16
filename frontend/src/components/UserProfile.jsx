@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import defaultProfil from '../assets/defaultProfil.svg'
 import { asyncFetch } from '../Utils'
@@ -9,6 +9,7 @@ import useLogStatus from '../Context'
 import Loading from '../components/Loading.jsx'
 
 function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
+  const imageRef = useRef()
   const { userId, token } = useLogStatus()
   const { data, isLoaded, error } = useFetch('http://localhost:3000/api/user')
   const [image, setImage] = useState(null)
@@ -150,61 +151,128 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
 
       {/* Profile page when no error and loading is finished */}
       {!error && !isLoaded && (
-        <div>
-          <form onSubmit={handleUserAccount}>
-            {/* if avatarUrl is not empty, display image. Display default svg profile picture when avatarUrl is empty */}
-            {input.avatarUrl ? (
-              <img
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                src={input.avatarUrl}
-                alt="l'avatar d'utilisateur"
-              />
-            ) : (
-              <img
-                style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                src={defaultProfil}
-                alt="l'avatar d'utilisateur"
-              />
-            )}
-            <input
-              type="file"
-              name="image"
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={handleImage}
-            />
+        <div className="w-4/5 mx-auto">
+          <form
+            onSubmit={handleUserAccount}
+            className="flex flex-col mt-12 md:mt-24 gap-y-5"
+          >
+            <div className="flex flex-col gap-y-6 md:flex-row justify-center items-center gap-x-8">
+              {/* image, add photo button and delete image button block */}
+              <div className="flex flex-col gap-y-3">
+                {/* if avatarUrl is not empty, display image. Display default svg profile picture when avatarUrl is empty */}
+                {input.avatarUrl ? (
+                  <img
+                    src={input.avatarUrl}
+                    alt="l'avatar d'utilisateur"
+                    className="w-40 h-40 object-cover rounded-full"
+                  />
+                ) : (
+                  <img
+                    src={defaultProfil}
+                    alt="l'avatar d'utilisateur"
+                    className="w-40 h-40 object-cover rounded-full"
+                  />
+                )}
+                <input
+                  ref={imageRef}
+                  type="file"
+                  name="image"
+                  accept="image/png, image/jpeg, image/jpg"
+                  onChange={handleImage}
+                  className="hidden"
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    imageRef.current.click()
+                  }}
+                  className="bg-tertiaire text-white px-2 py-1 rounded-md w-40"
+                >
+                  Choisir une image
+                </button>
 
-            {/* button to remove avatar or selected image */}
-            <button type="button" onClick={removeSelectedImg}>
-              Supprimer l'image
-            </button>
-            <label htmlFor="username">Nom d'utilisateur :</label>
-            <input
-              onChange={handleInput}
-              type="text"
-              name="username"
-              value={input.username}
-            />
+                {/* button to remove avatar or selected image, hide when no url is found */}
+                {input.avatarUrl ? (
+                  <button
+                    type="button"
+                    onClick={removeSelectedImg}
+                    className="bg-tertiaire text-white px-2 py-1 rounded-md w-40"
+                  >
+                    Supprimer l'image
+                  </button>
+                ) : (
+                  <></>
+                )}
+              </div>
 
-            {/* email input field can't be modified, display address only */}
-            <label htmlFor="email">L'adresse mail : </label>
-            <input type="text" name="email" value={input.email} disabled />
+              {/* username, email, type of account block */}
+              <div className="text-tertiaire flex flex-col gap-y-5">
+                <div className="flex gap-x-5 items-center">
+                  <label htmlFor="username" className="font-semibold text-lg">
+                    Nom d'utilisateur :{' '}
+                  </label>
+                  <input
+                    onChange={handleInput}
+                    type="text"
+                    name="username"
+                    value={input.username}
+                    className="border-2 border-secondaire px-2 py-1 rounded-lg"
+                  />
+                </div>
 
-            {/* user data will decide p value - admin / normal user */}
-            <p>Type de compte : </p>
-            {input.admin ? <p>Administrateur</p> : <p>Utilisateur</p>}
+                <div className="flex gap-x-5 items-center">
+                  {/* email input field can't be modified, display address only */}
+                  <label htmlFor="email" className="font-semibold text-lg">
+                    L'adresse mail :{' '}
+                  </label>
+                  <input
+                    type="text"
+                    name="email"
+                    value={input.email}
+                    disabled
+                    className="border-2 border-secondaire px-2 py-1 rounded-lg disabled:bg-secondaire"
+                  />
+                </div>
+
+                <div className="flex gap-x-5 items-center">
+                  {/* user data will decide p value - admin / normal user */}
+                  <p className="font-semibold text-lg">Type de compte : </p>
+                  {input.admin ? <p>Administrateur</p> : <p>Utilisateur</p>}
+                </div>
+              </div>
+            </div>
 
             {/* warning message pops up when form is username is empty */}
-            {formNotComplete && <p>Veuillez saisir un nom d'utilisateur</p>}
+            {formNotComplete && <p className='text-primaire text-center text-lg'>Veuillez saisir un nom d'utilisateur</p>}
 
-            {/* buttons to submit, disable by default when no change is detected. return button back to feed */}
-            <input type="submit" value="Modifier" disabled={btnDisable} />
+            {/* button block */}
+            <div className="flex flex-col md:flex-row justify-center gap-x-12 gap-y-4">
+              {/* buttons to submit, disable by default when no change is detected. return button back to feed */}
+              <input
+                type="submit"
+                value="Modifier"
+                disabled={btnDisable}
+                className="disabled:bg-gray-300 bg-emerald-700 text-white px-8 py-1 rounded-lg"
+              />
+
+              <Link to="/feed">
+                <button
+                  type="button"
+                  className="bg-tertiaire text-white px-8 py-1 rounded-lg w-full md:w-auto"
+                >
+                  Retourner
+                </button>
+              </Link>
+
+              <button
+                onClick={deleteUser}
+                type="button"
+                className="bg-primaire text-white px-8 py-1 rounded-lg"
+              >
+                Supprimer Compte
+              </button>
+            </div>
           </form>
-          <Link to="/feed">
-            <button type="button">Retourner</button>
-          </Link>
-          <button onClick={deleteUser} type="button">
-            Supprimer Compte
-          </button>
         </div>
       )}
     </>

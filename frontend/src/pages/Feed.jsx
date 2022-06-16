@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import '../styles/feed.css'
 import useFlashMessage from '../hooks/useFlashMessage'
 import useLogStatus from '../Context'
 import editPostLogo from '../assets/editPost.svg'
@@ -58,13 +57,17 @@ function Feed() {
   return (
     <>
       <NavBar />
-      <NewPost />
+      {isLoaded && !error && <NewPost />}
 
       {/* flash message pops up after user edited a post */}
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
 
-      <div className="w-11/12 md:w-8/12 mx-auto ">
-        {isLoaded && error && <p>Something went wrong...</p>}
+      <div className="w-11/12 md:w-8/12 mx-auto pb-14">
+        {isLoaded && error && (
+          <p className="text-tertiaire text-center text-4xl py-52">
+            Un problème est apparu, veuillez réessayer.
+          </p>
+        )}
 
         {isLoaded && !error && (
           <div className="w-full flex flex-col gap-y-10 text-tertiaire">
@@ -72,10 +75,13 @@ function Feed() {
             {allPosts.map((post) => {
               return (
                 <>
-                  <div key={post.postId} className="border-2 border-gray-500">
+                  <div
+                    key={post.postId}
+                    className="border-2 border-gray-500 rounded-xl"
+                  >
                     <div>
                       {/* username, avatar and edit button block */}
-                      <div className="flex justify-between px-3 py-1 text-white bg-lightGray">
+                      <div className="flex justify-between px-3 py-1 text-white bg-lightGray rounded-t-md">
                         <div className="flex items-center gap-x-3">
                           <img
                             src={post.avatarUrl}

@@ -116,13 +116,13 @@ function NewPost() {
 
   return (
     <>
-      <div className="text-center flex justify-center items-center gap-x-10 my-4 w-11/12 md:w-3/5 mx-auto text-tertiaire">
+      <div className="text-center flex justify-center items-center gap-x-10 my-8 w-11/12 md:w-3/5 mx-auto text-tertiaire">
         {username ? (
           <p className="text-lg italic">
             {username}, partargez nous quelque chose ...
           </p>
         ) : (
-          <p>Écrivez quelque chose...</p>
+          <p className="text-lg italic">Écrivez quelque chose...</p>
         )}
         <button
           onClick={toggleModal}
