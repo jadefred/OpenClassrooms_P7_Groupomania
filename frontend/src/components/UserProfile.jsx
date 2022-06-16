@@ -147,7 +147,11 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
       {isLoaded && <Loading />}
 
       {/* Error page */}
-      {error && <h2>Un problème apparu... Veuillez re-essayez plus tard</h2>}
+      {error && !isLoaded && (
+        <h2 className="text-tertiaire text-center text-4xl py-52">
+          Un problème apparu... Veuillez re-essayez plus tard
+        </h2>
+      )}
 
       {/* Profile page when no error and loading is finished */}
       {!error && !isLoaded && (
@@ -243,7 +247,11 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
             </div>
 
             {/* warning message pops up when form is username is empty */}
-            {formNotComplete && <p className='text-primaire text-center text-lg'>Veuillez saisir un nom d'utilisateur</p>}
+            {formNotComplete && (
+              <p className="text-primaire text-center text-lg">
+                Veuillez saisir un nom d'utilisateur
+              </p>
+            )}
 
             {/* button block */}
             <div className="flex flex-col md:flex-row justify-center gap-x-12 gap-y-4">

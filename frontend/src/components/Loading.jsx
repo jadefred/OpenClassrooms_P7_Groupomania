@@ -1,9 +1,14 @@
 import React from 'react'
+import loader from '../assets/loadingSpinner.svg'
 
 function Loading() {
   return (
     <>
-      <h1>I'm loading page</h1>
+      <img
+        src={loader}
+        alt="chargement"
+        className="animate-spin w-32 h-32 mx-auto mt-32"
+      />
     </>
   )
 }
