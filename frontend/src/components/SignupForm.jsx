@@ -111,12 +111,16 @@ function SignupForm() {
           );
           //response not okay, throw error and display error message
           if (!response.ok) {
+            if (response.status === 401) {
+              setError("Le format d'adresse est incorrecte.");
+              throw Error('This email is invalid');
+            }
             if (response.status === 409) {
               setError('Cette adresse mail est déjà enregistrée.');
-              throw Error('server error');
+              throw Error('This email has already registered');
             }
             setError('Une erreur est apparue, veuillez réessayer plus tard');
-            throw Error('server error');
+            throw Error('Server error');
           }
 
           //auto signup after sucessfully signed up

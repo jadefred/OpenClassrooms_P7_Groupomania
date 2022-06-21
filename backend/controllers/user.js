@@ -5,7 +5,6 @@ const pool = require('../database/database.js');
 // const dotenv = require('dotenv');
 // dotenv.config();
 
-
 exports.signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
