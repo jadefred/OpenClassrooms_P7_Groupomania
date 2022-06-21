@@ -9,6 +9,13 @@ exports.signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    //check email validity
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+      res.status(401).json({ error: 'Email is invalid' });
+    }
+
+    //hash password before save to DB
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newSignup = await pool.query(
@@ -16,13 +23,13 @@ exports.signup = async (req, res) => {
       [username, email, hashedPassword]
     );
 
-    res.json(newSignup);
+    console.log(newSignup.rows[0]);
+    res.status(200).json({ message: 'Signup success' });
   } catch (error) {
-    console.log('this is error block');
-
     //unique_violation error
-    if (error.code === 23505) {
+    if (error.code === '23505') {
       res.status(409).json({ message: 'This email has already used' });
     }
+    res.status(500).json({ error: error.message });
   }
 };
