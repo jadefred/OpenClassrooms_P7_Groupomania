@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
 
     //search user by email, return email and hashed password, if no matching email is found, throw error
     const user = await pool.query(
-      'SELECT email, pw_hashed FROM users WHERE email=$1',
+      'SELECT user_id, email, pw_hashed, username FROM users WHERE email=$1',
       [email]
     );
     if (user.rows.length === 0) {
@@ -52,6 +52,12 @@ exports.login = async (req, res) => {
     if (!match) {
       return res.status(401).json({ error: 'Password incorrect' });
     }
+
+    const userId = user.rows[0].user_id;
+    const username = user.rows[0].username;
+
+    const assessToken = jwt.sign({ userId: userId }, process.env.ACCESS_TOKEN);
+    res.json({ userId, username, assessToken });
   } catch (error) {
     console.error(error);
   }
