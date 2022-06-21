@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const userCtrl = require('../controllers/user.js');
-const usernameValidator = require('../middlewares/usernameValidate');
 
-router.post('/signup', usernameValidator, userCtrl.signup);
+//controllers
+const userCtrl = require('../controllers/user.js');
+
+//middlewares
+const usernameValidator = require('../middlewares/usernameValidate');
+const passwordValidator = require('../middlewares/passwordValidator');
+
+router.post('/signup', usernameValidator, passwordValidator, userCtrl.signup);
 // router.post('/login', userCtrl.login);
 
 module.exports = router;

@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const pool = require('../database/database.js');
+// const jwt = require('jsonwebtoken');
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 exports.signup = async (req, res) => {
   try {
