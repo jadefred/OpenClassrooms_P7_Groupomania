@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const pool = require('../database/database.js');
-// const jwt = require('jsonwebtoken');
-// const dotenv = require('dotenv');
-// dotenv.config();
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 exports.signup = async (req, res) => {
   try {
@@ -28,7 +28,31 @@ exports.signup = async (req, res) => {
     //unique_violation error
     if (error.code === '23505') {
       res.status(409).json({ message: 'This email has already used' });
+    } else {
+      res.status(500).json({ error: error.message });
     }
-    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //search user by email, return email and hashed password, if no matching email is found, throw error
+    const user = await pool.query(
+      'SELECT email, pw_hashed FROM users WHERE email=$1',
+      [email]
+    );
+    if (user.rows.length === 0) {
+      res.status(401).json({ error: 'User not exist' });
+    }
+
+    //compare req body password and hashed password which saved in DB
+    const match = await bcrypt.compare(password, user.rows[0].pw_hashed);
+    if (!match) {
+      return res.status(401).json({ error: 'Mot de passe incorrect !' });
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
