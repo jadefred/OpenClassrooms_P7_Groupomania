@@ -19,7 +19,7 @@ exports.signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     await pool.query(
-      'INSERT INTO users (username, email, pw_hashed) VALUES($1, $2, $3)',
+      'INSERT INTO users (user_id, username, email, pw_hashed) VALUES(uuid_generate_v4(), $1, $2, $3)',
       [username, email, hashedPassword]
     );
 
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
     //compare req body password and hashed password which saved in DB
     const match = await bcrypt.compare(password, user.rows[0].pw_hashed);
     if (!match) {
-      return res.status(401).json({ error: 'Mot de passe incorrect !' });
+      return res.status(401).json({ error: 'Password incorrect' });
     }
   } catch (error) {
     console.error(error);
