@@ -5,6 +5,7 @@ const pool = require('../database/database.js');
 // const dotenv = require('dotenv');
 // dotenv.config();
 
+
 exports.signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -18,12 +19,11 @@ exports.signup = async (req, res) => {
     //hash password before save to DB
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newSignup = await pool.query(
-      'INSERT INTO users (username, email, pw_hashed) VALUES($1, $2, $3) RETURNING *',
+    await pool.query(
+      'INSERT INTO users (username, email, pw_hashed) VALUES($1, $2, $3)',
       [username, email, hashedPassword]
     );
 
-    console.log(newSignup.rows[0]);
     res.status(200).json({ message: 'Signup success' });
   } catch (error) {
     //unique_violation error
