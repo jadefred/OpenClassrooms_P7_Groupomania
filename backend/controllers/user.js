@@ -23,7 +23,7 @@ exports.signup = async (req, res) => {
       [username, email, hashedPassword]
     );
 
-    res.status(200).json({ message: 'Signup success' });
+    res.status(201).json({ message: 'Signup success' });
   } catch (error) {
     //unique_violation error
     if (error.code === '23505') {
@@ -40,12 +40,14 @@ exports.login = async (req, res) => {
 
     //search user by email, return email and hashed password, if no matching email is found, throw error
     const user = await pool.query(
-      'SELECT user_id, email, pw_hashed, username FROM users WHERE email=$1',
+      'SELECT user_id, username, admin, avatar_url, pw_hashed FROM users WHERE email=$1',
       [email]
     );
     if (user.rows.length === 0) {
       res.status(401).json({ error: 'User not exist' });
     }
+
+    console.log(user.rows[0]);
 
     //compare req body password and hashed password which saved in DB
     const match = await bcrypt.compare(password, user.rows[0].pw_hashed);
@@ -54,10 +56,17 @@ exports.login = async (req, res) => {
     }
 
     const userId = user.rows[0].user_id;
-    const username = user.rows[0].username;
+    const { username, admin } = user.rows[0];
+    const avatarUrl = user.rows[0].avatar_url;
 
-    const assessToken = jwt.sign({ userId: userId }, process.env.ACCESS_TOKEN);
-    res.json({ userId, username, assessToken });
+    const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
+      expiresIn: '30m',
+    });
+    //const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN);
+
+    res
+      .status(200)
+      .json({ _id: userId, username, token: assessToken, admin, avatarUrl });
   } catch (error) {
     console.error(error);
   }
