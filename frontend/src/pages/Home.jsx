@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 //components
-import HomeNavBar from '../components/HomeNavBar'
-import LoginForm from '../components/LoginForm'
-import SignupForm from '../components/SignupForm'
-import logoOrange from '../assets/logo-orange.svg'
+import HomeNavBar from '../components/HomeNavBar';
+import LoginForm from '../components/LoginForm';
+import SignupForm from '../components/SignupForm';
+import logoOrange from '../assets/logo-orange.svg';
 
 function Home() {
-  const [guest, setGuest] = useState(false)
+  const [guest, setGuest] = useState(false);
   return (
     <>
-      <HomeNavBar setGuest={setGuest} />
+      <HomeNavBar guest={guest} setGuest={setGuest} />
       <div className="flex flex-col md:flex-row px-10 md:px-24 gap-x-20 mt-20">
         <div className="basis-1/2 md:self-center">
           <img
@@ -27,7 +27,7 @@ function Home() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
