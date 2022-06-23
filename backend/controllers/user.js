@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
       .status(200)
       .json({ _id: userId, username, token: assessToken, admin, avatarUrl });
   } catch (error) {
-    console.error(error);
+    res.status(500).json({ error });
   }
 };
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//controllers
+//controller
 const userCtrl = require('../controllers/user.js');
 
 //middlewares

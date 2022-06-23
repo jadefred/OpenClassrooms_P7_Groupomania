@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from 'react'
-import useFlashMessage from '../hooks/useFlashMessage'
-import useLogStatus from '../Context'
-import editPostLogo from '../assets/editPost.svg'
+import React, { useState, useEffect } from 'react';
+import useFlashMessage from '../hooks/useFlashMessage';
+import useLogStatus from '../Context';
+import editPostLogo from '../assets/editPost.svg';
 
 //components
-import NavBar from '../components/NavBar.jsx'
-import Comment from '../components/Comment.jsx'
-import NewPost from '../components/NewPost.jsx'
-import EditPost from '../components/EditPost.jsx'
-import FlashMessage from '../components/FlashMessage'
-import CommentButton from '../components/CommentButton'
-import LikePost from '../components/LikePost'
+import NavBar from '../components/NavBar.jsx';
+import Comment from '../components/Comment.jsx';
+import NewPost from '../components/NewPost.jsx';
+import EditPost from '../components/EditPost.jsx';
+import FlashMessage from '../components/FlashMessage';
+import CommentButton from '../components/CommentButton';
+import LikePost from '../components/LikePost';
 
 function Feed() {
-  const [error, setError] = useState(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [allPosts, setAllPosts] = useState([])
-  const [showComment, setShowComment] = useState({})
-  const [modal, setModal] = useState({})
-  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
-  const { userId, token, admin } = useLogStatus()
-  const [clickLike, setClickLike] = useState(true)
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [allPosts, setAllPosts] = useState([]);
+  const [showComment, setShowComment] = useState({});
+  const [modal, setModal] = useState({});
+  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
+  const { userId, token, admin } = useLogStatus();
+  const [clickLike, setClickLike] = useState(true);
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
     setShowComment((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
-    )
+    );
   }
 
   //toggle modal when clicked modifer post button
   function toggleModal(id) {
     setModal((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
-    )
+    );
   }
 
   //fetch to get all posts
@@ -43,16 +43,17 @@ function Feed() {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'GET',
         headers: { authorization: `Bearer ${token}` },
-      })
+      });
       if (response.status !== 200) {
-        setError(true)
+        setError(true);
+        setIsLoaded(true);
       }
-      const data = await response.json()
-      setAllPosts(data)
-      setIsLoaded(true)
+      const data = await response.json();
+      setAllPosts(data);
+      setIsLoaded(true);
     }
-    getAllPosts()
-  }, [clickLike])
+    getAllPosts();
+  }, [clickLike]);
 
   return (
     <>
@@ -94,7 +95,7 @@ function Feed() {
                         {(post.userId === userId || admin) && (
                           <button
                             onClick={() => {
-                              toggleModal(post.postId)
+                              toggleModal(post.postId);
                             }}
                           >
                             <img
@@ -182,13 +183,13 @@ function Feed() {
                     </div>
                   </div>
                 </>
-              )
+              );
             })}
           </div>
         )}
       </div>
     </>
-  )
+  );
 }
 
-export default Feed
+export default Feed;

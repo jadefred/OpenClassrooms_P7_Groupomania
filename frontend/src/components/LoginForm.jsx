@@ -37,14 +37,12 @@ function LoginForm() {
 
         //response not ok, throw error, depends on status code
         if (!response.ok) {
-          if (response.status === 500) {
-            setError("L'erreur du serveur, veuillez réessayer plus tard.");
-            throw Error('server error');
-          }
           if (response.status === 401) {
             setError("L'adresse mail ou le mot de passe est incorrecte.");
             throw Error('incorrect email or password');
           }
+          setError("L'erreur du serveur, veuillez réessayer plus tard.");
+          throw Error('server error');
         }
 
         const data = await response.json();
