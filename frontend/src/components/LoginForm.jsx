@@ -1,18 +1,18 @@
-import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
-import Cookies from 'js-cookie'
-import { verifyToken } from '../Utils.jsx'
-import useLogStatus from '../Context'
+import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import Cookies from 'js-cookie';
+import { verifyToken } from '../Utils.jsx';
+import useLogStatus from '../Context';
 
 function LoginForm() {
-  const email = useRef()
-  const password = useRef()
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
-  const { dispatchLogin, dispatchLogout } = useLogStatus()
+  const email = useRef();
+  const password = useRef();
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { dispatchLogin, dispatchLogout } = useLogStatus();
 
   function handleLogin(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     //object for POST request
     const userInfo = {
@@ -23,9 +23,9 @@ function LoginForm() {
         email: email.current.value,
         password: password.current.value,
       }),
-    }
+    };
 
-    login()
+    login();
 
     //async POST request - Login
     async function login() {
@@ -33,32 +33,32 @@ function LoginForm() {
         const response = await fetch(
           'http://localhost:3000/api/auth/login',
           userInfo
-        )
+        );
 
         //response not ok, throw error, depends on status code
         if (!response.ok) {
           if (response.status === 500) {
-            setError("L'erreur du serveur, veuillez réessayer plus tard.")
-            throw Error('server error')
+            setError("L'erreur du serveur, veuillez réessayer plus tard.");
+            throw Error('server error');
           }
           if (response.status === 401) {
-            setError("L'adresse mail ou le mot de passe est incorrecte.")
-            throw Error('incorrect email or password')
+            setError("L'adresse mail ou le mot de passe est incorrecte.");
+            throw Error('incorrect email or password');
           }
         }
 
-        const data = await response.json()
+        const data = await response.json();
         //set access token as cookie once received data
-        const { accessToken } = data
-        Cookies.set('accessToken', accessToken, { expires: 1 })
-        localStorage.setItem('username', JSON.stringify(data.username))
-        localStorage.setItem('avatarUrl', JSON.stringify(data.avatarUrl))
+        const { token } = data;
+        Cookies.set('accessToken', token);
+        localStorage.setItem('username', JSON.stringify(data.username));
+        localStorage.setItem('avatarUrl', JSON.stringify(data.avatarUrl));
 
         //verify token (function from utils), return false if it is not validate
-        const tokenValid = await verifyToken()
+        const tokenValid = await verifyToken(data._id);
         if (tokenValid === false) {
-          setError("L'authentification est expirée, veuillez se reconnecter.")
-          throw Error('Access token invalid')
+          setError("L'authentification est expirée, veuillez se reconnecter.");
+          throw Error('Access token invalid');
         }
 
         //object for useLogStatus hook
@@ -66,20 +66,20 @@ function LoginForm() {
           userId: data._id,
           username: data.username,
           auth: true,
-          token: accessToken,
+          token: token,
           admin: data.admin,
           avatarUrl: data.avatarUrl,
-        }
+        };
 
-        dispatchLogin(loginInfo)
+        dispatchLogin(loginInfo);
 
         //redirect to feed page
-        navigate('/feed')
+        navigate('/feed');
       } catch (err) {
         //catch block, console error and display error message
-        console.log(err.message)
+        console.log(err.message);
         //setError(true)
-        dispatchLogout()
+        dispatchLogout();
       }
     }
   }
@@ -116,7 +116,7 @@ function LoginForm() {
         </form>
       </div>
     </>
-  )
+  );
 }
 
-export default LoginForm
+export default LoginForm;

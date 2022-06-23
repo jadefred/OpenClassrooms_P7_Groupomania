@@ -43,11 +43,10 @@ exports.login = async (req, res) => {
       'SELECT user_id, username, admin, avatar_url, pw_hashed FROM users WHERE email=$1',
       [email]
     );
+
     if (user.rows.length === 0) {
       res.status(401).json({ error: 'User not exist' });
     }
-
-    console.log(user.rows[0]);
 
     //compare req body password and hashed password which saved in DB
     const match = await bcrypt.compare(password, user.rows[0].pw_hashed);
@@ -62,12 +61,66 @@ exports.login = async (req, res) => {
     const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
       expiresIn: '30m',
     });
-    //const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN);
+    const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN);
+    await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [
+      refreshToken,
+      email,
+    ]);
 
+    //send userId, username, accesstoken, admin and avatar_url to frontend
     res
       .status(200)
       .json({ _id: userId, username, token: assessToken, admin, avatarUrl });
   } catch (error) {
     console.error(error);
+  }
+};
+
+exports.auth = async (req, res) => {
+  try {
+    const token = req.headers['authorization'].split(' ')[1];
+    //return when no access token is found
+    if (!token) {
+      res.status(401).json({ error: 'No authentication token is found' });
+    }
+
+    //verify access token
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+      //when error is found, call function to validate refresh token which saved in database
+      if (err) {
+        valdidateRefreshToken(req.body.userId);
+      } else {
+        res.status(200).json({ message: 'access token is valid' });
+      }
+    });
+
+    //function to validate refresh token
+    async function valdidateRefreshToken(id) {
+      //search from databse
+      const hasRefreshToken = await pool.query(
+        'SELECT refresh_token FROM users WHERE user_id=$1',
+        [id]
+      );
+
+      //if no refresh token in the database, send failed status
+      if (hasRefreshToken.rows.length === 0)
+        return res.status(403).json({ error: 'Authentication failed' });
+
+      const refreshToken = hasRefreshToken.rows[0].refresh_token;
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, token) => {
+        //if error is detected, throw fail status code
+        if (err) {
+          return res.status(403).json({ error: 'Authentication failed' });
+        }
+
+        //if verification is good, send new access token to front end
+        const assessToken = jwt.sign({ userId: id }, process.env.ACCESS_TOKEN, {
+          expiresIn: '30m',
+        });
+        res.status(200).json({ token: assessToken });
+      });
+    }
+  } catch (error) {
+    res.status(403).json({ error: 'Authentication failed' });
   }
 };

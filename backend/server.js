@@ -8,10 +8,10 @@ const userRoutes = require('./routes/user');
 const corsOptions = {
   origin: ['http://localhost:3001', 'http://localhost:5432'],
   optionsSuccessStatus: 200,
+  credentials: true,
 };
-app.use(cors(corsOptions));
 
-//app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 
 //routes of users and posts

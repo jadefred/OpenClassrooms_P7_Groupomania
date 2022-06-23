@@ -1,35 +1,40 @@
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 //to verify if access token is exist
-export async function verifyToken() {
-  const accessToken = Cookies.get('accessToken')
+export async function verifyToken(userId) {
+  const accessToken = Cookies.get('accessToken');
 
   if (accessToken === null || accessToken === undefined) {
-    console.log('Access token invalid, please login again')
-    return false
+    console.log('Access token invalid, please login again');
+    return false;
   } else {
-    console.log('ready to set to request login')
-    const validToken = await requestLogin(accessToken)
-    return validToken
+    console.log('ready to set to request login');
+    const validToken = await requestLogin(accessToken, userId);
+    return validToken;
   }
 }
 
 //set access token as headers and fetch to endpoint to verify it
-async function requestLogin(accessToken) {
-  const response = await fetch('http://localhost:3000/api/auth', {
+async function requestLogin(accessToken, userId) {
+  const response = await fetch('http://localhost:3000/api/auth/access', {
     method: 'POST',
     headers: { authorization: `Bearer ${accessToken}` },
-  })
+    body: JSON.stringify({ userId }),
+  });
 
-  if (!response.ok) {
-    //check what error does the server return, to determine actions
-    console.log('Server error / token invalide')
-    return false
-  } else {
-    //token is okay, can redirect user to protected page
-    console.log('successfully set headers')
-    return true
-  }
+  const data = response.json();
+
+  return response.ok;
+
+  // if (!response.ok) {
+  //   //check what error does the server return, to determine actions
+  //   console.log('Server error / token invalide');
+  //   return false;
+  // } else {
+  //   //token is okay, can redirect user to protected page
+  //   console.log('successfully set headers');
+  //   return true;
+  // }
 }
 
 //async function for POST, POST, DELETE request
@@ -42,13 +47,13 @@ export async function asyncFetch(url, method, token, body, file) {
     : {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
-      }
+      };
 
   const response = await fetch(url, {
     method: method,
     headers: header,
     body: body,
-  })
+  });
 
-  return response
+  return response;
 }
