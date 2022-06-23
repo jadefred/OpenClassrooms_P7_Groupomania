@@ -162,13 +162,13 @@ function SignupForm() {
 
           const data = await response.json();
           //set access token as cookie once received data
-          const { accessToken } = data;
-          Cookies.set('accessToken', accessToken, { expires: 1 });
+          const { token } = data;
+          Cookies.set('accessToken', token);
           localStorage.setItem('username', JSON.stringify(data.username));
           localStorage.setItem('avatarUrl', JSON.stringify(data.avatarUrl));
 
           //verify token (function from utils), return false if it is not validate
-          const tokenValid = await verifyToken();
+          const tokenValid = await verifyToken(data._id);
           if (tokenValid === false) {
             setError(
               "L'authentification est expirée, veuillez se reconnecter."
@@ -181,7 +181,7 @@ function SignupForm() {
             userId: data._id,
             username: data.username,
             auth: true,
-            token: accessToken,
+            token: token,
             admin: data.admin,
             avatarUrl: data.avatarUrl,
           };
