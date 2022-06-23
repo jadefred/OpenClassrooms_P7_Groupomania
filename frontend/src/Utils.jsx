@@ -8,7 +8,6 @@ export async function verifyToken(userId) {
     console.log('Access token invalid, please login again');
     return false;
   } else {
-    console.log('ready to set to request login');
     const validToken = await requestLogin(accessToken, userId);
     return validToken;
   }
@@ -21,20 +20,14 @@ async function requestLogin(accessToken, userId) {
     headers: { authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({ userId }),
   });
+  const data = await response.json();
 
-  const data = response.json();
+  //see if backend has sent a new access token, if so, set it as new access token
+  if (data.token) {
+    Cookies.set('accessToken', data.token);
+  }
 
   return response.ok;
-
-  // if (!response.ok) {
-  //   //check what error does the server return, to determine actions
-  //   console.log('Server error / token invalide');
-  //   return false;
-  // } else {
-  //   //token is okay, can redirect user to protected page
-  //   console.log('successfully set headers');
-  //   return true;
-  // }
 }
 
 //async function for POST, POST, DELETE request
