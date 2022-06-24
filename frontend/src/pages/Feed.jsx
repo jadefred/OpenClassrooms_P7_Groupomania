@@ -165,7 +165,7 @@ function Feed() {
                       <div className="flex border-t-2 border-gray-300 py-1">
                         <div className="basis-1/2 text-center my-1">
                           <LikePost
-                            likeUserId={post.likeUserId}
+                            likeUserId={post.likeUserid}
                             postId={post.postId}
                             setClickLike={setClickLike}
                           />

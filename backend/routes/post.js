@@ -6,7 +6,11 @@ const multer = require('../middlewares/multer-config.js');
 const postCtrl = require('../controllers/post.js');
 
 //routes
+//CRUD posts
 router.get('/', postCtrl.getAllPosts);
 router.post('/', multer, postCtrl.createPost);
+
+//like
+router.post('/like', postCtrl.likePost);
 
 module.exports = router;

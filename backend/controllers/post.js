@@ -9,7 +9,6 @@ exports.getAllPosts = async (req, res) => {
     }
 
     res.status(200).json(allPosts.rows);
-    console.log(allPosts.rows);
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -32,6 +31,59 @@ exports.createPost = async (req, res) => {
     );
 
     res.status(201).json({ message: 'Created a post' });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+//like post
+exports.likePost = async (req, res) => {
+  try {
+    const { userId, postId, like } = req.body;
+
+    //query to check if user's id is in the array
+    const hasLiked = await pool.query(
+      'SELECT post_id FROM posts WHERE $1 = ANY(likeUserId)',
+      [userId]
+    );
+
+    switch (like) {
+      //retrieve like request
+      case 0:
+        //if no id is found in the array, send error message
+        if (hasLiked.rows.length === 0) {
+          return res
+            .status(404)
+            .json({ message: "User didn't like this post" });
+        }
+
+        //if it's good, remove user's id from array and number of like minus 1
+        await pool.query(
+          'UPDATE posts SET likeUserId = array_remove(likeUserId, $1), likes = (likes - 1) WHERE post_id = $2',
+          [userId, postId]
+        );
+        res.status(200).json({ message: 'Removed the like from this post' });
+        break;
+
+      //like post request
+      case 1:
+        //if id is already existed, return request
+        if (hasLiked.rows.length !== 0) {
+          return res
+            .status(409)
+            .json({ message: 'User has already liked this post' });
+        }
+
+        //if it's good, add user's id from array and number of like plus 1
+        await pool.query(
+          'UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + 1) WHERE post_id = $2',
+          [userId, postId]
+        );
+        res.status(200).json({ message: 'Liked this post' });
+        break;
+      default:
+        res.status(406).json({ error: 'Undefined action' });
+    }
   } catch (error) {
     res.status(500).json({ error });
   }

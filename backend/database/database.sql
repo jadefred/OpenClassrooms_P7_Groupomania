@@ -22,11 +22,12 @@ CREATE TABLE posts(
   title VARCHAR(100) NOT NULL,
   content VARCHAR(255),
   imageUrl VARCHAR(100),
-  likes INT DEFAULT 0,
-  likeUserId TEXT [],
+  likes INT DEFAULT 0 CHECK (likes >= 0),
+  likeUserId TEXT [] DEFAULT array[]::TEXT[],
   totalComment INT DEFAULT 0,
   commentId TEXT []
 );
+
 
 -- Table for comments
 CREATE TABLE comments(
@@ -42,4 +43,10 @@ INSERT INTO posts (post_id, user_id, title, content) VALUES (uuid_generate_v4(),
 INSERT INTO posts (post_id, title, likeUserId) VALUES (uuid_generate_v4(), 'second title', ARRAY ['dc85baa4-ff25-4776-a472-fc25da5c7a25']);
 
 -- to update array 
-UPDATE posts SET likeUserId = array_append(likeUserId, 'fourth part') WHERE post_id = 'dc85baa4-ff25-4776-a472-fc25da5c7a25';
+UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + $2) WHERE post_id = $3;
+
+DELETE FROM posts WHERE post_id = 'c96d4576-086d-45c6-af95-95d939a1c977';
+
+-- array query, if array contains certain value
+SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(likeUserId);
+
