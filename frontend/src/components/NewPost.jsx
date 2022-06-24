@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
 import '../styles/newPost.css';
-import FlashMessage from './FlashMessage';
-import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
 
-function NewPost({ flashMessage, setFlashMessage, timeOutMessage }) {
+function NewPost({ setFlashMessage, timeOutMessage }) {
   const [modal, setModal] = useState(false);
   const titleRef = useRef();
   const contentRef = useRef();
@@ -13,7 +11,6 @@ function NewPost({ flashMessage, setFlashMessage, timeOutMessage }) {
   const [preview, setPreview] = useState();
   const [formNotComplete, setFormNotComplete] = useState(false);
   const [btnDisable, setBtnDisable] = useState(true);
-  //const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
   const { userId, username, token } = useLogStatus();
 
   function toggleModal() {

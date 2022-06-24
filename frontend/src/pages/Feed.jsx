@@ -54,15 +54,13 @@ function Feed() {
       setIsLoaded(true);
     }
     getAllPosts();
-  }, [clickLike]);
+  }, [clickLike, flashMessage]);
 
   return (
     <>
       <NavBar />
-      {/* flashMessage, setFlashMessage, timeOutMessage */}
       {isLoaded && !error && (
         <NewPost
-          flashMessage={flashMessage}
           setFlashMessage={setFlashMessage}
           timeOutMessage={timeOutMessage}
         />
