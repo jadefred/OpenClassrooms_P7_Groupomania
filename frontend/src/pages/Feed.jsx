@@ -56,11 +56,17 @@ function Feed() {
     getAllPosts();
   }, [clickLike]);
 
-
   return (
     <>
       <NavBar />
-      {isLoaded && !error && <NewPost />}
+      {/* flashMessage, setFlashMessage, timeOutMessage */}
+      {isLoaded && !error && (
+        <NewPost
+          flashMessage={flashMessage}
+          setFlashMessage={setFlashMessage}
+          timeOutMessage={timeOutMessage}
+        />
+      )}
 
       {/* flash message pops up after user edited a post */}
       {flashMessage !== '' && <FlashMessage flashMessage={flashMessage} />}
