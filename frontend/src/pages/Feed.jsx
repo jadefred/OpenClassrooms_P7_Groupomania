@@ -22,6 +22,7 @@ function Feed() {
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
   const { userId, token, admin } = useLogStatus();
   const [clickLike, setClickLike] = useState(true);
+  const [noPostMsg, setNoPostMsg] = useState(false);
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -40,21 +41,35 @@ function Feed() {
   //fetch to get all posts
   //depends on clickLike, once user is clicked LikePost component's button, trigger useEffect to re-render allPost data in order to get latest number of like
   useEffect(() => {
-    async function getAllPosts() {
+    getAllPosts();
+  }, [clickLike, flashMessage]);
+
+  async function getAllPosts() {
+    try {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'GET',
         headers: { authorization: `Bearer ${token}` },
       });
-      if (response.status !== 200) {
+
+      if (!response.ok) {
         setError(true);
         setIsLoaded(true);
       }
+
       const data = await response.json();
+
+      if (data.length === 0) {
+        setIsLoaded(true);
+        setNoPostMsg(true);
+      }
+
       setAllPosts(data);
       setIsLoaded(true);
+    } catch (error) {
+      setError(true);
+      setIsLoaded(true);
     }
-    getAllPosts();
-  }, [clickLike, flashMessage]);
+  }
 
   return (
     <>
@@ -72,7 +87,13 @@ function Feed() {
       <div className="w-11/12 md:w-8/12 mx-auto pb-14">
         {isLoaded && error && (
           <p className="text-tertiaire text-center text-4xl py-52">
-            Un problème est apparu, veuillez réessayer.
+            Un problème apparu, veuillez réessayer
+          </p>
+        )}
+
+        {isLoaded && noPostMsg && (
+          <p className="text-tertiaire text-center text-4xl py-52">
+            Aucun post... Vous voulez créer un post ?
           </p>
         )}
 

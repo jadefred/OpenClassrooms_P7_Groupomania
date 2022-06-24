@@ -7,10 +7,6 @@ exports.getAllPosts = async (req, res) => {
       'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC'
     );
 
-    if (allPosts.rows.length === 0) {
-      res.status(500).json({ error });
-    }
-
     res.status(200).json(allPosts.rows);
   } catch (error) {
     res.status(500).json({ error });
