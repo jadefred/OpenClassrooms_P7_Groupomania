@@ -28,10 +28,14 @@ exports.createPost = async (req, res) => {
     }
 
     //save all data into database, content and imageUrl could be empty string or null
-    await pool.query(
-      'INSERT INTO posts (post_id, user_id, title, content, imageUrl) VALUES(uuid_generate_v4(), $1, $2, $3, $4)',
+    const saveToDb = await pool.query(
+      'INSERT INTO posts (post_id, user_id, title, content, imageUrl) VALUES(uuid_generate_v4(), $1, $2, $3, $4) RETURNING *',
       [userId, title, content, imageUrl]
     );
+
+    if (saveToDb.rows.length === 0) {
+      res.status(500).json({ message: 'failed to save data in database' });
+    }
 
     res.status(201).json({ message: 'Created a post' });
   } catch (error) {
