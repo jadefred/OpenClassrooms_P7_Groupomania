@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import '../styles/newPost.css';
 import useLogStatus from '../Context';
 
@@ -31,8 +31,12 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
   }
 
   //enable submit button when title is detected
-  function handleTitle() {
-    if (titleRef.current.value !== '') {
+  function handleRefChange() {
+    console.log(imageRef.current.value);
+    if (
+      titleRef.current.value !== '' &&
+      (contentRef.current.value !== '' || imageRef.current.value !== '')
+    ) {
       setBtnDisable(false);
     } else {
       setBtnDisable(true);
@@ -109,6 +113,7 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
   function removeSelectedImg() {
     setImage(null);
     imageRef.current.value = null;
+    handleRefChange();
   }
 
   return (
@@ -138,7 +143,7 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
               <div className="formInputField">
                 <label htmlFor="title">Titre : </label>
                 <input
-                  onChange={handleTitle}
+                  onChange={handleRefChange}
                   ref={titleRef}
                   type="text"
                   name="title"
@@ -149,6 +154,7 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
                 <label htmlFor="content">Contenu : </label>
                 <textarea
                   ref={contentRef}
+                  onChange={handleRefChange}
                   name="content"
                   cols="40"
                   rows="3"
@@ -161,7 +167,10 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
                   type="file"
                   name="image"
                   accept="image/png, image/jpeg, image/jpg"
-                  onChange={handleImage}
+                  onChange={(e) => {
+                    handleImage(e);
+                    handleRefChange();
+                  }}
                   className="NewPost--hidden-file-input"
                 />
                 <button
