@@ -2,8 +2,9 @@ const pool = require('../database/database.js');
 
 exports.getAllPosts = async (req, res) => {
   try {
+    //get all posts in descending order
     const allPosts = await pool.query(
-      'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id;'
+      'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC'
     );
 
     if (allPosts.rows.length === 0) {

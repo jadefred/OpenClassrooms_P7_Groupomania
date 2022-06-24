@@ -56,7 +56,6 @@ function Feed() {
     getAllPosts();
   }, [clickLike]);
 
-  console.log(allPosts[0].imageurl);
 
   return (
     <>

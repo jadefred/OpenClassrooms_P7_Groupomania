@@ -26,7 +26,8 @@ CREATE TABLE posts(
   likes INT DEFAULT 0 CHECK (likes >= 0),
   likeUserId TEXT [] DEFAULT array[]::TEXT[],
   totalComment INT DEFAULT 0,
-  commentId TEXT []
+  commentId TEXT [],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table for comments
@@ -38,7 +39,7 @@ CREATE TABLE comments(
 );
 
 INSERT INTO posts (post_id, user_id, title, content) VALUES (uuid_generate_v4(), 'fbfd8610-7834-4927-9879-3567aaf80433', 'test JOIN', 'JOIN content');
-INSERT INTO posts (post_id, user_id, title, imageUrl) VALUES (uuid_generate_v4(), 'afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b', 'test image', 'https://www.pinterest.com/pin/845902742483436444/');
+INSERT INTO posts (post_id, user_id, title, imageUrl) VALUES (uuid_generate_v4(), 'afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b', 'test image', 'http://localhost:3000/1656017763164.7fa7c83d9fa9c44cb774a08b0b596219.jpeg');
 
 -- To insert data
 INSERT INTO posts (post_id, title, likeUserId) VALUES (uuid_generate_v4(), 'second title', ARRAY ['dc85baa4-ff25-4776-a472-fc25da5c7a25']);
@@ -52,7 +53,7 @@ DELETE FROM posts WHERE post_id = '6321de8a-ff4b-4cf4-a70c-5626338a3396';
 SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(likeUserId);
 
 -- JOIN two table
-SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id;
+SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at ASC;
 
 
 
