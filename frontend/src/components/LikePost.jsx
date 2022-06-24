@@ -3,7 +3,7 @@ import useLogStatus from '../Context';
 import thumbOrange from '../assets/thumbUp-orange.svg';
 import thumbgray from '../assets/thumbUp-gray.svg';
 
-function LikePost({ likeUserId, postId, setClickLike }) {
+function LikePost({ likeUserId, post_id, setClickLike, isLoaded }) {
   const { userId, token } = useLogStatus();
   const [liked, setLiked] = useState(false);
 
@@ -12,14 +12,13 @@ function LikePost({ likeUserId, postId, setClickLike }) {
     if (likeUserId) {
       setLiked(likeUserId.some((i) => i === userId));
     }
-  }, []);
+  }, [likeUserId]);
 
-  async function likePost(userId, likeUserId, setClickLike) {
+  async function likePost(userId, likeUserId, setClickLike, post_id) {
     //use some to determine if the user has already liked this post
     //send 0 if he already liked -> retrieve the like
     //send 1 if he hasn't react to the post
-    //const userliked = likeUserId.some((i) => i === userId) ? 0 : 1;
-    const userliked = liked ? 0 : 1;
+    const userliked = likeUserId.some((i) => i === userId) ? 0 : 1;
     setLiked((prev) => !prev);
     //props from Feed, change state when user clicked like button to trigger useEffect to re-render all post in Feed
     setClickLike((prev) => !prev);
@@ -29,7 +28,7 @@ function LikePost({ likeUserId, postId, setClickLike }) {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, postId, like: userliked }),
+      body: JSON.stringify({ userId, post_id, like: userliked }),
     });
     const data = await response.json();
     console.log(data);
@@ -39,7 +38,7 @@ function LikePost({ likeUserId, postId, setClickLike }) {
     <>
       <button
         onClick={() => {
-          likePost(userId, likeUserId, setClickLike);
+          likePost(userId, likeUserId, setClickLike, post_id);
         }}
         className={`flex mx-auto items-center gap-x-2 ${
           liked ? 'text-primaire' : 'text-tertiaire'

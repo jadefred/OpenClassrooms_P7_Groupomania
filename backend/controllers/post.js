@@ -2,7 +2,9 @@ const pool = require('../database/database.js');
 
 exports.getAllPosts = async (req, res) => {
   try {
-    const allPosts = await pool.query('SELECT * FROM posts');
+    const allPosts = await pool.query(
+      'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id;'
+    );
 
     if (allPosts.rows.length === 0) {
       res.status(500).json({ error });
@@ -39,7 +41,7 @@ exports.createPost = async (req, res) => {
 //like post
 exports.likePost = async (req, res) => {
   try {
-    const { userId, postId, like } = req.body;
+    const { userId, post_id, like } = req.body;
 
     //query to check if user's id is in the array
     const hasLiked = await pool.query(
@@ -60,7 +62,7 @@ exports.likePost = async (req, res) => {
         //if it's good, remove user's id from array and number of like minus 1
         await pool.query(
           'UPDATE posts SET likeUserId = array_remove(likeUserId, $1), likes = (likes - 1) WHERE post_id = $2',
-          [userId, postId]
+          [userId, post_id]
         );
         res.status(200).json({ message: 'Removed the like from this post' });
         break;
@@ -77,7 +79,7 @@ exports.likePost = async (req, res) => {
         //if it's good, add user's id from array and number of like plus 1
         await pool.query(
           'UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + 1) WHERE post_id = $2',
-          [userId, postId]
+          [userId, post_id]
         );
         res.status(200).json({ message: 'Liked this post' });
         break;

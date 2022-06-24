@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
 import editPostLogo from '../assets/editPost.svg';
+import defaultProfil from '../assets/defaultProfil.svg';
 
 //components
 import NavBar from '../components/NavBar.jsx';
@@ -55,6 +56,8 @@ function Feed() {
     getAllPosts();
   }, [clickLike]);
 
+  console.log(allPosts[0].imageurl);
+
   return (
     <>
       <NavBar />
@@ -77,7 +80,7 @@ function Feed() {
               return (
                 <>
                   <div
-                    key={post.postId}
+                    key={post.post_id}
                     className="border-2 border-gray-500 rounded-xl"
                   >
                     <div>
@@ -85,7 +88,9 @@ function Feed() {
                       <div className="flex justify-between px-3 py-1 text-white bg-lightGray rounded-t-md">
                         <div className="flex items-center gap-x-3">
                           <img
-                            src={post.avatarUrl}
+                            src={
+                              post.avatar_url ? post.avatar_url : defaultProfil
+                            }
                             alt={`l'avatar de ${post.username}`}
                             className="w-10 h-10 object-cover rounded-full"
                           />
@@ -95,7 +100,7 @@ function Feed() {
                         {(post.userId === userId || admin) && (
                           <button
                             onClick={() => {
-                              toggleModal(post.postId);
+                              toggleModal(post.post_id);
                             }}
                           >
                             <img
@@ -107,11 +112,11 @@ function Feed() {
                         )}
                       </div>
                       <div>
-                        {/* render edit post component when content according postId */}
-                        {modal[post.postId] && (
+                        {/* render edit post component when content according post_id */}
+                        {modal[post.post_id] && (
                           <EditPost
                             post={post}
-                            postId={post.postId}
+                            post_id={post.post_id}
                             modal={modal}
                             setModal={setModal}
                             setFlashMessage={setFlashMessage}
@@ -127,9 +132,9 @@ function Feed() {
                         <h2 className="font-bold text-2xl">{post.title}</h2>
                         <p>{post.content}</p>
                         {/* appear only when imageUrl is added */}
-                        {post.imageUrl !== '' && (
+                        {post.imageurl && (
                           <img
-                            src={post.imageUrl}
+                            src={post.imageurl}
                             alt={post.title}
                             className="w-full object-cover"
                           />
@@ -146,7 +151,7 @@ function Feed() {
                           {/* number of comment on this post, hide p when no comment */}
                           {post.totalComment > 0 && post.totalComment <= 1 && (
                             <p
-                              onClick={() => toggleComment(post.postId)}
+                              onClick={() => toggleComment(post.post_id)}
                               className="cursor-pointer"
                             >
                               {post.totalComment} Commentaire
@@ -154,7 +159,7 @@ function Feed() {
                           )}
                           {post.totalComment > 1 && (
                             <p
-                              onClick={() => toggleComment(post.postId)}
+                              onClick={() => toggleComment(post.post_id)}
                               className="cursor-pointer"
                             >
                               {post.totalComment} Commentaires
@@ -165,19 +170,20 @@ function Feed() {
                       <div className="flex border-t-2 border-gray-300 py-1">
                         <div className="basis-1/2 text-center my-1">
                           <LikePost
-                            likeUserId={post.likeUserid}
-                            postId={post.postId}
+                            likeUserId={post.likeuserid}
+                            post_id={post.post_id}
                             setClickLike={setClickLike}
+                            isLoaded={isLoaded}
                           />
                         </div>
                         <div className="basis-1/2 text-center my-1">
                           <CommentButton
-                            postId={post.postId}
+                            post_id={post.post_id}
                             setFlashMessage={setFlashMessage}
                           />
                         </div>
                       </div>
-                      {showComment[post.postId] ? (
+                      {showComment[post.post_id] ? (
                         <Comment comment={post.comment} />
                       ) : null}
                     </div>
