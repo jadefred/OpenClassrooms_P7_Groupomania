@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
 import editPostLogo from '../assets/editPost.svg';
@@ -12,7 +12,6 @@ import EditPost from '../components/EditPost.jsx';
 import FlashMessage from '../components/FlashMessage';
 import CommentButton from '../components/CommentButton';
 import LikePost from '../components/LikePost';
-import LikeAndComment from '../components/LikeAndComment';
 
 function Feed() {
   const [error, setError] = useState(null);
@@ -41,17 +40,13 @@ function Feed() {
 
   //fetch to get all posts
   //depends on clickLike, once user is clicked LikePost component's button, trigger useEffect to re-render allPost data in order to get latest number of like
-  // useEffect(() => {
-  //   getAllPosts();
-  // }, [clickLike, flashMessage]);
-
-  const fetchAllPost = useMemo(() => {
-    return getAllPosts();
+  useEffect(() => {
+    getAllPosts();
   }, [clickLike, flashMessage]);
 
   async function getAllPosts() {
-    console.log('get all post is called');
     try {
+      console.log('get all post is called');
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'GET',
         headers: { authorization: `Bearer ${token}` },
@@ -170,12 +165,33 @@ function Feed() {
                           />
                         )}
                       </div>
-                      <LikeAndComment
-                        post_id={post.post_id}
-                        likes={post.likes}
-                        totalcomment={post.totalcomment}
-                        toggleComment={toggleComment}
-                      />
+                      <div className="w-full mt-5 mb-2">
+                        <div className="w-9/12 flex mx-auto justify-end gap-x-8 ">
+                          {/* number of people liked this post, hide p whee like is 0 */}
+                          {post.likes > 0 && post.likes <= 1 && (
+                            <p>{post.likes} Like</p>
+                          )}
+                          {post.likes > 1 && <p>{post.likes} Likes</p>}
+
+                          {/* number of comment on this post, hide p when no comment */}
+                          {post.totalcomment > 0 && post.totalcomment <= 1 && (
+                            <p
+                              onClick={() => toggleComment(post.post_id)}
+                              className="cursor-pointer"
+                            >
+                              {post.totalcomment} Commentaire
+                            </p>
+                          )}
+                          {post.totalcomment > 1 && (
+                            <p
+                              onClick={() => toggleComment(post.post_id)}
+                              className="cursor-pointer"
+                            >
+                              {post.totalcomment} Commentaires
+                            </p>
+                          )}
+                        </div>
+                      </div>
                       <div className="flex border-t-2 border-gray-300 py-1">
                         <div className="basis-1/2 text-center my-1">
                           <LikePost
