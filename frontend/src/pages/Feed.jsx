@@ -71,6 +71,8 @@ function Feed() {
     }
   }
 
+  console.log(allPosts[0]);
+
   return (
     <>
       <NavBar />
@@ -167,26 +169,26 @@ function Feed() {
                       <div className="w-full mt-5 mb-2">
                         <div className="w-9/12 flex mx-auto justify-end gap-x-8 ">
                           {/* number of people liked this post, hide p whee like is 0 */}
-                          {post.like > 0 && post.like <= 1 && (
-                            <p>{post.like} Like</p>
+                          {post.likes > 0 && post.likes <= 1 && (
+                            <p>{post.likes} Like</p>
                           )}
-                          {post.like > 1 && <p>{post.like} Likes</p>}
+                          {post.likes > 1 && <p>{post.likes} Likes</p>}
 
                           {/* number of comment on this post, hide p when no comment */}
-                          {post.totalComment > 0 && post.totalComment <= 1 && (
+                          {post.totalcomment > 0 && post.totalcomment <= 1 && (
                             <p
                               onClick={() => toggleComment(post.post_id)}
                               className="cursor-pointer"
                             >
-                              {post.totalComment} Commentaire
+                              {post.totalcomment} Commentaire
                             </p>
                           )}
-                          {post.totalComment > 1 && (
+                          {post.totalcomment > 1 && (
                             <p
                               onClick={() => toggleComment(post.post_id)}
                               className="cursor-pointer"
                             >
-                              {post.totalComment} Commentaires
+                              {post.totalcomment} Commentaires
                             </p>
                           )}
                         </div>
