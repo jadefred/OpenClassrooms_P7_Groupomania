@@ -8,6 +8,7 @@ const postCtrl = require('../controllers/post.js');
 //routes
 //CRUD posts
 router.get('/', postCtrl.getAllPosts);
+router.get('/:id', postCtrl.getOnePost)
 router.post('/', multer, postCtrl.createPost);
 
 //like

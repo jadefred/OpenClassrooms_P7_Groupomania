@@ -55,6 +55,8 @@ SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(lik
 -- JOIN two table
 SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at ASC;
 
+SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id WHERE posts.post_id = 'c7d02a9d-c490-4e63-bed5-4fd59a8574bd';
+
 
 
 
