@@ -197,7 +197,6 @@ function Feed() {
                             likeUserId={post.likeuserid}
                             post_id={post.post_id}
                             setClickLike={setClickLike}
-                            isLoaded={isLoaded}
                           />
                         </div>
                         <div className="basis-1/2 text-center my-1">

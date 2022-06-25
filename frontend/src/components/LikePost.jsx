@@ -3,16 +3,16 @@ import useLogStatus from '../Context';
 import thumbOrange from '../assets/thumbUp-orange.svg';
 import thumbgray from '../assets/thumbUp-gray.svg';
 
-function LikePost({ likeUserId, post_id, setClickLike, isLoaded }) {
+function LikePost({ likeUserId, post_id, setClickLike }) {
   const { userId, token } = useLogStatus();
   const [liked, setLiked] = useState(false);
 
   //useEffect to get initial value to see whether user has already liked this post
   useEffect(() => {
-    if (likeUserId) {
+    if (likeUserId.length > 0) {
       setLiked(likeUserId.some((i) => i === userId));
     }
-  }, [likeUserId]);
+  }, []);
 
   async function likePost(userId, likeUserId, setClickLike, post_id) {
     //use some to determine if the user has already liked this post
