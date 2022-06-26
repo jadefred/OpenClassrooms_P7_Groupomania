@@ -2,7 +2,7 @@ import React, { useState, useRef, memo } from 'react';
 import '../styles/newPost.css';
 import useLogStatus from '../Context';
 
-function NewPost({ setFlashMessage }) {
+function NewPost({ setFlashMessage, setRefresh }) {
   const [modal, setModal] = useState(false);
   const titleRef = useRef();
   const contentRef = useRef();
@@ -32,7 +32,6 @@ function NewPost({ setFlashMessage }) {
 
   //enable submit button when title is detected
   function handleRefChange() {
-    console.log(imageRef.current.value);
     if (
       titleRef.current.value !== '' &&
       (contentRef.current.value !== '' || imageRef.current.value !== '')
@@ -99,6 +98,7 @@ function NewPost({ setFlashMessage }) {
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez créé un post');
+        setRefresh(true);
       }
       //fail flash message
       else {

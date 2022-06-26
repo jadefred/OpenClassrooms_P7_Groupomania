@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import useLogStatus from '../Context';
 import commentIcon from '../assets/commentBtn.svg';
 
@@ -200,3 +200,4 @@ function CommentButton({ postId, setFlashMessage }) {
 }
 
 export default CommentButton;
+export const MemoizedCommentButton = memo(CommentButton);

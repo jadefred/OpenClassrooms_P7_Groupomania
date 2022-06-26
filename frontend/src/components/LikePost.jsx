@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import useLogStatus from '../Context';
 import thumbOrange from '../assets/thumbUp-orange.svg';
 import thumbgray from '../assets/thumbUp-gray.svg';
@@ -56,3 +56,4 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
 }
 
 export default LikePost;
+export const MemoizedLikePost = memo(LikePost);

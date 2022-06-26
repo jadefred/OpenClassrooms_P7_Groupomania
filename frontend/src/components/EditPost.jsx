@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import useLogStatus from '../Context';
 
-function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
+function EditPost({ modal, setModal, post, setFlashMessage }) {
   const [image, setImage] = useState();
   const [input, setInput] = useState({
     title: post.title,
@@ -91,12 +91,10 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez modifié un post');
-        timeOutMessage();
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..');
-        timeOutMessage();
       }
     }
     modifyPost();
@@ -132,12 +130,10 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez supprimé un post');
-        timeOutMessage();
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..');
-        timeOutMessage();
       }
     }
   }
