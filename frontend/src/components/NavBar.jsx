@@ -5,7 +5,6 @@ import useLogStatus from '../Context';
 import whiteLogo from '../assets/logo-white.svg';
 
 function NavBar() {
-  console.log('nav bar is loaded');
   const { dispatchLogout } = useLogStatus();
   const navigate = useNavigate();
 

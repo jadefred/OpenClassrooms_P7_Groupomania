@@ -61,8 +61,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
     //pop error message if title / body content is empty and return function
     if (
       input.title === '' ||
-      (input.title !== '' && input.content === '' && !image) ||
-      (input.title !== '' && input.content === '' && input.imageUrl === '')
+      (input.imageUrl === '' && input.content === '' && !image)
     ) {
       setFormNotComplete(true);
       return;
