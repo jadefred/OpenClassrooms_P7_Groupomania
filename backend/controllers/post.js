@@ -125,6 +125,41 @@ exports.modifyPost = async (req, res) => {
   }
 };
 
+exports.deletePost = async (req, res) => {
+  try {
+    const { userId, postId } = req.body;
+
+    const deletePost = await pool.query(
+      'DELETE FROM posts WHERE post_id = $1 AND user_id = $2 RETURNING *',
+      [postId, userId]
+    );
+
+    if (deletePost.rows.length === 0) {
+      return res.status(404).json({ message: 'No related post is found' });
+    }
+
+    //function to delete uploaded image by its file name
+    function deleteImage(url) {
+      fs.unlink(`image/${url}`, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.log('successfully deleted local image');
+        }
+      });
+    }
+
+    if (deletePost.rows[0].imageurl !== null) {
+      console.log('entered delete image block');
+      deleteImage(deletePost.rows[0].imageurl.split('/').pop());
+    }
+
+    res.status(204).json({ message: 'Post deleted' });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
 //like post
 exports.likePost = async (req, res) => {
   try {

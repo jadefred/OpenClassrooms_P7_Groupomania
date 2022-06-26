@@ -125,13 +125,14 @@ function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
           'Content-Type': 'application/json',
           authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId: userId, postId: post.postId }),
+        body: JSON.stringify({ userId: userId, postId: post.post_id }),
       });
 
-      setModal(false);
+      closeModal();
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez supprimé un post');
+        setRefresh(true);
       }
       //fail flash message
       else {

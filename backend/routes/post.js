@@ -11,6 +11,7 @@ router.get('/', postCtrl.getAllPosts);
 router.get('/:id', postCtrl.getOnePost)
 router.post('/', multer, postCtrl.createPost);
 router.put('/', multer, postCtrl.modifyPost);
+router.delete('/', postCtrl.deletePost)
 
 //like
 router.post('/like', postCtrl.likePost);
