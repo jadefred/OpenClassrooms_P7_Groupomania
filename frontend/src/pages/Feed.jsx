@@ -28,8 +28,6 @@ function Feed() {
     'http://localhost:3000/api/posts'
   );
 
-  console.log(data);
-
   //when data contains no post, show no post message
   useEffect(() => {
     if (data && data.length === 0) {
@@ -137,7 +135,7 @@ function Feed() {
                           <p className="font-bold text-md">{post.username}</p>
                         </div>
                         {/* render edit button if user is op / admin  */}
-                        {(post.userId === userId || admin) && (
+                        {(post.user_id === userId || admin) && (
                           <button
                             onClick={() => {
                               toggleModal(post.post_id);
