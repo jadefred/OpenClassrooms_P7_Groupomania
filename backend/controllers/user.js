@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
     );
 
     if (user.rows.length === 0) {
-      res.status(401).json({ error: 'User not exist' });
+      return res.status(401).json({ error: 'User not exist' });
     }
 
     //compare req body password and hashed password which saved in DB
