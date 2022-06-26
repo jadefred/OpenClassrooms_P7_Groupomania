@@ -12,6 +12,7 @@ import FlashMessage from '../components/FlashMessage';
 import CommentButton from '../components/CommentButton';
 import LikePost from '../components/LikePost';
 import { MemoizedPostHeader } from '../components/PostHeader';
+import { MemoizedPostContent } from '../components/PostContent';
 
 function Feed() {
   const [showComment, setShowComment] = useState({});
@@ -82,7 +83,7 @@ function Feed() {
                     className="border-2 border-gray-500 rounded-xl"
                   >
                     <div>
-                      {/* username, avatar and edit button block */}
+                      {/* header of each post - username, avatar and edit button */}
                       <MemoizedPostHeader
                         avatar_url={post.avatar_url}
                         username={post.username}
@@ -109,18 +110,11 @@ function Feed() {
 
                     {/* Block of title, content, like, comment buttons */}
                     <div>
-                      <div className="flex flex-col gap-y-4 w-9/12 mx-auto my-3">
-                        <h2 className="font-bold text-2xl">{post.title}</h2>
-                        <p>{post.content}</p>
-                        {/* appear only when imageUrl is added */}
-                        {post.imageurl && (
-                          <img
-                            src={post.imageurl}
-                            alt={post.title}
-                            className="w-full object-cover"
-                          />
-                        )}
-                      </div>
+                      <MemoizedPostContent 
+                        title={post.title}
+                        content={post.content}
+                        imageurl={post.imageurl}
+                      />
                       <div className="w-full mt-5 mb-2">
                         <div className="w-9/12 flex mx-auto justify-end gap-x-8 ">
                           {/* number of people liked this post, hide p whee like is 0 */}
