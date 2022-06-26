@@ -1,84 +1,84 @@
-import React, { useState, useRef } from 'react'
-import useLogStatus from '../Context'
+import React, { useState, useRef } from 'react';
+import useLogStatus from '../Context';
 
 function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
-  const [image, setImage] = useState()
+  const [image, setImage] = useState();
   const [input, setInput] = useState({
     title: post.title,
     content: post.content,
     imageUrl: post.imageUrl,
-  })
-  const [preview, setPreview] = useState(input.imageUrl)
-  const [formNotComplete, setFormNotComplete] = useState(false)
-  const [btnDisable, setBtnDisable] = useState(true)
-  const { userId, token } = useLogStatus()
-  const imageRef = useRef()
+  });
+  const [preview, setPreview] = useState(input.imageUrl);
+  const [formNotComplete, setFormNotComplete] = useState(false);
+  const [btnDisable, setBtnDisable] = useState(true);
+  const { userId, token } = useLogStatus();
+  const imageRef = useRef();
 
   //close modal after clicked overlay
   function toggleModal() {
-    setModal((prev) => !prev)
+    setModal((prev) => !prev);
   }
 
   //freeze body from scrolling when modal is there
   if (modal) {
-    document.body.classList.add('active-modal')
+    document.body.classList.add('active-modal');
   } else {
-    document.body.classList.remove('active-modal')
+    document.body.classList.remove('active-modal');
   }
 
   //handle title and content input change
   function handleEditPost(e) {
-    setInput({ ...input, [e.target.name]: e.target.value })
-    setBtnDisable(false)
+    setInput({ ...input, [e.target.name]: e.target.value });
+    setBtnDisable(false);
   }
 
   //handle image input, check mime type before set to the state
   function handleImage(e) {
-    setBtnDisable(false)
-    const file = e.target.files[0]
+    setBtnDisable(false);
+    const file = e.target.files[0];
     const mimeType =
       file.type === 'image/jpg' ||
       file.type === 'image/jpeg' ||
       file.type === 'image/png'
         ? true
-        : false
+        : false;
 
     if (file && mimeType) {
-      setImage(file)
-      const reader = new FileReader()
+      setImage(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
-      setImage(null)
+      setImage(null);
     }
   }
 
   function handleModifyPost(e) {
-    e.preventDefault()
+    e.preventDefault();
     //pop error message if title / body content is empty and return function
     if (
       input.title === '' ||
       (input.title !== '' && input.content === '' && !image) ||
       (input.title !== '' && input.content === '' && input.imageUrl === '')
     ) {
-      setFormNotComplete(true)
-      return
+      setFormNotComplete(true);
+      return;
     }
 
     //create form data, append image when user added
-    const formData = new FormData()
-    formData.append('userId', userId)
-    formData.append('title', input.title)
-    formData.append('content', input.content)
-    formData.append('postId', post.postId)
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('title', input.title);
+    formData.append('content', input.content);
+    formData.append('postId', post.postId);
 
     //append image if it exists
     if (image) {
-      formData.append('image', image)
+      formData.append('image', image);
     } else {
-      formData.append('image', input.imageUrl)
+      formData.append('image', input.imageUrl);
     }
 
     async function modifyPost() {
@@ -86,36 +86,36 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
         method: 'PUT',
         headers: { authorization: `Bearer ${token}` },
         body: formData,
-      })
-      setModal(false)
+      });
+      setModal(false);
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
-        setFlashMessage('Vous avez modifié un post')
-        timeOutMessage()
+        setFlashMessage('Vous avez modifié un post');
+        timeOutMessage();
       }
       //fail flash message
       else {
-        setFlashMessage('Un problème a apparu..')
-        timeOutMessage()
+        setFlashMessage('Un problème a apparu..');
+        timeOutMessage();
       }
     }
-    modifyPost()
+    modifyPost();
   }
 
   //remove selected image / the image from server
   function removeSelectedImg() {
-    setImage(null)
-    setPreview(null)
-    setInput({ ...input, imageUrl: '' })
-    setBtnDisable(false)
+    setImage(null);
+    setPreview(null);
+    setInput({ ...input, imageUrl: '' });
+    setBtnDisable(false);
   }
 
   //alert user, delete post if confirmed, then flash message
   function handleDeletePost() {
     if (window.confirm('Vous êtes sûr de supprimer ce post ?')) {
-      deletePost()
+      deletePost();
     } else {
-      return
+      return;
     }
 
     async function deletePost() {
@@ -126,18 +126,18 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
           authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId: userId, postId: post.postId }),
-      })
+      });
 
-      setModal(false)
+      setModal(false);
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
-        setFlashMessage('Vous avez supprimé un post')
-        timeOutMessage()
+        setFlashMessage('Vous avez supprimé un post');
+        timeOutMessage();
       }
       //fail flash message
       else {
-        setFlashMessage('Un problème a apparu..')
-        timeOutMessage()
+        setFlashMessage('Un problème a apparu..');
+        timeOutMessage();
       }
     }
   }
@@ -182,8 +182,8 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
                 />
                 <button
                   onClick={(e) => {
-                    e.preventDefault()
-                    imageRef.current.click()
+                    e.preventDefault();
+                    imageRef.current.click();
                   }}
                   className="NewPost--add-image-btn"
                 >
@@ -235,7 +235,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, timeOutMessage }) {
         </div>
       )}
     </>
-  )
+  );
 }
 
-export default EditPost
+export default EditPost;

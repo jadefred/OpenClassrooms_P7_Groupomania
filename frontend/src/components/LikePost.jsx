@@ -22,7 +22,6 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
     setLiked((prev) => !prev);
     setRefresh(true);
     //props from Feed, change state when user clicked like button to trigger useEffect to re-render all post in Feed
-    // setClickLike((prev) => !prev);
     const response = await fetch('http://localhost:3000/api/posts/like', {
       method: 'POST',
       headers: {

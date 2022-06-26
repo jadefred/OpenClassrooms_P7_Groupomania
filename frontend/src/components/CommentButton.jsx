@@ -1,91 +1,91 @@
-import React, { useState, useRef } from 'react'
-import useLogStatus from '../Context'
-import commentIcon from '../assets/commentBtn.svg'
+import React, { useState, useRef } from 'react';
+import useLogStatus from '../Context';
+import commentIcon from '../assets/commentBtn.svg';
 
 function CommentButton({ postId, setFlashMessage }) {
-  const [modal, setModal] = useState(false)
-  const [image, setImage] = useState(null)
-  const [preview, setPreview] = useState(null)
-  const imageRef = useRef()
-  const contentRef = useRef()
-  const [formNotComplete, setFormNotComplete] = useState(false)
-  const [btnDisable, setBtnDisable] = useState(true)
-  const { userId, token } = useLogStatus()
+  const [modal, setModal] = useState(false);
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const imageRef = useRef();
+  const contentRef = useRef();
+  const [formNotComplete, setFormNotComplete] = useState(false);
+  const [btnDisable, setBtnDisable] = useState(true);
+  const { userId, token } = useLogStatus();
 
   function toggleModal() {
-    setModal((prev) => !prev)
+    setModal((prev) => !prev);
     if (!modal) {
-      setPreview(null)
-      setImage(null)
-      setFormNotComplete(false)
-      setBtnDisable(true)
+      setPreview(null);
+      setImage(null);
+      setFormNotComplete(false);
+      setBtnDisable(true);
     }
   }
 
   //freeze background body from scrolling when modal is actived
   if (modal) {
-    document.body.classList.add('active-modal')
+    document.body.classList.add('active-modal');
   } else {
-    document.body.classList.remove('active-modal')
+    document.body.classList.remove('active-modal');
   }
 
   //enable submit button when content is detected
   function handleInput() {
     if (contentRef.current.value !== '') {
-      setBtnDisable(false)
+      setBtnDisable(false);
     } else {
-      setBtnDisable(true)
+      setBtnDisable(true);
     }
   }
 
   //handle image input, check mime type before set to the state, and render preview image, enable submit if image is there
   function handleImage(e) {
-    setBtnDisable(false)
-    const file = e.target.files[0]
+    setBtnDisable(false);
+    const file = e.target.files[0];
     const mimeType =
       file.type === 'image/jpg' ||
       file.type === 'image/jpeg' ||
       file.type === 'image/png'
         ? true
-        : false
+        : false;
 
     if (file && mimeType) {
-      setImage(file)
-      const reader = new FileReader()
+      setImage(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
-      setImage(null)
+      setImage(null);
     }
   }
 
   function removeSelectedImg() {
-    setImage(null)
-    imageRef.current.value = null
+    setImage(null);
+    imageRef.current.value = null;
   }
 
   //fetch comment to endpoint
   function creatComment(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     //comment has to contain either content or image
     if (contentRef.current.value === '' && !image) {
-      setFormNotComplete(true)
-      return
+      setFormNotComplete(true);
+      return;
     }
 
     //create form data, append image when user added
-    const formData = new FormData()
-    formData.append('userId', userId)
-    formData.append('postId', postId)
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('postId', postId);
 
     if (image) {
-      formData.append('image', image)
+      formData.append('image', image);
     }
     if (contentRef.current.value !== '') {
-      formData.append('content', contentRef.current.value)
+      formData.append('content', contentRef.current.value);
     }
 
     async function createComment() {
@@ -93,24 +93,24 @@ function CommentButton({ postId, setFlashMessage }) {
         method: 'POST',
         headers: { authorization: `Bearer ${token}` },
         body: formData,
-      })
-      setModal(false)
+      });
+      setModal(false);
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
-        setFlashMessage('Vous avez posté un commentaire')
+        setFlashMessage('Vous avez posté un commentaire');
         setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+          setFlashMessage('');
+        }, 3000);
       }
       //fail flash message
       else {
-        setFlashMessage('Un problème a apparu..')
+        setFlashMessage('Un problème a apparu..');
         setTimeout(() => {
-          setFlashMessage('')
-        }, 3000)
+          setFlashMessage('');
+        }, 3000);
       }
     }
-    createComment()
+    createComment();
   }
 
   return (
@@ -151,8 +151,8 @@ function CommentButton({ postId, setFlashMessage }) {
                 />
                 <button
                   onClick={(e) => {
-                    e.preventDefault()
-                    imageRef.current.click()
+                    e.preventDefault();
+                    imageRef.current.click();
                   }}
                   className="NewPost--add-image-btn"
                 >
@@ -196,7 +196,7 @@ function CommentButton({ postId, setFlashMessage }) {
         </div>
       )}
     </>
-  )
+  );
 }
 
-export default CommentButton
+export default CommentButton;

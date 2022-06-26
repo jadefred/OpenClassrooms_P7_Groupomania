@@ -6,7 +6,7 @@ import defaultProfil from '../assets/defaultProfil.svg';
 import useFetch from '../hooks/useFetch';
 
 //components
-import NavBar from '../components/NavBar.jsx';
+import { MemoizedNavBar } from '../components/NavBar.jsx';
 import Comment from '../components/Comment.jsx';
 import NewPost from '../components/NewPost.jsx';
 import EditPost from '../components/EditPost.jsx';
@@ -15,18 +15,16 @@ import CommentButton from '../components/CommentButton';
 import LikePost from '../components/LikePost';
 
 function Feed() {
-  // const [error, setError] = useState(null);
-  // const [isLoaded, setIsLoaded] = useState(false);
-  //const [allPosts, setAllPosts] = useState([]);
   const [showComment, setShowComment] = useState({});
   const [modal, setModal] = useState({});
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
   const { userId, admin } = useLogStatus();
-  //const [clickLike, setClickLike] = useState(true);
   const [noPostMsg, setNoPostMsg] = useState(false);
   const { data, isLoaded, error, setRefresh } = useFetch(
     'http://localhost:3000/api/posts'
   );
+
+  console.log(data);
 
   //when data contains no post, show no post message
   useEffect(() => {
@@ -51,43 +49,9 @@ function Feed() {
     );
   }
 
-  //fetch to get all posts
-  //depends on clickLike, once user is clicked LikePost component's button, trigger useEffect to re-render allPost data in order to get latest number of like
-  // useEffect(() => {
-  //   getAllPosts();
-  // }, [clickLike, flashMessage]);
-
-  // async function getAllPosts() {
-  //   try {
-  //     console.log('get all post is called');
-  //     const response = await fetch('http://localhost:3000/api/posts', {
-  //       method: 'GET',
-  //       headers: { authorization: `Bearer ${token}` },
-  //     });
-
-  //     if (!response.ok) {
-  //       setError(true);
-  //       setIsLoaded(true);
-  //     }
-
-  //     const data = await response.json();
-
-  //     if (data.length === 0) {
-  //       setIsLoaded(true);
-  //       setNoPostMsg(true);
-  //     }
-
-  //     setAllPosts(data);
-  //     setIsLoaded(true);
-  //   } catch (error) {
-  //     setError(true);
-  //     setIsLoaded(true);
-  //   }
-  // }
-
   return (
     <>
-      <NavBar />
+      <MemoizedNavBar />
       {isLoaded && !error && (
         <NewPost
           setFlashMessage={setFlashMessage}
