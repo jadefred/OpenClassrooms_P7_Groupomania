@@ -1,4 +1,5 @@
 const pool = require('../database/database.js');
+const fs = require('fs');
 
 exports.getAllPosts = async (req, res) => {
   try {
@@ -60,12 +61,35 @@ exports.createPost = async (req, res) => {
 exports.modifyPost = async (req, res) => {
   try {
     let imageUrl = null;
-    const { postId, userId, title, content } = req.body;
+    const { postId, userId, title, content, image } = req.body;
 
-    //if user has uploaded file, update file path
+    //query to get saved imageUrl
+    const imageInDB = await pool.query(
+      'SELECT imageUrl FROM posts WHERE post_id = $1',
+      [postId]
+    );
+
+    //function to delete uploaded image by its file name
+    function deleteImage(url) {
+      fs.unlink(`image/${url}`, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.log('successfully deleted local image');
+        }
+      });
+    }
+
+    //When user has uploaded an image
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
 
+      //If imageUrl in DB is not null, call function to delete old image
+      if (imageInDB.rows[0].imageurl) {
+        deleteImage(imageInDB.rows[0].imageurl.split('/').pop());
+      }
+
+      //Update DB
       const updatePost = await pool.query(
         'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
         [title, content, imageUrl, postId, userId]
@@ -77,11 +101,17 @@ exports.modifyPost = async (req, res) => {
         .status(200)
         .json({ message: "Successfully updated post's content and image" });
     }
-    //no req.file -> search original imageUrl to see whether user has delete image, then update accordingly
+    //no image is uploaded, user might or might not deleted old image
     else {
+      //if req.body.image is an empty string, it means user deleted the image, call function to remove image from DB
+      if (!image && imageInDB.rows[0].imageurl) {
+        deleteImage(imageInDB.rows[0].imageurl.split('/').pop());
+      }
+
+      //update DB
       const updatePost = await pool.query(
-        'UPDATE posts SET title = $1, content = $2 WHERE post_id = $3 AND user_id = $4 RETURNING *',
-        [title, content, postId, userId]
+        'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
+        [title, content, image, postId, userId]
       );
 
       if (updatePost.rows.length === 0) {
