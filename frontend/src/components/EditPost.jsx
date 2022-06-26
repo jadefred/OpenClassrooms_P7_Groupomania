@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import useLogStatus from '../Context';
 
-function EditPost({ modal, setModal, post, setFlashMessage }) {
+function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
   const [image, setImage] = useState();
   const [input, setInput] = useState({
     title: post.title,
@@ -89,10 +89,10 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
         body: formData,
       });
       closeModal();
-      //setModal(false);
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez modifié un post');
+        setRefresh(true);
       }
       //fail flash message
       else {

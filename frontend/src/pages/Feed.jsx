@@ -103,6 +103,7 @@ function Feed() {
                             modal={modal}
                             setModal={setModal}
                             setFlashMessage={setFlashMessage}
+                            setRefresh={setRefresh}
                           />
                         )}
                       </div>
