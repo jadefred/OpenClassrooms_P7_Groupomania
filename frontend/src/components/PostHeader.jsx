@@ -5,13 +5,12 @@ import defaultProfil from '../assets/defaultProfil.svg';
 function PostHeader({
   avatar_url,
   username,
-  post_id,
   user_id,
   userId,
   admin,
   toggleModal,
+  post_id,
 }) {
-  console.log(`render post ${post_id}`);
   return (
     <div className="flex justify-between px-3 py-1 text-white bg-lightGray rounded-t-md">
       <div className="flex items-center gap-x-3">
@@ -40,4 +39,6 @@ function PostHeader({
   );
 }
 
-export default memo(PostHeader);
+export default PostHeader;
+
+export const MemoizedPostHeader = memo(PostHeader);

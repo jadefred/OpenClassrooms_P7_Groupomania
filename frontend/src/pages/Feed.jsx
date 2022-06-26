@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
-import editPostLogo from '../assets/editPost.svg';
-import defaultProfil from '../assets/defaultProfil.svg';
 import useFetch from '../hooks/useFetch';
 
 //components
@@ -13,6 +11,7 @@ import EditPost from '../components/EditPost.jsx';
 import FlashMessage from '../components/FlashMessage';
 import CommentButton from '../components/CommentButton';
 import LikePost from '../components/LikePost';
+import { MemoizedPostHeader } from '../components/PostHeader';
 
 function Feed() {
   const [showComment, setShowComment] = useState({});
@@ -42,20 +41,18 @@ function Feed() {
     );
   }
 
-  //toggle modal when clicked modifer post button
-  function toggleModal(id) {
+  //toggle modal when clicked modifer post button (useCallback to memorize function before pass it as props to child)
+  const toggleModal = useCallback((id) => {
     setModal((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
     );
-  }
+  }, []);
 
   return (
     <>
       <MemoizedNavBar />
       {isLoaded && !error && (
-        <MemoizedNewPost
-          setFlashMessage={setFlashMessage}
-        />
+        <MemoizedNewPost setFlashMessage={setFlashMessage} />
       )}
 
       {/* flash message pops up after user edited a post */}
@@ -86,32 +83,15 @@ function Feed() {
                   >
                     <div>
                       {/* username, avatar and edit button block */}
-                      <div className="flex justify-between px-3 py-1 text-white bg-lightGray rounded-t-md">
-                        <div className="flex items-center gap-x-3">
-                          <img
-                            src={
-                              post.avatar_url ? post.avatar_url : defaultProfil
-                            }
-                            alt={`l'avatar de ${post.username}`}
-                            className="w-10 h-10 object-cover rounded-full"
-                          />
-                          <p className="font-bold text-md">{post.username}</p>
-                        </div>
-                        {/* render edit button if user is op / admin  */}
-                        {(post.user_id === userId || admin) && (
-                          <button
-                            onClick={() => {
-                              toggleModal(post.post_id);
-                            }}
-                          >
-                            <img
-                              src={editPostLogo}
-                              alt="bouton pour modifier le post"
-                              className="w-5 h-5"
-                            />
-                          </button>
-                        )}
-                      </div>
+                      <MemoizedPostHeader
+                        avatar_url={post.avatar_url}
+                        username={post.username}
+                        user_id={post.user_id}
+                        userId={userId}
+                        admin={admin}
+                        toggleModal={toggleModal}
+                        post_id={post.post_id}
+                      />
                       <div>
                         {/* render edit post component when content according post_id */}
                         {modal[post.post_id] && (
