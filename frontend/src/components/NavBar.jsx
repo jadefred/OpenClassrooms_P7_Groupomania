@@ -1,18 +1,19 @@
-import React from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import Cookies from 'js-cookie'
-import useLogStatus from '../Context'
-import whiteLogo from '../assets/logo-white.svg'
+import React, { memo } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import useLogStatus from '../Context';
+import whiteLogo from '../assets/logo-white.svg';
 
 function NavBar() {
-  const { dispatchLogout } = useLogStatus()
-  const navigate = useNavigate()
+  console.log('nav bar is loaded');
+  const { dispatchLogout } = useLogStatus();
+  const navigate = useNavigate();
 
   function toLogout() {
-    Cookies.remove('accessToken')
-    localStorage.clear()
-    dispatchLogout()
-    navigate('/')
+    Cookies.remove('accessToken');
+    localStorage.clear();
+    dispatchLogout();
+    navigate('/');
   }
 
   return (
@@ -36,7 +37,7 @@ function NavBar() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default NavBar
+export default memo(NavBar);

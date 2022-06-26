@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react'
-import useLogStatus from '../Context'
+import { useEffect, useState } from 'react';
+import useLogStatus from '../Context';
 
 function useFetch(url) {
-  const [data, setData] = useState(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [error, setError] = useState(null)
-  const { token } = useLogStatus()
+  const [data, setData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const { token } = useLogStatus();
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    setIsLoaded(true)
-
     fetch(url, {
       method: 'GET',
       headers: {
@@ -18,16 +17,16 @@ function useFetch(url) {
     })
       .then((response) => {
         response.json().then((result) => {
-          setData(result)
-        })
+          setData(result);
+        });
       })
       .catch((err) => {
-        setError(err)
+        setError(err);
       })
-      .finally(setIsLoaded(false))
-  }, [url])
+      .finally(setIsLoaded(true), setRefresh(false));
+  }, [url, refresh]);
 
-  return { data, isLoaded, error }
+  return { data, isLoaded, error, setRefresh };
 }
 
-export default useFetch
+export default useFetch;

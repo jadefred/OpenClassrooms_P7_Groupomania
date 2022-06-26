@@ -3,6 +3,7 @@ import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
 import editPostLogo from '../assets/editPost.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
+import useFetch from '../hooks/useFetch';
 
 //components
 import NavBar from '../components/NavBar.jsx';
@@ -14,15 +15,29 @@ import CommentButton from '../components/CommentButton';
 import LikePost from '../components/LikePost';
 
 function Feed() {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [allPosts, setAllPosts] = useState([]);
+  // const [error, setError] = useState(null);
+  // const [isLoaded, setIsLoaded] = useState(false);
+  //const [allPosts, setAllPosts] = useState([]);
   const [showComment, setShowComment] = useState({});
   const [modal, setModal] = useState({});
   const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
-  const { userId, token, admin } = useLogStatus();
-  const [clickLike, setClickLike] = useState(true);
+  const { userId, admin } = useLogStatus();
+  //const [clickLike, setClickLike] = useState(true);
   const [noPostMsg, setNoPostMsg] = useState(false);
+  const { data, isLoaded, error, setRefresh } = useFetch(
+    'http://localhost:3000/api/posts'
+  );
+
+  console.log(data);
+
+  //when data contains no post, show no post message
+  useEffect(() => {
+    if (data && data.length === 0) {
+      setNoPostMsg(true);
+    } else {
+      setNoPostMsg(false);
+    }
+  }, [data]);
 
   //toggle comment block, map id key to target clicked element
   function toggleComment(id) {
@@ -40,37 +55,37 @@ function Feed() {
 
   //fetch to get all posts
   //depends on clickLike, once user is clicked LikePost component's button, trigger useEffect to re-render allPost data in order to get latest number of like
-  useEffect(() => {
-    getAllPosts();
-  }, [clickLike, flashMessage]);
+  // useEffect(() => {
+  //   getAllPosts();
+  // }, [clickLike, flashMessage]);
 
-  async function getAllPosts() {
-    try {
-      console.log('get all post is called');
-      const response = await fetch('http://localhost:3000/api/posts', {
-        method: 'GET',
-        headers: { authorization: `Bearer ${token}` },
-      });
+  // async function getAllPosts() {
+  //   try {
+  //     console.log('get all post is called');
+  //     const response = await fetch('http://localhost:3000/api/posts', {
+  //       method: 'GET',
+  //       headers: { authorization: `Bearer ${token}` },
+  //     });
 
-      if (!response.ok) {
-        setError(true);
-        setIsLoaded(true);
-      }
+  //     if (!response.ok) {
+  //       setError(true);
+  //       setIsLoaded(true);
+  //     }
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (data.length === 0) {
-        setIsLoaded(true);
-        setNoPostMsg(true);
-      }
+  //     if (data.length === 0) {
+  //       setIsLoaded(true);
+  //       setNoPostMsg(true);
+  //     }
 
-      setAllPosts(data);
-      setIsLoaded(true);
-    } catch (error) {
-      setError(true);
-      setIsLoaded(true);
-    }
-  }
+  //     setAllPosts(data);
+  //     setIsLoaded(true);
+  //   } catch (error) {
+  //     setError(true);
+  //     setIsLoaded(true);
+  //   }
+  // }
 
   return (
     <>
@@ -98,10 +113,10 @@ function Feed() {
           </p>
         )}
 
-        {isLoaded && !error && (
+        {isLoaded && !error && data && (
           <div className="w-full flex flex-col gap-y-10 text-tertiaire">
             {/* map throught allPosts state to display all content */}
-            {allPosts.map((post) => {
+            {data.map((post) => {
               return (
                 <>
                   <div
@@ -197,7 +212,7 @@ function Feed() {
                           <LikePost
                             likeUserId={post.likeuserid}
                             post_id={post.post_id}
-                            setClickLike={setClickLike}
+                            setRefresh={setRefresh}
                           />
                         </div>
                         <div className="basis-1/2 text-center my-1">

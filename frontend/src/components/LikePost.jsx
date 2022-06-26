@@ -3,7 +3,7 @@ import useLogStatus from '../Context';
 import thumbOrange from '../assets/thumbUp-orange.svg';
 import thumbgray from '../assets/thumbUp-gray.svg';
 
-function LikePost({ likeUserId, post_id, setClickLike }) {
+function LikePost({ likeUserId, post_id, setRefresh }) {
   const { userId, token } = useLogStatus();
   const [liked, setLiked] = useState(false);
 
@@ -14,14 +14,15 @@ function LikePost({ likeUserId, post_id, setClickLike }) {
     }
   }, []);
 
-  async function likePost(userId, likeUserId, setClickLike, post_id) {
+  async function likePost(userId, likeUserId, post_id) {
     //use some to determine if the user has already liked this post
     //send 0 if he already liked -> retrieve the like
     //send 1 if he hasn't react to the post
     const userliked = likeUserId.some((i) => i === userId) ? 0 : 1;
     setLiked((prev) => !prev);
+    setRefresh(true);
     //props from Feed, change state when user clicked like button to trigger useEffect to re-render all post in Feed
-    setClickLike((prev) => !prev);
+    // setClickLike((prev) => !prev);
     const response = await fetch('http://localhost:3000/api/posts/like', {
       method: 'POST',
       headers: {
@@ -38,7 +39,7 @@ function LikePost({ likeUserId, post_id, setClickLike }) {
     <>
       <button
         onClick={() => {
-          likePost(userId, likeUserId, setClickLike, post_id);
+          likePost(userId, likeUserId, post_id);
         }}
         className={`flex mx-auto items-center gap-x-2 ${
           liked ? 'text-primaire' : 'text-tertiaire'
