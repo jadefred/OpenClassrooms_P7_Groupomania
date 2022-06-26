@@ -14,6 +14,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+//app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //routes of users and posts

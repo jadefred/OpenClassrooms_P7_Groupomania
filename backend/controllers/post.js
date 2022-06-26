@@ -57,6 +57,44 @@ exports.createPost = async (req, res) => {
   }
 };
 
+exports.modifyPost = async (req, res) => {
+  try {
+    let imageUrl = null;
+    const { postId, userId, title, content } = req.body;
+
+    //if user has uploaded file, update file path
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+
+      const updatePost = await pool.query(
+        'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
+        [title, content, imageUrl, postId, userId]
+      );
+      if (updatePost.rows.length === 0) {
+        res.status(500).json({ error });
+      }
+      res
+        .status(200)
+        .json({ message: "Successfully updated post's content and image" });
+    }
+    //no req.file -> search original imageUrl to see whether user has delete image, then update accordingly
+    else {
+      const updatePost = await pool.query(
+        'UPDATE posts SET title = $1, content = $2 WHERE post_id = $3 AND user_id = $4 RETURNING *',
+        [title, content, postId, userId]
+      );
+
+      if (updatePost.rows.length === 0) {
+        res.status(500).json({ error });
+      }
+
+      res.status(200).json({ message: "Successfully updated post's content" });
+    }
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
 //like post
 exports.likePost = async (req, res) => {
   try {

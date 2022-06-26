@@ -55,8 +55,6 @@ SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(lik
 -- JOIN two table
 SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at ASC;
 
-SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id WHERE posts.post_id = 'c7d02a9d-c490-4e63-bed5-4fd59a8574bd';
 
-
-
+UPDATE posts SET title = 'hahahaha', content = 'change me too', imageUrl = 'http://localhost:3000/image/1656254401490.7fa7c83d9fa9c44cb774a08b0b596219.jpeg' WHERE post_id = '72c3bf26-12bf-43d8-b483-cedad89a497f' AND user_id = 'fbfd8610-7834-4927-9879-3567aaf80433';
 

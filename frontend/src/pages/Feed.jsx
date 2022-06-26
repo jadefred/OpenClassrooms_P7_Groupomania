@@ -100,7 +100,6 @@ function Feed() {
                         {modal[post.post_id] && (
                           <EditPost
                             post={post}
-                            post_id={post.post_id}
                             modal={modal}
                             setModal={setModal}
                             setFlashMessage={setFlashMessage}

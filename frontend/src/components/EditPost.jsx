@@ -6,7 +6,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
   const [input, setInput] = useState({
     title: post.title,
     content: post.content,
-    imageUrl: post.imageUrl,
+    imageUrl: post.imageurl,
   });
   const [preview, setPreview] = useState(input.imageUrl);
   const [formNotComplete, setFormNotComplete] = useState(false);
@@ -15,8 +15,9 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
   const imageRef = useRef();
 
   //close modal after clicked overlay
-  function toggleModal() {
-    setModal((prev) => !prev);
+  function closeModal() {
+    setModal(false);
+    document.body.classList.remove('active-modal');
   }
 
   //freeze body from scrolling when modal is there
@@ -72,7 +73,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     formData.append('userId', userId);
     formData.append('title', input.title);
     formData.append('content', input.content);
-    formData.append('postId', post.postId);
+    formData.append('postId', post.post_id);
 
     //append image if it exists
     if (image) {
@@ -87,7 +88,8 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
         headers: { authorization: `Bearer ${token}` },
         body: formData,
       });
-      setModal(false);
+      closeModal();
+      //setModal(false);
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez modifié un post');
@@ -142,7 +144,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
     <>
       {modal && (
         <div className="NewPost--modal">
-          <div onClick={toggleModal} className="NewPost--overlay"></div>
+          <div onClick={closeModal} className="NewPost--overlay"></div>
           <div className="NewPost--modal-content">
             <h2>Modifer Post</h2>
             <form onSubmit={handleModifyPost}>
@@ -215,7 +217,7 @@ function EditPost({ modal, setModal, post, setFlashMessage }) {
                   disabled={btnDisable}
                   className="NewPost--submit-btn"
                 />
-                <button onClick={toggleModal} className="NewPost--cancel-btn">
+                <button onClick={closeModal} className="NewPost--cancel-btn">
                   Annuler
                 </button>
                 <button

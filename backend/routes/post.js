@@ -10,6 +10,7 @@ const postCtrl = require('../controllers/post.js');
 router.get('/', postCtrl.getAllPosts);
 router.get('/:id', postCtrl.getOnePost)
 router.post('/', multer, postCtrl.createPost);
+router.put('/', multer, postCtrl.modifyPost);
 
 //like
 router.post('/like', postCtrl.likePost);
