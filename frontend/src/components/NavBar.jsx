@@ -41,4 +41,4 @@ function NavBar() {
 }
 
 export default NavBar;
-export const MemoizedNavBar = React.memo(NavBar);
+export const MemoizedNavBar = memo(NavBar);

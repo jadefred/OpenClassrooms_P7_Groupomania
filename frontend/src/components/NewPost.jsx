@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import '../styles/newPost.css';
 import useLogStatus from '../Context';
 
-function NewPost({ setFlashMessage, timeOutMessage }) {
+function NewPost({ setFlashMessage }) {
   const [modal, setModal] = useState(false);
   const titleRef = useRef();
   const contentRef = useRef();
@@ -99,12 +99,10 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez créé un post');
-        timeOutMessage();
       }
       //fail flash message
       else {
         setFlashMessage('Un problème a apparu..');
-        timeOutMessage();
       }
     }
     createPost();
@@ -224,3 +222,4 @@ function NewPost({ setFlashMessage, timeOutMessage }) {
 }
 
 export default NewPost;
+export const MemoizedNewPost = memo(NewPost);

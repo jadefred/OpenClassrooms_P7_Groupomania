@@ -8,7 +8,7 @@ import useFetch from '../hooks/useFetch';
 //components
 import { MemoizedNavBar } from '../components/NavBar.jsx';
 import Comment from '../components/Comment.jsx';
-import NewPost from '../components/NewPost.jsx';
+import { MemoizedNewPost } from '../components/NewPost.jsx';
 import EditPost from '../components/EditPost.jsx';
 import FlashMessage from '../components/FlashMessage';
 import CommentButton from '../components/CommentButton';
@@ -17,7 +17,7 @@ import LikePost from '../components/LikePost';
 function Feed() {
   const [showComment, setShowComment] = useState({});
   const [modal, setModal] = useState({});
-  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage();
+  const { flashMessage, setFlashMessage } = useFlashMessage();
   const { userId, admin } = useLogStatus();
   const [noPostMsg, setNoPostMsg] = useState(false);
   const { data, isLoaded, error, setRefresh } = useFetch(
@@ -53,9 +53,8 @@ function Feed() {
     <>
       <MemoizedNavBar />
       {isLoaded && !error && (
-        <NewPost
+        <MemoizedNewPost
           setFlashMessage={setFlashMessage}
-          timeOutMessage={timeOutMessage}
         />
       )}
 
@@ -122,7 +121,7 @@ function Feed() {
                             modal={modal}
                             setModal={setModal}
                             setFlashMessage={setFlashMessage}
-                            timeOutMessage={timeOutMessage}
+                            //timeOutMessage={timeOutMessage}
                           />
                         )}
                       </div>
