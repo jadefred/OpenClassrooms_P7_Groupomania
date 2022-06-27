@@ -212,3 +212,46 @@ exports.likePost = async (req, res) => {
     res.status(500).json({ error });
   }
 };
+
+//create comment
+exports.createComment = async (req, res) => {
+  try {
+    let imageUrl = null;
+    const { postId, userId, content, image } = req.body;
+
+    console.table({ postId, userId, content, image });
+
+    //if user has sent file, create url for the image
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+    }
+
+    //save all data into database, content and imageUrl could be empty string or null
+    const commentToDB = await pool.query(
+      'INSERT INTO comments (comment_id,user_id, post_id, commentBody, imageUrl) VALUES(uuid_generate_v4(), $1, $2, $3, $4) RETURNING *',
+      [userId, postId, content, imageUrl]
+    );
+
+    console.log(commentToDB.rows[0]);
+
+    if (commentToDB.rows.length === 0) {
+      res.status(500).json({ message: 'failed to save data in database' });
+    }
+
+    //push comment_id to posts commentId array
+    const pushToPost = await pool.query(
+      'UPDATE posts SET commentId = array_append(commentId, $1), totalComment = (totalComment + 1) WHERE post_id = $2 RETURNING *',
+      [commentToDB.rows[0].comment_id, postId]
+    );
+
+    console.log(pushToPost.rows[0]);
+
+    if (pushToPost.rows.length === 0) {
+      res.status(500).json({ message: 'failed to save data in database' });
+    }
+
+    res.status(201).json({ message: 'Created a comment' });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};

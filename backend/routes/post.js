@@ -8,12 +8,15 @@ const postCtrl = require('../controllers/post.js');
 //routes
 //CRUD posts
 router.get('/', postCtrl.getAllPosts);
-router.get('/:id', postCtrl.getOnePost)
+router.get('/:id', postCtrl.getOnePost);
 router.post('/', multer, postCtrl.createPost);
 router.put('/', multer, postCtrl.modifyPost);
-router.delete('/', postCtrl.deletePost)
+router.delete('/', postCtrl.deletePost);
 
 //like
 router.post('/like', postCtrl.likePost);
+
+//comment
+router.post('/comments', multer, postCtrl.createComment);
 
 module.exports = router;

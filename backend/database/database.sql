@@ -25,8 +25,8 @@ CREATE TABLE posts(
   imageUrl VARCHAR(100),
   likes INT DEFAULT 0 CHECK (likes >= 0),
   likeUserId TEXT [] DEFAULT array[]::TEXT[],
-  totalComment INT DEFAULT 0,
-  commentId TEXT [],
+  totalComment INT DEFAULT 0 CHECK (totalComment >= 0),
+  commentId TEXT [] DEFAULT array[]::TEXT[],
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -34,8 +34,10 @@ CREATE TABLE posts(
 CREATE TABLE comments(
   comment_id UUID PRIMARY KEY NOT NULL UNIQUE,
   user_id UUID REFERENCES users(user_id) NOT NULL,
+  post_id UUID REFERENCES posts(post_id) NOT NULL,
   commentBody VARCHAR(255),
-  imageUrl VARCHAR(100)
+  imageUrl VARCHAR(100),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO posts (post_id, user_id, title, content) VALUES (uuid_generate_v4(), 'fbfd8610-7834-4927-9879-3567aaf80433', 'test JOIN', 'JOIN content');
@@ -47,7 +49,8 @@ INSERT INTO posts (post_id, title, likeUserId) VALUES (uuid_generate_v4(), 'seco
 -- to update array 
 UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + $2) WHERE post_id = $3;
 
-DELETE FROM posts WHERE post_id = '5a3fdd5a-be8c-4430-ba5a-7114ed37e225';
+DELETE FROM posts WHERE post_id = 'b6e7266f-2237-4bec-8560-f5f55f59d5cc';
+DELETE FROM comments WHERE comment_id = '3bd5e767-1564-4c75-8e7f-df7039cb84bf';
 
 -- array query, if array contains certain value
 SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(likeUserId);

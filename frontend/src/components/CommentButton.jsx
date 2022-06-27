@@ -2,7 +2,7 @@ import React, { useState, useRef, memo } from 'react';
 import useLogStatus from '../Context';
 import commentIcon from '../assets/commentBtn.svg';
 
-function CommentButton({ postId, setFlashMessage }) {
+function CommentButton({ post_id, setFlashMessage }) {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -79,7 +79,7 @@ function CommentButton({ postId, setFlashMessage }) {
     //create form data, append image when user added
     const formData = new FormData();
     formData.append('userId', userId);
-    formData.append('postId', postId);
+    formData.append('postId', post_id);
 
     if (image) {
       formData.append('image', image);
