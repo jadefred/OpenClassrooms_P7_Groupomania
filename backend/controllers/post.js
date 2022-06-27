@@ -129,6 +129,11 @@ exports.deletePost = async (req, res) => {
   try {
     const { userId, postId } = req.body;
 
+    //delete all comments related to the post (table of comment used post_id as foreign keys)
+    await pool.query('DELETE FROM comments WHERE post_id = $1 RETURNING *', [
+      postId,
+    ]);
+
     const deletePost = await pool.query(
       'DELETE FROM posts WHERE post_id = $1 AND user_id = $2 RETURNING *',
       [postId, userId]
@@ -248,6 +253,7 @@ exports.createComment = async (req, res) => {
 
     if (pushToPost.rows.length === 0) {
       res.status(500).json({ message: 'failed to save data in database' });
+      //delete the related comment as well
     }
 
     res.status(201).json({ message: 'Created a comment' });

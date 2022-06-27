@@ -49,8 +49,15 @@ INSERT INTO posts (post_id, title, likeUserId) VALUES (uuid_generate_v4(), 'seco
 -- to update array 
 UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + $2) WHERE post_id = $3;
 
-DELETE FROM posts WHERE post_id = 'b6e7266f-2237-4bec-8560-f5f55f59d5cc';
+DELETE FROM posts WHERE post_id = 'c8951a24-b9c8-4e4c-bba6-bacaf5830e7f';
 DELETE FROM comments WHERE comment_id = '3bd5e767-1564-4c75-8e7f-df7039cb84bf';
+
+SELECT commentId FROM posts;
+
+DELETE FROM comments WHERE comment_id = ANY(ARRAY [$1]) RETURNING *;
+
+
+
 
 -- array query, if array contains certain value
 SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(likeUserId);
