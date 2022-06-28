@@ -25,6 +25,8 @@ function Feed() {
     'http://localhost:3000/api/posts'
   );
 
+  console.log(data);
+
   //when data contains no post, show no post message
   useEffect(() => {
     if (data && data.length === 0) {
@@ -140,8 +142,12 @@ function Feed() {
                           />
                         </div>
                       </div>
+                      {/* Pass comment id to the component for fetch the comment data */}
                       {showComment[post.post_id] ? (
-                        <Comment comment={post.comment} />
+                        <Comment
+                          commentId={post.commentid}
+                          postId={post.post_id}
+                        />
                       ) : null}
                     </div>
                   </div>

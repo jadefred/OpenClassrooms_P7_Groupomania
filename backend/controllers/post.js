@@ -237,8 +237,6 @@ exports.createComment = async (req, res) => {
       [userId, postId, content, imageUrl]
     );
 
-    console.log(commentToDB.rows[0]);
-
     if (commentToDB.rows.length === 0) {
       res.status(500).json({ message: 'failed to save data in database' });
     }
@@ -249,14 +247,31 @@ exports.createComment = async (req, res) => {
       [commentToDB.rows[0].comment_id, postId]
     );
 
-    console.log(pushToPost.rows[0]);
-
     if (pushToPost.rows.length === 0) {
       res.status(500).json({ message: 'failed to save data in database' });
       //delete the related comment as well
     }
 
     res.status(201).json({ message: 'Created a comment' });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+//get all related comments
+exports.getAllComments = async (req, res) => {
+  try {
+    const post_id = req.params.id;
+    const relatedComments = await pool.query(
+      'SELECT (comments).*, users.username, users.avatar_url FROM comments JOIN users ON comments.user_id = users.user_id WHERE comments.post_id = $1',
+      [post_id]
+    );
+
+    if (relatedComments.rows.length === 0) {
+      res.status(500).json({ message: 'failed get related comments' });
+    }
+
+    res.status(200).json(relatedComments.rows);
   } catch (error) {
     res.status(500).json({ error });
   }

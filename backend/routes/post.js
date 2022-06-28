@@ -18,5 +18,6 @@ router.post('/like', postCtrl.likePost);
 
 //comment
 router.post('/comments', multer, postCtrl.createComment);
+router.get('/comments/:id', postCtrl.getAllComments)
 
 module.exports = router;
