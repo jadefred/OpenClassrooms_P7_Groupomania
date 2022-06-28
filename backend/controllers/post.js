@@ -222,7 +222,7 @@ exports.likePost = async (req, res) => {
 exports.createComment = async (req, res) => {
   try {
     let imageUrl = null;
-    const { postId, userId, content, image } = req.body;
+    const { postId, userId, content } = req.body;
 
     //if user has sent file, create url for the image
     if (req.file) {
@@ -250,7 +250,6 @@ exports.createComment = async (req, res) => {
       await pool.query('DELETE FROM comments WHERE comment_id = $1', [
         commentToDB.rows[0].comment_id,
       ]);
-
       res
         .status(500)
         .json({ message: 'failed to insert comment id to the related post' });

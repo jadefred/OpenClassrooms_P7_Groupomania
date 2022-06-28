@@ -45,8 +45,18 @@ function Comment({ postId }) {
                 />
                 <p className="font-semibold">{i.username}</p>
               </div>
-              <div className="flex justify-between items-center basis-3/4 gap-x-2">
-                <div className="basis-3/4">{i.commentbody}</div>
+              <div className="flex justify-between items-center basis-3/4 gap-x-2 mt-4">
+                <div className="flex flex-col basis-3/4">
+                  {i.commentbody && <div className="mb-4">{i.commentbody}</div>}
+
+                  {i.imageurl && (
+                    <img
+                      src={i.imageurl}
+                      alt={`Commentaire de ${i.username}`}
+                      className="w-full object-cover rounded-xl mb-4"
+                    />
+                  )}
+                </div>
                 {(userId === i.userId || admin) && (
                   <button
                     onClick={() => {
