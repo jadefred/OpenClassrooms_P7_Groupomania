@@ -139,6 +139,7 @@ function Feed() {
                           <MemoizedCommentButton
                             post_id={post.post_id}
                             setFlashMessage={setFlashMessage}
+                            setRefresh={setRefresh}
                           />
                         </div>
                       </div>

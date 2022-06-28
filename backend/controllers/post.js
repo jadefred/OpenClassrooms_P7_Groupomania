@@ -224,8 +224,6 @@ exports.createComment = async (req, res) => {
     let imageUrl = null;
     const { postId, userId, content, image } = req.body;
 
-    console.table({ postId, userId, content, image });
-
     //if user has sent file, create url for the image
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
@@ -238,7 +236,7 @@ exports.createComment = async (req, res) => {
     );
 
     if (commentToDB.rows.length === 0) {
-      res.status(500).json({ message: 'failed to save data in database' });
+      res.status(500).json({ message: 'failed to save comment into database' });
     }
 
     //push comment_id to posts commentId array
@@ -248,8 +246,14 @@ exports.createComment = async (req, res) => {
     );
 
     if (pushToPost.rows.length === 0) {
-      res.status(500).json({ message: 'failed to save data in database' });
-      //delete the related comment as well
+      //if failed to insert comment id to the post, delete the comment then throw error
+      await pool.query('DELETE FROM comments WHERE comment_id = $1', [
+        commentToDB.rows[0].comment_id,
+      ]);
+
+      res
+        .status(500)
+        .json({ message: 'failed to insert comment id to the related post' });
     }
 
     res.status(201).json({ message: 'Created a comment' });
