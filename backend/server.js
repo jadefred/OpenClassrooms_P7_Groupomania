@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post.js');
+const commentRoutes = require('./routes/comment.js');
 
 //CORS setting
 const corsOptions = {
@@ -17,9 +18,10 @@ app.use(cors(corsOptions));
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//routes of users and posts
+//routes
 app.use('/api/auth', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/posts', commentRoutes);
 
 //images handling
 app.use('/image', express.static(path.join(__dirname, 'image')));
