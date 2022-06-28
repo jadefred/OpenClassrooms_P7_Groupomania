@@ -148,6 +148,8 @@ function Feed() {
                         <Comment
                           commentId={post.commentid}
                           postId={post.post_id}
+                          setFlashMessage={setFlashMessage}
+                          feedSetRefresh={setRefresh}
                         />
                       ) : null}
                     </div>

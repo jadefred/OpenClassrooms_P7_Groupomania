@@ -271,10 +271,62 @@ exports.getAllComments = async (req, res) => {
     );
 
     if (relatedComments.rows.length === 0) {
-      res.status(500).json({ message: 'failed get related comments' });
+      console.log('No comment has found');
+      return res.status(404).json({ message: 'No comment has found' });
     }
 
     res.status(200).json(relatedComments.rows);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+
+//delete comment
+exports.deleteComment = async (req, res) => {
+  try {
+    const { commentId, userId, postId } = req.body;
+
+    //see if user is admin
+    const isUserAdmin = await pool.query(
+      'SELECT admin FROM users WHERE user_id = $1',
+      [userId]
+    );
+
+    //if user is admin, delete comment anyway
+    if (isUserAdmin.rows[0].admin) {
+      //delete comment by comment id
+      const adminDeleteComment = await pool.query(
+        'DELETE FROM comments WHERE comment_id = $1 RETURNING *',
+        [commentId]
+      );
+      if (adminDeleteComment.rows.length === 0) {
+        res.status(500).json({ error });
+      }
+    }
+
+    //if user is not admin, verify his user id, allow when is him created the comment
+    else {
+      //delete comment by comment id
+      const userDeleteComment = await pool.query(
+        'DELETE FROM comments WHERE comment_id = $1 AND user_id = $2 RETURNING *',
+        [commentId, userId]
+      );
+      if (userDeleteComment.rows.length === 0) {
+        res.status(500).json({ error });
+      }
+    }
+
+    //update total number of comment from post by post id
+    const updateNumOfComment = await pool.query(
+      'UPDATE posts SET totalComment = (totalComment - 1) WHERE post_id = $1 RETURNING *',
+      [postId]
+    );
+
+    if (updateNumOfComment.rows.length === 0) {
+      res.status(500).json({ error });
+    }
+
+    res.status(204).json({ message: 'Comment deleted' });
   } catch (error) {
     res.status(500).json({ error });
   }

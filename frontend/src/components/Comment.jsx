@@ -3,27 +3,32 @@ import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import useFetch from '../hooks/useFetch';
 
-function Comment({ postId }) {
-  //const comment = [...props.comment];
+function Comment({ postId, setFlashMessage, feedSetRefresh }) {
   const { userId, token, admin } = useLogStatus();
-  const { data, isLoaded, error } = useFetch(
+  const { data, isLoaded, error, setRefresh } = useFetch(
     `http://localhost:3000/api/posts/comments/${postId}`
   );
 
-  console.log(data);
-
-  async function deleteComment(commentId) {
+  async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ commentId }),
+      body: JSON.stringify({ commentId, userId, postId }),
     });
 
-    const data = await response.json();
-    console.log(data);
+    //flash success message if res is ok, then reset state to make it disappear
+    if (response.ok) {
+      setFlashMessage('Vous avez supprimé un commentaire');
+      setRefresh(true);
+      feedSetRefresh(true);
+    }
+    //fail flash message
+    else {
+      setFlashMessage('Un problème a apparu..');
+    }
   }
 
   return (
@@ -57,11 +62,12 @@ function Comment({ postId }) {
                     />
                   )}
                 </div>
-                {(userId === i.userId || admin) && (
+                {(userId === i.user_id || admin) && (
                   <button
                     onClick={() => {
-                      deleteComment(i.comment_id);
+                      deleteComment(i.comment_id, userId, postId);
                     }}
+                    className="self-start"
                   >
                     <img
                       src={deleteBtn}
