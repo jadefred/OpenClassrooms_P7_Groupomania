@@ -50,7 +50,7 @@ INSERT INTO posts (post_id, title, likeUserId) VALUES (uuid_generate_v4(), 'seco
 UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + $2) WHERE post_id = $3;
 UPDATE users SET admin = true WHERE user_id = 'fbfd8610-7834-4927-9879-3567aaf80433';
 
-DELETE FROM posts WHERE post_id = 'c8951a24-b9c8-4e4c-bba6-bacaf5830e7f';
+DELETE FROM posts WHERE post_id = '4ac2a964-3526-4385-a345-1e2d670f6067' AND user_id = 'afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b';
 DELETE FROM comments WHERE comment_id = '3bd5e767-1564-4c75-8e7f-df7039cb84bf';
 
 -- array query, if array contains certain value
@@ -63,5 +63,6 @@ SELECT (posts).*, users.username, users.avatar_url, comments.comment_id, comment
 
 SELECT (comments).*, users.user_id, users.admin FROM comments INNER JOIN users ON comments.user_id = users.user_id;
 
+SELECT post_id, user_id FROM posts WHERE post_id = 'd1553a40-681c-4d51-9bcd-c5e4e27b471f' AND user_id = 'afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b';
 
 UPDATE posts SET title = 'hahahaha', content = 'change me too', imageUrl = 'http://localhost:3000/image/1656254401490.7fa7c83d9fa9c44cb774a08b0b596219.jpeg' WHERE post_id = '72c3bf26-12bf-43d8-b483-cedad89a497f' AND user_id = 'fbfd8610-7834-4927-9879-3567aaf80433';

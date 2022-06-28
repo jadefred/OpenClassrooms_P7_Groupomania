@@ -129,6 +129,8 @@ exports.deletePost = async (req, res) => {
   try {
     const { userId, postId } = req.body;
 
+    console.table({ userId, postId });
+
     //see if user is admin
     const isAdmin = await pool.query(
       'SELECT admin FROM users WHERE user_id = $1',
@@ -137,12 +139,15 @@ exports.deletePost = async (req, res) => {
 
     //is user is the OP
     const isOP = await pool.query(
-      'SELECT post_id, user_id FROM posts WHERE post_id = $1 AND user_id = $2',
-      [postId, userId]
+      'SELECT user_id FROM posts WHERE post_id = $1',
+      [postId]
     );
 
-    if (!isAdmin.rows[0].admin && isOP.rows.length === 0) {
-      return res.status(401).json({ message: 'User has no authorisation to delete this post' });
+    //if user is not admin nor OP, set 401 not authorisated status
+    if (!isAdmin.rows[0].admin && isOP.rows[0] !== postId) {
+      return res
+        .status(401)
+        .json({ message: 'User has no authorisation to delete this post' });
     }
 
     //delete all comments related to the post (table of comment used post_id as foreign keys)
@@ -151,8 +156,8 @@ exports.deletePost = async (req, res) => {
     ]);
 
     const deletePost = await pool.query(
-      'DELETE FROM posts WHERE post_id = $1 AND user_id = $2 RETURNING *',
-      [postId, userId]
+      'DELETE FROM posts WHERE post_id = $1 RETURNING *',
+      [postId]
     );
 
     if (deletePost.rows.length === 0) {
