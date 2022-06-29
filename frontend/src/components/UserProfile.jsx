@@ -100,7 +100,13 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     //async function from Utils to do POST request
     //last argument (true) represents this fetch will passing file, asyncFetch will change headers accordingly
     //assign flashMessage based on the response
-    asyncFetch('http://localhost:3000/api/user', 'PUT', token, formData, true)
+    asyncFetch(
+      `http://localhost:3000/api/user/${userId}`,
+      'PUT',
+      token,
+      formData,
+      true
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error('rejected by server');

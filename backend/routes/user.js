@@ -7,5 +7,6 @@ const userCtrl = require('../controllers/user.js');
 
 //routes
 router.get('/:id', userCtrl.getUserInfo);
+router.put('/:id', multer, userCtrl.modifyUserInfo);
 
 module.exports = router;
