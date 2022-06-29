@@ -1,26 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
-import defaultProfil from '../assets/defaultProfil.svg'
-import { asyncFetch } from '../Utils'
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import defaultProfil from '../assets/defaultProfil.svg';
+import { asyncFetch } from '../Utils';
 
 //custom hooks
-import useFetch from '../hooks/useFetch'
-import useLogStatus from '../Context'
-import Loading from '../components/Loading.jsx'
+import useFetch from '../hooks/useFetch';
+import useLogStatus from '../Context';
+import Loading from '../components/Loading.jsx';
 
-function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
-  const imageRef = useRef()
-  const { userId, token } = useLogStatus()
-  const { data, isLoaded, error } = useFetch('http://localhost:3000/api/user')
-  const [image, setImage] = useState(null)
-  const [formNotComplete, setFormNotComplete] = useState(false)
-  const [btnDisable, setBtnDisable] = useState(true)
+function UserProfile({ setFlashMessage, setDeleteAccount }) {
+  const imageRef = useRef();
+  const { userId, token } = useLogStatus();
+  const { data, isLoaded, error } = useFetch(
+    `http://localhost:3000/api/user/${userId}`
+  );
+  const [image, setImage] = useState(null);
+  const [formNotComplete, setFormNotComplete] = useState(false);
+  const [btnDisable, setBtnDisable] = useState(true);
   const [input, setInput] = useState({
     username: '',
     email: '',
     avatarUrl: '',
     admin: false,
-  })
+  });
 
   //once fetch's data is loaded, update state
   useEffect(() => {
@@ -30,69 +32,69 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
         avatarUrl: data.avatarUrl,
         email: data.email,
         admin: data.admin,
-      })
+      });
     }
-  }, [data])
+  }, [data]);
 
   //update username state
   const handleInput = (e) => {
-    setInput({ ...input, [e.target.name]: e.target.value })
-    setBtnDisable(false)
+    setInput({ ...input, [e.target.name]: e.target.value });
+    setBtnDisable(false);
     //remove warning message when user entred something in the field of username
     if (input.username !== '') {
-      setFormNotComplete(false)
+      setFormNotComplete(false);
     }
-  }
+  };
 
   //handle image input, check mime type before set to the state
   function handleImage(e) {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     const mimeType =
       file.type === 'image/jpg' ||
       file.type === 'image/jpeg' ||
       file.type === 'image/png'
         ? true
-        : false
+        : false;
 
     if (file && mimeType) {
-      setImage(file)
-      const reader = new FileReader()
+      setImage(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setInput({ ...input, avatarUrl: reader.result })
-      }
-      reader.readAsDataURL(file)
-      setBtnDisable(false)
+        setInput({ ...input, avatarUrl: reader.result });
+      };
+      reader.readAsDataURL(file);
+      setBtnDisable(false);
     } else {
-      setImage(null)
+      setImage(null);
     }
   }
 
   //remove selected image / the image from server
   function removeSelectedImg() {
-    setImage(null)
-    setInput({ ...input, avatarUrl: '' })
-    setBtnDisable(false)
+    setImage(null);
+    setInput({ ...input, avatarUrl: '' });
+    setBtnDisable(false);
   }
 
   function handleUserAccount(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     //pop error message if title / body content is empty and return function
     if (input.username === '') {
-      setFormNotComplete(true)
-      return
+      setFormNotComplete(true);
+      return;
     }
 
     //create form data, append image when user added
-    const formData = new FormData()
-    formData.append('userId', userId)
-    formData.append('username', input.username)
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('username', input.username);
 
     //append image if it exists
     if (image) {
-      formData.append('image', image)
+      formData.append('image', image);
     } else {
-      formData.append('image', input.avatarUrl)
+      formData.append('image', input.avatarUrl);
     }
 
     //async function from Utils to do POST request
@@ -101,17 +103,15 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
     asyncFetch('http://localhost:3000/api/user', 'PUT', token, formData, true)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('rejected by server')
+          throw new Error('rejected by server');
         }
-        console.log(response)
-        setFlashMessage('Vous avez modifié votre profil')
-        timeOutMessage()
+        console.log(response);
+        setFlashMessage('Vous avez modifié votre profil');
       })
       .catch((err) => {
-        console.log(err)
-        setFlashMessage('Un problème a apparu..')
-        timeOutMessage()
-      })
+        console.log(err);
+        setFlashMessage('Un problème a apparu..');
+      });
   }
 
   //pop up confirm block, setDeleteAccount as true, page will render DeleteUser component
@@ -126,35 +126,34 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
       )
         .then((response) => {
           if (!response.ok) {
-            throw new Error('rejected by server')
+            throw new Error('rejected by server');
           }
-          console.log(response)
-          setDeleteAccount(true)
+          console.log(response);
+          setDeleteAccount(true);
         })
         .catch((err) => {
-          console.log(err)
-          setFlashMessage('Un problème a apparu..')
-          timeOutMessage()
-        })
+          console.log(err);
+          setFlashMessage('Un problème a apparu..');
+        });
     } else {
-      return
+      return;
     }
   }
 
   return (
     <>
       {/* Loading page */}
-      {isLoaded && <Loading />}
+      {!isLoaded && <Loading />}
 
       {/* Error page */}
-      {error && !isLoaded && (
+      {error && isLoaded && (
         <h2 className="text-tertiaire text-center text-4xl py-52">
           Un problème apparu... Veuillez re-essayez plus tard
         </h2>
       )}
 
       {/* Profile page when no error and loading is finished */}
-      {!error && !isLoaded && (
+      {!error && isLoaded && (
         <div className="w-4/5 mx-auto">
           <form
             onSubmit={handleUserAccount}
@@ -187,8 +186,8 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
                 />
                 <button
                   onClick={(e) => {
-                    e.preventDefault()
-                    imageRef.current.click()
+                    e.preventDefault();
+                    imageRef.current.click();
                   }}
                   className="bg-tertiaire text-white px-2 py-1 rounded-md w-40"
                 >
@@ -284,7 +283,7 @@ function UserProfile({ setFlashMessage, timeOutMessage, setDeleteAccount }) {
         </div>
       )}
     </>
-  )
+  );
 }
 
-export default UserProfile
+export default UserProfile;

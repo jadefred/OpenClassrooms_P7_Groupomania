@@ -69,6 +69,25 @@ exports.deleteComment = async (req, res) => {
   try {
     const { commentId, userId, postId } = req.body;
 
+    console.table({ commentId, userId, postId });
+
+    //function to delete uploaded image by its file name
+    function deleteImage(url) {
+      fs.unlink(`image/${url}`, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.log('successfully deleted local image');
+        }
+      });
+    }
+
+    //image url of comment
+    const imageUrl = await pool.query(
+      'SELECT imageUrl FROM comments WHERE comment_id = $1',
+      [commentId]
+    );
+
     //see if user is admin
     const isUserAdmin = await pool.query(
       'SELECT admin FROM users WHERE user_id = $1',
@@ -91,12 +110,18 @@ exports.deleteComment = async (req, res) => {
     else {
       //delete comment by comment id
       const userDeleteComment = await pool.query(
-        'DELETE FROM comments WHERE comment_id = $1 AND user_id = $2 RETURNING *',
-        [commentId, userId]
+        'DELETE FROM comments WHERE comment_id = $1 RETURNING *',
+        [commentId]
       );
+
       if (userDeleteComment.rows.length === 0) {
         res.status(500).json({ error });
       }
+    }
+
+    //delete local saved image of comment
+    if (imageUrl.rows[0].imageurl) {
+      deleteImage(imageUrl.rows[0].imageurl.split('/').pop());
     }
 
     //update total number of comment from post by post id

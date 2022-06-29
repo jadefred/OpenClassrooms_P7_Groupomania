@@ -19,7 +19,7 @@ function Profile() {
       {!deleteAccount ? (
         <UserProfile
           setFlashMessage={setFlashMessage}
-          timeOutMessage={timeOutMessage}
+          //timeOutMessage={timeOutMessage}
           setDeleteAccount={setDeleteAccount}
         />
       ) : (

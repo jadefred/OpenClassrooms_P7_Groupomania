@@ -3,9 +3,10 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 const path = require('path');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post.js');
 const commentRoutes = require('./routes/comment.js');
+const userRoutes = require('./routes/user');
 
 //CORS setting
 const corsOptions = {
@@ -19,9 +20,10 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 //routes
-app.use('/api/auth', userRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/posts', commentRoutes);
+app.use('/api/user', userRoutes);
 
 //images handling
 app.use('/image', express.static(path.join(__dirname, 'image')));
