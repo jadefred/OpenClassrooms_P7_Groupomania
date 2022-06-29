@@ -1,6 +1,7 @@
 import React from 'react';
 import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
+import defaultProfil from '../assets/defaultProfil.svg';
 import useFetch from '../hooks/useFetch';
 
 function Comment({ postId, setFlashMessage, feedSetRefresh }) {
@@ -43,11 +44,19 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
             >
               {/* Username, avatar block */}
               <div className="flex items-center gap-x-3 basis-1/4">
-                <img
-                  src={i.avatar_url}
-                  alt={`l'avatar de ${i.username}`}
-                  className="w-8 h-8 object-cover rounded-full"
-                />
+                {i.avatar_url ? (
+                  <img
+                    src={i.avatar_url}
+                    alt={`l'avatar de ${i.username}`}
+                    className="w-8 h-8 object-cover rounded-full"
+                  />
+                ) : (
+                  <img
+                    src={defaultProfil}
+                    alt="l'avatar d'utilisateur"
+                    className="w-8 h-8 object-cover rounded-full"
+                  />
+                )}
                 <p className="font-semibold">{i.username}</p>
               </div>
               <div className="flex justify-between items-center basis-3/4 gap-x-2 mt-4">

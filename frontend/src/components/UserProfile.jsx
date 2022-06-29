@@ -29,7 +29,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     if (data) {
       setInput({
         username: data.username,
-        avatarUrl: data.avatarUrl,
+        avatarUrl: data.avatar_url,
         email: data.email,
         admin: data.admin,
       });
