@@ -6,27 +6,31 @@ function useFetch(url) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useLogStatus();
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(true);
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        response.json().then((result) => {
-          setData(result);
-        });
+    if (refresh) {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(setIsLoaded(true), setRefresh(false));
-  }, [url, refresh]);
+        .then((response) => {
+          setStatus(response.status);
+          response.json().then((result) => {
+            setData(result);
+          });
+        })
+        .catch((err) => {
+          setError(err);
+        })
+        .finally(setIsLoaded(true), setRefresh(false));
+    }
+  }, [url, refresh, token]);
 
-  return { data, isLoaded, error, setRefresh };
+  return { data, isLoaded, error, setRefresh, status };
 }
 
 export default useFetch;

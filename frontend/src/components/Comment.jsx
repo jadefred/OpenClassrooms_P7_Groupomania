@@ -6,10 +6,11 @@ import useFetch from '../hooks/useFetch';
 
 function Comment({ postId, setFlashMessage, feedSetRefresh }) {
   const { userId, token, admin } = useLogStatus();
-  const { data, isLoaded, error, setRefresh } = useFetch(
+  const { data, isLoaded, error, setRefresh, status } = useFetch(
     `http://localhost:3000/api/posts/comments/${postId}`
   );
 
+  console.log(status);
   async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
@@ -33,63 +34,69 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
   }
 
   return (
-    <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
-      {isLoaded &&
-        data &&
-        data.map((i) => {
-          return (
-            <div
-              key={i.comment_id}
-              className="flex bg-white w-4/5 mx-auto py-2 px-6 rounded-2xl"
-            >
-              {/* Username, avatar block */}
-              <div className="flex items-center gap-x-3 basis-1/4">
-                {i.avatar_url ? (
-                  <img
-                    src={i.avatar_url}
-                    alt={`l'avatar de ${i.username}`}
-                    className="w-8 h-8 object-cover rounded-full"
-                  />
-                ) : (
-                  <img
-                    src={defaultProfil}
-                    alt="l'avatar d'utilisateur"
-                    className="w-8 h-8 object-cover rounded-full"
-                  />
-                )}
-                <p className="font-semibold">{i.username}</p>
-              </div>
-              <div className="flex justify-between items-center basis-3/4 gap-x-2 mt-4">
-                <div className="flex flex-col basis-3/4">
-                  {i.commentbody && <div className="mb-4">{i.commentbody}</div>}
+    <>
+      {isLoaded && data?.length && (
+        <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
+          {isLoaded &&
+            data?.length &&
+            data.map((i) => {
+              return (
+                <div
+                  key={i.comment_id}
+                  className="flex bg-white w-4/5 mx-auto py-2 px-6 rounded-2xl"
+                >
+                  {/* Username, avatar block */}
+                  <div className="flex items-center gap-x-3 basis-1/4">
+                    {i.avatar_url ? (
+                      <img
+                        src={i.avatar_url}
+                        alt={`l'avatar de ${i.username}`}
+                        className="w-8 h-8 object-cover rounded-full"
+                      />
+                    ) : (
+                      <img
+                        src={defaultProfil}
+                        alt="l'avatar d'utilisateur"
+                        className="w-8 h-8 object-cover rounded-full"
+                      />
+                    )}
+                    <p className="font-semibold">{i.username}</p>
+                  </div>
+                  <div className="flex justify-between items-center basis-3/4 gap-x-2 mt-4">
+                    <div className="flex flex-col basis-3/4">
+                      {i.commentbody && (
+                        <div className="mb-4">{i.commentbody}</div>
+                      )}
 
-                  {i.imageurl && (
-                    <img
-                      src={i.imageurl}
-                      alt={`Commentaire de ${i.username}`}
-                      className="w-full object-cover rounded-xl mb-4"
-                    />
-                  )}
+                      {i.imageurl && (
+                        <img
+                          src={i.imageurl}
+                          alt={`Commentaire de ${i.username}`}
+                          className="w-full object-cover rounded-xl mb-4"
+                        />
+                      )}
+                    </div>
+                    {(userId === i.user_id || admin) && (
+                      <button
+                        onClick={() => {
+                          deleteComment(i.comment_id, userId, postId);
+                        }}
+                        className="self-start"
+                      >
+                        <img
+                          src={deleteBtn}
+                          alt="supprimer cette commentaire"
+                          className="w-5 h-5"
+                        />
+                      </button>
+                    )}
+                  </div>
                 </div>
-                {(userId === i.user_id || admin) && (
-                  <button
-                    onClick={() => {
-                      deleteComment(i.comment_id, userId, postId);
-                    }}
-                    className="self-start"
-                  >
-                    <img
-                      src={deleteBtn}
-                      alt="supprimer cette commentaire"
-                      className="w-5 h-5"
-                    />
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
-    </div>
+              );
+            })}
+        </div>
+      )}
+    </>
   );
 }
 

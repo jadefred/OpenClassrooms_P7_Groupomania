@@ -111,7 +111,6 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
         if (!response.ok) {
           throw new Error('rejected by server');
         }
-        console.log(response);
         setFlashMessage('Vous avez modifié votre profil');
       })
       .catch((err) => {

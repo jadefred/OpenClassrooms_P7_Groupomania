@@ -23,7 +23,6 @@ exports.getUserInfo = async (req, res) => {
 exports.modifyUserInfo = async (req, res) => {
   try {
     const user_id = req.params.id;
-    console.log(user_id);
 
     let avatarUrl = null;
     const { username, image } = req.body;
@@ -74,8 +73,10 @@ exports.modifyUserInfo = async (req, res) => {
       //update DB
       const updateUser = await pool.query(
         'UPDATE users SET username = $1, avatar_url = $2 WHERE user_id = $3 RETURNING *',
-        [username, avatarInDB.rows[0].avatar_url, , user_id]
+        [username, image, user_id]
       );
+
+      console.log(updateUser.rows[0]);
 
       if (updateUser.rows.length === 0) {
         res.status(500).json({ error });

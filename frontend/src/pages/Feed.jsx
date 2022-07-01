@@ -25,8 +25,6 @@ function Feed() {
     'http://localhost:3000/api/posts'
   );
 
-  console.log(data);
-
   //when data contains no post, show no post message
   useEffect(() => {
     if (data && data.length === 0) {
