@@ -55,7 +55,7 @@ exports.getAllComments = async (req, res) => {
 
     if (relatedComments.rows.length === 0) {
       console.log('No comment has found');
-      return res.status(404).json({ message: 'No comment has found' });
+      return res.status(200).json({ message: 'No comment has found' });
     }
 
     res.status(200).json(relatedComments.rows);

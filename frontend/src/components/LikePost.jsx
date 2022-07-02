@@ -12,7 +12,7 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
     if (likeUserId.length > 0) {
       setLiked(likeUserId.some((i) => i === userId));
     }
-  }, []);
+  }, [likeUserId, userId]);
 
   async function likePost(userId, likeUserId, post_id) {
     //use some to determine if the user has already liked this post

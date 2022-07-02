@@ -6,11 +6,10 @@ import useFetch from '../hooks/useFetch';
 
 function Comment({ postId, setFlashMessage, feedSetRefresh }) {
   const { userId, token, admin } = useLogStatus();
-  const { data, isLoaded, error, setRefresh, status } = useFetch(
+  const { data, isLoaded, error, setRefresh } = useFetch(
     `http://localhost:3000/api/posts/comments/${postId}`
   );
 
-  console.log(status);
   async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
@@ -24,6 +23,7 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
     //flash success message if res is ok, then reset state to make it disappear
     if (response.ok) {
       setFlashMessage('Vous avez supprimé un commentaire');
+
       setRefresh(true);
       feedSetRefresh(true);
     }
@@ -35,6 +35,16 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
 
   return (
     <>
+      {/* Fetch error handling */}
+      {isLoaded && error && (
+        <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
+          <p className="text-center">
+            Un problème a apparu, veuillez réessayer plus tard
+          </p>
+        </div>
+      )}
+
+      {/* Display all comments */}
       {isLoaded && data?.length && (
         <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
           {isLoaded &&
