@@ -88,3 +88,12 @@ exports.modifyUserInfo = async (req, res) => {
     res.status(500).json({ error });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    console.log(userId);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};

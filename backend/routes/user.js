@@ -8,5 +8,6 @@ const userCtrl = require('../controllers/user.js');
 //routes
 router.get('/:id', userCtrl.getUserInfo);
 router.put('/:id', multer, userCtrl.modifyUserInfo);
+router.delete('/:id', userCtrl.deleteUser)
 
 module.exports = router;

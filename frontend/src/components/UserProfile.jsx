@@ -125,7 +125,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
   function deleteUser() {
     if (window.confirm('Vous êtes sûr de supprimer ce post ?')) {
       asyncFetch(
-        'http://localhost:3000/api/user',
+        `http://localhost:3000/api/user/${userId}`,
         'DELETE',
         token,
         JSON.stringify({ userId: userId })
