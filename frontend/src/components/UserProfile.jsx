@@ -134,7 +134,6 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
           if (!response.ok) {
             throw new Error('rejected by server');
           }
-          console.log(response);
           setDeleteAccount(true);
         })
         .catch((err) => {
