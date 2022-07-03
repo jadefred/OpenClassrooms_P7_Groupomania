@@ -8,7 +8,7 @@ import FlashMessage from '../components/FlashMessage'
 import DeleteUser from '../components/DeleteUser.jsx'
 
 function Profile() {
-  const { flashMessage, setFlashMessage, timeOutMessage } = useFlashMessage()
+  const { flashMessage, setFlashMessage } = useFlashMessage()
   const [deleteAccount, setDeleteAccount] = useState(false)
 
   return (
@@ -19,7 +19,6 @@ function Profile() {
       {!deleteAccount ? (
         <UserProfile
           setFlashMessage={setFlashMessage}
-          //timeOutMessage={timeOutMessage}
           setDeleteAccount={setDeleteAccount}
         />
       ) : (
