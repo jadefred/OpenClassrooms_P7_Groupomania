@@ -15,6 +15,7 @@ import Profile from './Profile.jsx';
 
 function App() {
   const { auth, persistLogin } = useLogStatus();
+  //const navigate = useNavigate();
 
   useEffect(() => {
     //Post access token to access route, data contains user's context
@@ -29,11 +30,13 @@ function App() {
       return data;
     }
 
-    //whenever page is refreshed, call getUserContext function to get user's data
-    if (Cookies.get('accessToken')) {
-      getUserContext().then((response) => persistLogin(response));
+    //if auth is empty (refreshed the page), fetch to access endpoint to get all user data and set to context
+    if (Cookies.get('accessToken') && !auth) {
+      getUserContext().then((response) => {
+        persistLogin(response);
+      });
     }
-  }, [persistLogin]);
+  }, [persistLogin, auth]);
 
   return (
     <>

@@ -10,7 +10,6 @@ function NavBar() {
 
   function toLogout() {
     Cookies.remove('accessToken');
-    localStorage.clear();
     dispatchLogout();
     navigate('/');
   }

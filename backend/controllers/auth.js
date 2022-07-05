@@ -81,12 +81,14 @@ exports.login = async (req, res) => {
 exports.auth = async (req, res) => {
   try {
     const token = req.headers['authorization'].split(' ')[1];
-    //get userId from jwt
-    const decodedUserId = jwt.decode(token).userId;
+
     //return when no access token is found
     if (!token) {
       res.status(401).json({ error: 'No authentication token is found' });
     }
+
+    //get userId from jwt
+    const decodedUserId = jwt.decode(token).userId;
 
     //verify access token
     jwt.verify(token, process.env.ACCESS_TOKEN, async (err, user) => {

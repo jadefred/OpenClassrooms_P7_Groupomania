@@ -7,29 +7,24 @@ const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 
 module.exports = (req, res, next) => {
   try {
-    console.log('entered auth middleware');
     const token = req.headers['authorization'].split(' ')[1];
-    console.log(token);
     const decodedUserId = jwt.decode(token).userId;
 
-    if (!token)
-      return res
-        .status(401)
-        .json({ error: 'No authentication token is found' });
+    if (!token) {
+      console.log('no token is found');
+      res.status(401).json({ error: 'No authentication token is found' });
+    }
 
     jwt.verify(token, accessTokenSecretKey, (err, user) => {
       if (err) {
-        console.log('ready to refresh access token');
         valdidateRefreshToken(decodedUserId);
       } else {
-        console.log('access token ok and then next');
         next();
       }
     });
 
     //function to validate refresh token
     async function valdidateRefreshToken(id) {
-      console.log('entered function to refresh');
       //search from databse
       const hasRefreshToken = await pool.query(
         'SELECT refresh_token FROM users WHERE user_id=$1',
@@ -58,8 +53,6 @@ module.exports = (req, res, next) => {
               expiresIn: '30m',
             }
           );
-
-          console.log('set a new access token from middleware');
 
           res.status(200).cookie('accessToken', 'Bearer ' + assessToken, {
             expires: new Date(Date.now() + 0.5 * 3600000),
