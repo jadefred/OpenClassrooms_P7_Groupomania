@@ -5,10 +5,10 @@ export const initialState = {
   token: '',
   admin: false,
   avatarUrl: '',
-}
+};
 
 const userReducer = (state, action) => {
-  const { type, payload } = action
+  const { type, payload } = action;
 
   switch (type) {
     case 'LOGIN':
@@ -20,7 +20,7 @@ const userReducer = (state, action) => {
         token: payload.token,
         admin: payload.admin,
         avatarUrl: payload.avatarUrl,
-      }
+      };
 
     case 'LOGOUT':
       return {
@@ -31,25 +31,36 @@ const userReducer = (state, action) => {
         token: '',
         admin: false,
         avatarUrl: '',
-      }
+      };
 
     case 'PERSIST_LOGIN':
       return {
         ...state,
         auth: true,
         token: payload.token,
-      }
+      };
+
+    case 'REFRESH_CONTEXT':
+      return {
+        ...state,
+        userId: payload.userId,
+        username: payload.username,
+        auth: true,
+        token: payload.token,
+        admin: payload.admin,
+        avatarUrl: payload.avatarUrl,
+      };
 
     case 'KEEP_USER_INFO':
       return {
         ...state,
         username: payload.username,
         avatarUrl: payload.avatarUrl,
-      }
+      };
 
     default:
-      throw new Error(`No case for type ${type} found in shopReducer.`)
+      throw new Error(`No case for type ${type} found in shopReducer.`);
   }
-}
+};
 
-export default userReducer
+export default userReducer;

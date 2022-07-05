@@ -17,7 +17,10 @@ export async function verifyToken(userId) {
 async function requestLogin(accessToken, userId) {
   const response = await fetch('http://localhost:3000/api/auth/access', {
     method: 'POST',
-    headers: { authorization: `Bearer ${accessToken}` },
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
+    },
     body: JSON.stringify({ userId }),
   });
   const data = await response.json();

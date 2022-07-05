@@ -1,11 +1,11 @@
-import { createContext, useContext, useReducer } from 'react'
-import userReducer, { initialState } from './hooks/useLoginReducer'
+import { createContext, useContext, useReducer } from 'react';
+import userReducer, { initialState } from './hooks/useLoginReducer';
 
 //user information
-const UserContext = createContext({ initialState })
+const UserContext = createContext({ initialState });
 
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(userReducer, initialState)
+  const [state, dispatch] = useReducer(userReducer, initialState);
 
   const dispatchLogin = (loginInfo) => {
     dispatch({
@@ -17,19 +17,32 @@ export const UserProvider = ({ children }) => {
         admin: loginInfo.admin,
         avatarUrl: loginInfo.avatarUrl,
       },
-    })
-  }
+    });
+  };
 
   const dispatchLogout = () => {
-    dispatch({ type: 'LOGOUT' })
-  }
+    dispatch({ type: 'LOGOUT' });
+  };
 
   const persistLogin = (token) => {
     dispatch({
       type: 'PERSIST_LOGIN',
       payload: { token: token },
-    })
-  }
+    });
+  };
+
+  const refreshContext = (userInfo) => {
+    dispatch({
+      type: 'REFRESH_CONTEXT',
+      payload: {
+        userId: userInfo.userId,
+        username: userInfo.username,
+        token: userInfo.token,
+        admin: userInfo.admin,
+        avatarUrl: userInfo.avatarUrl,
+      },
+    });
+  };
 
   const keepUserInfo = (userInfo) => {
     dispatch({
@@ -38,8 +51,8 @@ export const UserProvider = ({ children }) => {
         username: userInfo.username,
         avatarUrl: userInfo.avatarUrl,
       },
-    })
-  }
+    });
+  };
 
   const value = {
     userId: state.userId,
@@ -52,19 +65,20 @@ export const UserProvider = ({ children }) => {
     dispatchLogout,
     persistLogin,
     keepUserInfo,
-  }
+    refreshContext,
+  };
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
-}
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+};
 
 const useLogStatus = () => {
-  const context = useContext(UserContext)
+  const context = useContext(UserContext);
 
   if (context === undefined) {
-    throw new Error('useLogStatus must be used within UserContext')
+    throw new Error('useLogStatus must be used within UserContext');
   }
 
-  return context
-}
+  return context;
+};
 
-export default useLogStatus
+export default useLogStatus;

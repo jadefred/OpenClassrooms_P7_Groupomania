@@ -79,6 +79,7 @@ exports.login = async (req, res) => {
 exports.auth = async (req, res) => {
   try {
     const token = req.headers['authorization'].split(' ')[1];
+    const decodedUserId = jwt.decode(token).userId;
     //return when no access token is found
     if (!token) {
       res.status(401).json({ error: 'No authentication token is found' });
@@ -88,9 +89,9 @@ exports.auth = async (req, res) => {
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
       //when error is found, call function to validate refresh token which saved in database
       if (err) {
-        valdidateRefreshToken(req.body.userId);
+        valdidateRefreshToken(decodedUserId);
       } else {
-        res.status(200).json({ message: 'access token is valid' });
+        res.status(200).json({ userId: decodedUserId });
       }
     });
 
@@ -117,7 +118,7 @@ exports.auth = async (req, res) => {
         const assessToken = jwt.sign({ userId: id }, process.env.ACCESS_TOKEN, {
           expiresIn: '30m',
         });
-        res.status(200).json({ token: assessToken });
+        res.status(200).json({ token: assessToken, userId: id });
       });
     }
   } catch (error) {
