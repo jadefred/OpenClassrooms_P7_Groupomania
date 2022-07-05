@@ -14,7 +14,7 @@ import Feed from './Feed.jsx';
 import Profile from './Profile.jsx';
 
 function App() {
-  const { auth, refreshContext } = useLogStatus();
+  const { auth, persistLogin } = useLogStatus();
 
   useEffect(() => {
     //Post access token to access route, data contains user's context
@@ -29,10 +29,11 @@ function App() {
       return data;
     }
 
+    //whenever page is refreshed, call getUserContext function to get user's data
     if (Cookies.get('accessToken')) {
-      getUserContext().then((response) => refreshContext(response));
+      getUserContext().then((response) => persistLogin(response));
     }
-  }, [refreshContext]);
+  }, [persistLogin]);
 
   return (
     <>

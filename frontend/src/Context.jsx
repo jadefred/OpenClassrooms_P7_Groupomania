@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const refreshContext = (userInfo) => {
+  const persistLogin = (userInfo) => {
     dispatch({
       type: 'PERSIST_LOGIN',
       payload: {
@@ -37,15 +37,15 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const keepUserInfo = (userInfo) => {
-    dispatch({
-      type: 'KEEP_USER_INFO',
-      payload: {
-        username: userInfo.username,
-        avatarUrl: userInfo.avatarUrl,
-      },
-    });
-  };
+  // const keepUserInfo = (userInfo) => {
+  //   dispatch({
+  //     type: 'KEEP_USER_INFO',
+  //     payload: {
+  //       username: userInfo.username,
+  //       avatarUrl: userInfo.avatarUrl,
+  //     },
+  //   });
+  // };
 
   const value = {
     userId: state.userId,
@@ -56,8 +56,8 @@ export const UserProvider = ({ children }) => {
     avatarUrl: state.avatarUrl,
     dispatchLogin,
     dispatchLogout,
-    keepUserInfo,
-    refreshContext,
+    //keepUserInfo,
+    persistLogin,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

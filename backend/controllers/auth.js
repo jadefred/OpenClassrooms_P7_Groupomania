@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
     const avatarUrl = user.rows[0].avatar_url;
 
     const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
-      expiresIn: '30m',
+      expiresIn: '2s',
     });
     const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN, {
       expiresIn: '365d',
@@ -137,7 +137,7 @@ exports.auth = async (req, res) => {
 
           const userInfo = await pool.query(
             'SELECT user_id, username, admin, avatar_url FROM users WHERE user_id=$1',
-            [decodedUserId]
+            [id]
           );
 
           res.status(200).json({ token: assessToken, ...userInfo.rows[0] });
