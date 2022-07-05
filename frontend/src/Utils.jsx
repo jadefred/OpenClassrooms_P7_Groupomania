@@ -24,6 +24,8 @@ async function requestLogin(accessToken) {
   });
   const data = await response.json();
 
+  console.log(data);
+
   //see if backend has sent a new access token, if so, set it as new access token
   if (data.token) {
     Cookies.set('accessToken', data.token);

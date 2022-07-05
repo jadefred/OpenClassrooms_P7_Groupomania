@@ -15,11 +15,27 @@ import Feed from './Feed.jsx';
 import Profile from './Profile.jsx';
 
 function App() {
-  const { auth, persistLogin, keepUserInfo } = useLogStatus();
+  const { auth, persistLogin, keepUserInfo, refreshContext } = useLogStatus();
 
   useEffect(() => {
+    async function getUserContext() {
+      const response = await fetch('http://localhost:3000/api/auth/access', {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+      });
+
+      if(response.ok) {
+        
+      } else {
+        return
+      }
+    }
+
     if (Cookies.get('accessToken')) {
-      persistLogin(Cookies.get('accessToken'));
+      //persistLogin(Cookies.get('accessToken'));
+      //refreshContext();
     }
 
     keepUserInfo({

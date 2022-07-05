@@ -79,6 +79,7 @@ exports.login = async (req, res) => {
 exports.auth = async (req, res) => {
   try {
     const token = req.headers['authorization'].split(' ')[1];
+    //get userId from jwt
     const decodedUserId = jwt.decode(token).userId;
     //return when no access token is found
     if (!token) {
@@ -86,12 +87,18 @@ exports.auth = async (req, res) => {
     }
 
     //verify access token
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN, async (err, user) => {
       //when error is found, call function to validate refresh token which saved in database
       if (err) {
         valdidateRefreshToken(decodedUserId);
       } else {
-        res.status(200).json({ userId: decodedUserId });
+        //return user data
+        const userInfo = await pool.query(
+          'SELECT user_id, username, admin, avatar_url FROM users WHERE user_id=$1',
+          [decodedUserId]
+        );
+
+        res.status(200).json(userInfo.rows[0]);
       }
     });
 
@@ -108,18 +115,32 @@ exports.auth = async (req, res) => {
         return res.status(403).json({ error: 'Authentication failed' });
 
       const refreshToken = hasRefreshToken.rows[0].refresh_token;
-      jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, token) => {
-        //if error is detected, throw fail status code
-        if (err) {
-          return res.status(403).json({ error: 'Authentication failed' });
-        }
+      jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN,
+        async (err, token) => {
+          //if error is detected, throw fail status code
+          if (err) {
+            return res.status(403).json({ error: 'Authentication failed' });
+          }
 
-        //if verification is good, send new access token to front end
-        const assessToken = jwt.sign({ userId: id }, process.env.ACCESS_TOKEN, {
-          expiresIn: '30m',
-        });
-        res.status(200).json({ token: assessToken, userId: id });
-      });
+          //if verification is good, send new access token to front end
+          const assessToken = jwt.sign(
+            { userId: id },
+            process.env.ACCESS_TOKEN,
+            {
+              expiresIn: '30m',
+            }
+          );
+
+          const userInfo = await pool.query(
+            'SELECT user_id, username, admin, avatar_url FROM users WHERE user_id=$1',
+            [decodedUserId]
+          );
+
+          res.status(200).json({ token: assessToken, ...userInfo.rows[0] });
+        }
+      );
     }
   } catch (error) {
     res.status(403).json({ error: 'Authentication failed' });
