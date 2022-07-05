@@ -24,18 +24,11 @@ export const UserProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const persistLogin = (token) => {
-    dispatch({
-      type: 'PERSIST_LOGIN',
-      payload: { token: token },
-    });
-  };
-
   const refreshContext = (userInfo) => {
     dispatch({
-      type: 'REFRESH_CONTEXT',
+      type: 'PERSIST_LOGIN',
       payload: {
-        userId: userInfo.userId,
+        userId: userInfo.user_id,
         username: userInfo.username,
         token: userInfo.token,
         admin: userInfo.admin,
@@ -63,7 +56,6 @@ export const UserProvider = ({ children }) => {
     avatarUrl: state.avatarUrl,
     dispatchLogin,
     dispatchLogout,
-    persistLogin,
     keepUserInfo,
     refreshContext,
   };

@@ -61,7 +61,9 @@ exports.login = async (req, res) => {
     const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
       expiresIn: '30m',
     });
-    const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN);
+    const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN, {
+      expiresIn: '365d',
+    });
     await pool.query('UPDATE users SET refresh_token=$1 WHERE email=$2', [
       refreshToken,
       email,

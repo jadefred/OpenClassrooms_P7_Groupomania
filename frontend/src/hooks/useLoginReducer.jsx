@@ -36,13 +36,6 @@ const userReducer = (state, action) => {
     case 'PERSIST_LOGIN':
       return {
         ...state,
-        auth: true,
-        token: payload.token,
-      };
-
-    case 'REFRESH_CONTEXT':
-      return {
-        ...state,
         userId: payload.userId,
         username: payload.username,
         auth: true,

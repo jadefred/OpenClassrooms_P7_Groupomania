@@ -49,8 +49,6 @@ function LoginForm() {
         //set access token as cookie once received data
         const { token } = data;
         Cookies.set('accessToken', token);
-        localStorage.setItem('username', JSON.stringify(data.username));
-        localStorage.setItem('avatarUrl', JSON.stringify(data.avatarUrl));
 
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken();

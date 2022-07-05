@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
-import { asyncFetch } from '../Utils';
 
 //pages - components
 import Home from './Home.jsx';
@@ -15,9 +14,10 @@ import Feed from './Feed.jsx';
 import Profile from './Profile.jsx';
 
 function App() {
-  const { auth, persistLogin, keepUserInfo, refreshContext } = useLogStatus();
+  const { auth, refreshContext } = useLogStatus();
 
   useEffect(() => {
+    //Post access token to access route, data contains user's context
     async function getUserContext() {
       const response = await fetch('http://localhost:3000/api/auth/access', {
         method: 'POST',
@@ -25,26 +25,14 @@ function App() {
           authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
       });
-
-      if(response.ok) {
-        
-      } else {
-        return
-      }
+      const data = await response.json();
+      return data;
     }
 
     if (Cookies.get('accessToken')) {
-      //persistLogin(Cookies.get('accessToken'));
-      //refreshContext();
+      getUserContext().then((response) => refreshContext(response));
     }
-
-    keepUserInfo({
-      userId: JSON.parse(localStorage.getItem('userId')),
-      username: JSON.parse(localStorage.getItem('username')),
-      admin: JSON.parse(localStorage.getItem('admin')),
-      avatarUrl: JSON.parse(localStorage.getItem('avatarUrl')),
-    });
-  }, []);
+  }, [refreshContext]);
 
   return (
     <>
