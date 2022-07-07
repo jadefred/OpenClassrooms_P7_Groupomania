@@ -72,6 +72,7 @@ exports.login = async (req, res) => {
     //send userId, username, accesstoken, admin and avatar_url to frontend
     res
       .status(200)
+      .cookie('accessToken', assessToken, { maxAge: 2 * 60 * 60 * 1000 }) //cookie expire in 2 hours
       .json({ _id: userId, username, token: assessToken, admin, avatarUrl });
   } catch (error) {
     res.status(500).json({ error });
@@ -101,7 +102,6 @@ exports.auth = async (req, res) => {
           'SELECT user_id, username, admin, avatar_url FROM users WHERE user_id=$1',
           [decodedUserId]
         );
-
         res.status(200).json(userInfo.rows[0]);
       }
     });
@@ -142,7 +142,12 @@ exports.auth = async (req, res) => {
             [id]
           );
 
-          res.status(200).json({ token: assessToken, ...userInfo.rows[0] });
+          res
+            .status(200)
+            .cookie('accessToken', assessToken, {
+              maxAge: 2 * 60 * 60 * 1000,
+            })
+            .json({ token: assessToken, ...userInfo.rows[0] });
         }
       );
     }

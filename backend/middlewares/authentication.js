@@ -7,21 +7,17 @@ const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 
 module.exports = (req, res, next) => {
   try {
-    console.log('middleware - auth');
     const token = req.headers['authorization'].split(' ')[1];
     const decodedUserId = jwt.decode(token).userId;
 
     if (!token) {
-      console.log('no token is found');
       res.status(401).json({ error: 'No authentication token is found' });
     }
 
     jwt.verify(token, accessTokenSecretKey, (err, user) => {
       if (err) {
-        console.log('token expired -> ready to refresh');
         valdidateRefreshToken(decodedUserId);
       } else {
-        console.log('access token - all good, next');
         next();
       }
     });
@@ -53,15 +49,10 @@ module.exports = (req, res, next) => {
             { userId: id },
             process.env.ACCESS_TOKEN,
             {
-              expiresIn: '30m',
+              expiresIn: '2s',
             }
           );
-
-          console.log('Generated new access token');
-
-          res.status(200).cookie('accessToken', assessToken, {
-            expires: new Date(Date.now() + 0.5 * 3600000),
-          });
+          res.cookie('accessToken', assessToken);
 
           next();
         }

@@ -17,6 +17,7 @@ export async function verifyToken() {
 async function requestLogin(accessToken) {
   const response = await fetch('http://localhost:3000/api/auth/access', {
     method: 'POST',
+    credentials: 'include',
     headers: {
       authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
@@ -25,9 +26,9 @@ async function requestLogin(accessToken) {
   const data = await response.json();
 
   //see if backend has sent a new access token, if so, set it as new access token
-  if (data.token) {
-    Cookies.set('accessToken', data.token);
-  }
+  // if (data.token) {
+  //   Cookies.set('accessToken', data.token);
+  // }
 
   return response.ok;
 }

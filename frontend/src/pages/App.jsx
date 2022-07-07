@@ -21,6 +21,7 @@ function App() {
     async function getUserContext() {
       const response = await fetch('http://localhost:3000/api/auth/access', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
@@ -28,8 +29,6 @@ function App() {
       const data = await response.json();
       return data;
     }
-
-    
 
     //if auth is empty (refreshed the page), fetch to access endpoint to get all user data and set to context
     if (Cookies.get('accessToken') && !auth) {

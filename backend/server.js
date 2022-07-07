@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post.js');
 const commentRoutes = require('./routes/comment.js');
 const userRoutes = require('./routes/user');
+const cookieParser = require('cookie-parser');
 
 //CORS setting
 const corsOptions = {
@@ -15,8 +16,9 @@ const corsOptions = {
   credentials: true,
 };
 
+app.use(cookieParser());
 app.use(cors(corsOptions));
-//app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //routes
