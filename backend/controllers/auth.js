@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
     const avatarUrl = user.rows[0].avatar_url;
 
     const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
-      expiresIn: '2s',
+      expiresIn: '30m',
     });
     const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN, {
       expiresIn: '365d',
@@ -148,5 +148,13 @@ exports.auth = async (req, res) => {
     }
   } catch (error) {
     res.status(403).json({ error: 'Authentication failed' });
+  }
+};
+
+exports.tokenRoute = (req, res) => {
+  try {
+    res.status(200).json({ message: 'Valid token' });
+  } catch (error) {
+    res.status(500).json(err);
   }
 };

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import useLogStatus from '../Context';
+//import useLogStatus from '../Context';
+import Cookies from 'js-cookie';
 
 function useFetch(url) {
   const [data, setData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const { token } = useLogStatus();
+  //const { token } = useLogStatus();
+  const token = Cookies.get('accessToken');
   const [refresh, setRefresh] = useState(true);
   const [status, setStatus] = useState('');
 

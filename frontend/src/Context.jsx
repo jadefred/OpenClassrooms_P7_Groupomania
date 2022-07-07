@@ -25,6 +25,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const persistLogin = (userInfo) => {
+    
     dispatch({
       type: 'PERSIST_LOGIN',
       payload: {

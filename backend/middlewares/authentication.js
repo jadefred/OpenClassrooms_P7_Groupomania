@@ -7,6 +7,7 @@ const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 
 module.exports = (req, res, next) => {
   try {
+    console.log('middleware - auth');
     const token = req.headers['authorization'].split(' ')[1];
     const decodedUserId = jwt.decode(token).userId;
 
@@ -17,8 +18,10 @@ module.exports = (req, res, next) => {
 
     jwt.verify(token, accessTokenSecretKey, (err, user) => {
       if (err) {
+        console.log('token expired -> ready to refresh');
         valdidateRefreshToken(decodedUserId);
       } else {
+        console.log('access token - all good, next');
         next();
       }
     });
@@ -54,7 +57,9 @@ module.exports = (req, res, next) => {
             }
           );
 
-          res.status(200).cookie('accessToken', 'Bearer ' + assessToken, {
+          console.log('Generated new access token');
+
+          res.status(200).cookie('accessToken', assessToken, {
             expires: new Date(Date.now() + 0.5 * 3600000),
           });
 
@@ -63,6 +68,7 @@ module.exports = (req, res, next) => {
       );
     }
   } catch (error) {
+    console.log(error);
     res.status(403).json({ error: 'Authentication failed' });
   }
 };

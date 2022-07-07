@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import useFlashMessage from '../hooks/useFlashMessage';
 import useLogStatus from '../Context';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
+//custom hooks
 import useFetch from '../hooks/useFetch';
+import useFlashMessage from '../hooks/useFlashMessage';
+//import useAuth from '../hooks/useAuth';
 
 //components
 import { MemoizedNavBar } from '../components/NavBar.jsx';
@@ -19,17 +24,32 @@ function Feed() {
   const [showComment, setShowComment] = useState({});
   const [modal, setModal] = useState({});
   const { flashMessage, setFlashMessage } = useFlashMessage();
-  const { userId, admin } = useLogStatus();
+  const { userId, admin, dispatchLogout } = useLogStatus();
   const [noPostMsg, setNoPostMsg] = useState(false);
-  const { data, isLoaded, error, setRefresh } = useFetch(
+  const navigate = useNavigate();
+  const { data, isLoaded, error, setRefresh, status } = useFetch(
     'http://localhost:3000/api/posts'
   );
 
+  //useAuth();
+
+  //if authentication is failed, force user to log out
+  useEffect(() => {
+    if (status === 403) {
+      Cookies.remove('accessToken');
+      dispatchLogout();
+      navigate('/');
+    }
+  }, [status, dispatchLogout, navigate]);
+
   //when data contains no post, show no post message
   useEffect(() => {
-    if (data && data.length === 0) {
+    console.log('data is changed');
+    if (data && data?.length === 0) {
+      console.log('useEffect no data');
       setNoPostMsg(true);
     } else {
+      console.log('show all post');
       setNoPostMsg(false);
     }
   }, [data]);
@@ -74,7 +94,7 @@ function Feed() {
           </p>
         )}
 
-        {isLoaded && !error && data && (
+        {isLoaded && !error && data && data.length > 0 && (
           <div className="w-full flex flex-col gap-y-10 text-tertiaire">
             {/* map throught allPosts state to display all content */}
             {data.map((post) => {

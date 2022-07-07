@@ -9,10 +9,10 @@ const postCtrl = require('../controllers/post.js');
 //routes
 //CRUD posts
 router.get('/', auth, postCtrl.getAllPosts);
-router.get('/:id', postCtrl.getOnePost);
+router.get('/:id', auth, postCtrl.getOnePost);
 router.post('/', auth, multer, postCtrl.createPost);
-router.put('/', multer, postCtrl.modifyPost);
-router.delete('/', postCtrl.deletePost);
+router.put('/', auth, multer, postCtrl.modifyPost);
+router.delete('/', auth, postCtrl.deletePost);
 
 //like
 router.post('/like', postCtrl.likePost);
