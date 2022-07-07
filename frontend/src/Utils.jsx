@@ -23,9 +23,8 @@ async function requestLogin(accessToken) {
       'content-type': 'application/json',
     },
   });
-  const data = await response.json();
-
-  //see if backend has sent a new access token, if so, set it as new access token
+  // const data = await response.json();
+  // //see if backend has sent a new access token, if so, set it as new access token
   // if (data.token) {
   //   Cookies.set('accessToken', data.token);
   // }
