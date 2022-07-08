@@ -35,7 +35,7 @@ function Feed() {
 
   //if authentication is failed, force user to log out
   useEffect(() => {
-    if (status === 403) {
+    if (status === 403 || status === 401) {
       Cookies.remove('accessToken');
       dispatchLogout();
       navigate('/');
@@ -44,12 +44,9 @@ function Feed() {
 
   //when data contains no post, show no post message
   useEffect(() => {
-    console.log('data is changed');
     if (data && data?.length === 0) {
-      console.log('useEffect no data');
       setNoPostMsg(true);
     } else {
-      console.log('show all post');
       setNoPostMsg(false);
     }
   }, [data]);

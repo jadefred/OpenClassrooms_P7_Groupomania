@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
     const avatarUrl = user.rows[0].avatar_url;
 
     const assessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN, {
-      expiresIn: '30m',
+      expiresIn: '2s',
     });
     const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN, {
       expiresIn: '365d',
@@ -133,7 +133,7 @@ exports.auth = async (req, res) => {
             { userId: id },
             process.env.ACCESS_TOKEN,
             {
-              expiresIn: '30m',
+              expiresIn: '2s',
             }
           );
 
@@ -142,6 +142,7 @@ exports.auth = async (req, res) => {
             [id]
           );
 
+          console.log('set refresh cookie from /access');
           res
             .status(200)
             .cookie('accessToken', assessToken, {

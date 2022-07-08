@@ -15,8 +15,8 @@ function useFetch(url) {
     if (refresh) {
       fetch(url, {
         method: 'GET',
+        credentials: 'include',
         headers: {
-          credentials: 'include',
           authorization: `Bearer ${token}`,
         },
       })

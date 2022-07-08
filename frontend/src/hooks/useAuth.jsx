@@ -4,15 +4,13 @@ import Cookies from 'js-cookie';
 function useAuth() {
   useEffect(() => {
     fetch('http://localhost:3000/api/auth/token', {
-      method: 'POST',
+      method: 'GET',
+      credentials: 'include',
       headers: {
-        credentials: 'include',
         authorization: `Bearer ${Cookies.get('accessToken')}`,
       },
     })
-      .then((response) => {
-        console.log(response.headers);
-      })
+      .then(console.log('useAuth hook called /token'))
 
       .catch((err) => {
         console.log(err);

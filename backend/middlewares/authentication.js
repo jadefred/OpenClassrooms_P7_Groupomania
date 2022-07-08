@@ -8,10 +8,12 @@ const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 module.exports = (req, res, next) => {
   try {
     const token = req.headers['authorization'].split(' ')[1];
-    const decodedUserId = jwt.decode(token).userId;
+    const decodedUserId = jwt.decode(token)?.userId;
 
-    if (!token) {
-      res.status(401).json({ error: 'No authentication token is found' });
+    if (!token || token === 'undefined') {
+      return res
+        .status(401)
+        .json({ error: 'No authentication token is found' });
     }
 
     jwt.verify(token, accessTokenSecretKey, (err, user) => {
@@ -52,6 +54,8 @@ module.exports = (req, res, next) => {
               expiresIn: '2s',
             }
           );
+
+          console.log('set refresh token - middleware');
           res.cookie('accessToken', assessToken);
 
           next();
