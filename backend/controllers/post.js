@@ -14,23 +14,23 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-exports.getOnePost = async (req, res) => {
-  try {
-    const post_id = req.params.id;
-    const onePost = await pool.query(
-      'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id WHERE posts.post_id = $1',
-      [post_id]
-    );
+// exports.getOnePost = async (req, res) => {
+//   try {
+//     const post_id = req.params.id;
+//     const onePost = await pool.query(
+//       'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id WHERE posts.post_id = $1',
+//       [post_id]
+//     );
 
-    if (onePost.rows.length === 0) {
-      res.status(404).json({ message: 'No matching post is found' });
-    }
+//     if (onePost.rows.length === 0) {
+//       res.status(404).json({ message: 'No matching post is found' });
+//     }
 
-    res.status(200).json(onePost.rows[0]);
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-};
+//     res.status(200).json(onePost.rows[0]);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// };
 
 exports.createPost = async (req, res) => {
   try {
@@ -108,10 +108,14 @@ exports.modifyPost = async (req, res) => {
         deleteImage(imageInDB.rows[0].imageurl.split('/').pop());
       }
 
+      if (image !== 'null') {
+        imageUrl = image;
+      }
+
       //update DB
       const updatePost = await pool.query(
         'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
-        [title, content, image, postId, userId]
+        [title, content, imageUrl, postId, userId]
       );
 
       if (updatePost.rows.length === 0) {

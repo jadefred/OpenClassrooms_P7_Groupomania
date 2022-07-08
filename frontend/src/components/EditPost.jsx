@@ -79,6 +79,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
       formData.append('image', image);
     } else {
       formData.append('image', input.imageUrl);
+      console.log(input.imageUrl);
     }
 
     async function modifyPost() {

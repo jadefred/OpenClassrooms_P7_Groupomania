@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 
 function PostContent({ title, content, imageurl }) {
+
   return (
     <div className="flex flex-col gap-y-4 w-9/12 mx-auto my-3">
       <h2 className="font-bold text-2xl">{title}</h2>
