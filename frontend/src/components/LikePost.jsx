@@ -19,7 +19,14 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
     //send 0 if he already liked -> retrieve the like
     //send 1 if he hasn't react to the post
     const userliked = likeUserId.some((i) => i === userId) ? 0 : 1;
-    setLiked((prev) => !prev);
+
+    //use 1 / 0 to determine button's colour shown as liked or not
+    if (userliked === 1) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+
     setRefresh(true);
     //props from Feed, change state when user clicked like button to trigger useEffect to re-render all post in Feed
     const response = await fetch('http://localhost:3000/api/posts/like', {
