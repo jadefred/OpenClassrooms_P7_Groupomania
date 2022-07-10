@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import Home from './Home.jsx';
 import Feed from './Feed.jsx';
 import Profile from './Profile.jsx';
+import NotFound from '../components/NotFound';
 
 function App() {
   const { auth, persistLogin } = useLogStatus();
@@ -38,16 +39,16 @@ function App() {
     }
   }, [persistLogin, auth]);
 
+  console.log(Boolean(auth));
+
   return (
     <>
       <Router>
         <Routes>
           <Route path="/" element={auth ? <Navigate to="/feed" /> : <Home />} />
-          <Route path="/feed" element={auth ? <Feed /> : <Navigate to="/" />} />
-          <Route
-            path="/profile"
-            element={auth ? <Profile /> : <Navigate to="/" />}
-          />
+          <Route path="/feed" element={auth ? <Feed /> : <Home />} />
+          <Route path="/profile" element={auth ? <Profile /> : <Home />} />
+          <Route path="*" element={auth ? <NotFound /> : <Home />} />
         </Routes>
       </Router>
     </>

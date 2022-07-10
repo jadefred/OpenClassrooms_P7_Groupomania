@@ -116,17 +116,13 @@ function NewPost({ setFlashMessage, setRefresh }) {
 
   return (
     <>
-      <div className="text-center flex justify-center items-center gap-x-10 my-8 w-11/12 md:w-3/5 mx-auto text-tertiaire">
-        {username ? (
-          <p className="text-lg italic">
-            {username}, partargez nous quelque chose ...
-          </p>
-        ) : (
-          <p className="text-lg italic">Écrivez quelque chose...</p>
-        )}
+      <div className="text-center flex justify-center items-center gap-x-2 sm:gap-x-10 my-8 w-11/12 md:w-3/5 mx-auto text-tertiaire">
+        <p className="text-lg italic">
+          {username}, partargez nous quelque chose ...
+        </p>
         <button
           onClick={toggleModal}
-          className="bg-tertiaire text-white text-md font-semibold rounded-lg px-5 py-1 shadow-md shadow-gray-200"
+          className="bg-tertiaire text-white font-semibold rounded-lg px-5 py-1 shadow-md shadow-gray-200"
         >
           Nouveau Post
         </button>

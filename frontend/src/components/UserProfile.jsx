@@ -159,7 +159,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
 
       {/* Profile page when no error and loading is finished */}
       {!error && isLoaded && (
-        <div className="w-4/5 mx-auto">
+        <div className="w-11/12 sm:w-4/5 mx-auto">
           <form
             onSubmit={handleUserAccount}
             className="flex flex-col mt-12 md:mt-24 gap-y-5"
@@ -215,7 +215,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
 
               {/* username, email, type of account block */}
               <div className="text-tertiaire flex flex-col gap-y-5">
-                <div className="flex gap-x-5 items-center">
+                <div className="flex gap-x-1 sm:gap-x-5 items-center">
                   <label htmlFor="username" className="font-semibold text-lg">
                     Nom d'utilisateur :{' '}
                   </label>
@@ -228,7 +228,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
                   />
                 </div>
 
-                <div className="flex gap-x-5 items-center">
+                <div className="flex gap-x-1 sm:gap-x-5 items-center">
                   {/* email input field can't be modified, display address only */}
                   <label htmlFor="email" className="font-semibold text-lg">
                     L'adresse mail :{' '}
