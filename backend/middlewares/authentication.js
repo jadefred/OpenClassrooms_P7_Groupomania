@@ -7,7 +7,6 @@ const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 
 module.exports = (req, res, next) => {
   try {
-    console.log('middleware');
     const token = req.headers['authorization'].split(' ')[1];
     const decodedUserId = jwt.decode(token)?.userId;
 
@@ -52,7 +51,7 @@ module.exports = (req, res, next) => {
             { userId: id },
             process.env.ACCESS_TOKEN,
             {
-              expiresIn: '2s',
+              expiresIn: '30m',
             }
           );
 
