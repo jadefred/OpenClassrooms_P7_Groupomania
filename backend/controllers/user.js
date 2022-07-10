@@ -76,8 +76,6 @@ exports.modifyUserInfo = async (req, res) => {
         [username, image, user_id]
       );
 
-      console.log(updateUser.rows[0]);
-
       if (updateUser.rows.length === 0) {
         res.status(500).json({ error });
       }

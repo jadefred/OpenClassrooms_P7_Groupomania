@@ -193,8 +193,6 @@ exports.likePost = async (req, res) => {
   try {
     const { userId, post_id, like } = req.body;
 
-    console.log(like);
-
     //query to check if user's id is in the array
     const hasLiked = await pool.query(
       'SELECT post_id FROM posts WHERE $1 = ANY(likeUserId) AND post_id = $2',
