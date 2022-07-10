@@ -52,6 +52,7 @@ UPDATE users SET admin = true WHERE user_id = 'fbfd8610-7834-4927-9879-3567aaf80
 
 DELETE FROM posts WHERE post_id = '4ac2a964-3526-4385-a345-1e2d670f6067' AND user_id = 'afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b';
 DELETE FROM comments WHERE comment_id = '3bd5e767-1564-4c75-8e7f-df7039cb84bf';
+DELETE FROM users WHERE user_id = '27d3f5ee-6e0a-44f1-8536-415c3bcf67ef';
 
 -- array query, if array contains certain value
 SELECT post_id FROM posts WHERE 'fbfd8610-7834-4927-9879-3567aaf80433' = ANY(likeUserId);

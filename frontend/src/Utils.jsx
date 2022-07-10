@@ -50,5 +50,7 @@ export async function asyncFetch(url, method, token, body, file) {
     body: body,
   });
 
+  const data = await response.json();
+  console.log(data);
   return response;
 }

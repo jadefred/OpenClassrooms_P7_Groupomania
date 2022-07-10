@@ -41,7 +41,7 @@ function SignupForm() {
 
   function verifyPassword(e) {
     //password must contain 8 characters
-    const regexLength = /^\w{8,}$/;
+    const regexLength = /.{8,}/;
     if (regexLength.test(e.target.value)) {
       setEightChar(true);
     } else {
