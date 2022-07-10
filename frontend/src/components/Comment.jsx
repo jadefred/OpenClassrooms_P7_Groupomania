@@ -68,7 +68,7 @@ function Comment({
               return (
                 <div
                   key={i.comment_id}
-                  className="flex bg-white w-4/5 mx-auto py-2 px-6 rounded-2xl gap-x-2"
+                  className="flex bg-white w-4/5 mx-auto py-2 px-3 md:px-6 rounded-2xl gap-x-2"
                 >
                   {/* Username, avatar block */}
                   <div className="flex items-center gap-x-1 md:gap-x-3 w-4/12">
@@ -92,7 +92,7 @@ function Comment({
                   <div className="relative flex justify-between items-center mt-4 w-8/12">
                     <div className="flex flex-col w-10/12">
                       {i.commentbody && (
-                        <div className="mb-4">{i.commentbody}</div>
+                        <div className="mb-4 break-words">{i.commentbody}</div>
                       )}
 
                       {i.imageurl && (

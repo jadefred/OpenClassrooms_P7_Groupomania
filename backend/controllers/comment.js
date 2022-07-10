@@ -7,6 +7,14 @@ exports.createComment = async (req, res) => {
     let imageUrl = null;
     const { postId, userId, content } = req.body;
 
+    const wordCount = content.split('').length;
+
+    if (wordCount > 255) {
+      return res
+        .status(400)
+        .json({ message: 'Content is move than 255 characters' });
+    }
+
     //if user has sent file, create url for the image
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;

@@ -110,7 +110,13 @@ function CommentButton({
       }
       //fail flash message
       else {
-        setFlashMessage('Un problème a apparu..');
+        if (response.status === 400) {
+          setFlashMessage(
+            'Le commentaire est trop long. Veuillez le limiter à 255 caractères'
+          );
+        } else {
+          setFlashMessage('Un problème a apparu..');
+        }
       }
     }
     createComment();
