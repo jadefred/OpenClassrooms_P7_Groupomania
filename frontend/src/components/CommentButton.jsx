@@ -91,9 +91,11 @@ function CommentButton({ post_id, setFlashMessage, setRefresh }) {
     async function createComment() {
       const response = await fetch('http://localhost:3000/api/posts/comments', {
         method: 'POST',
+        credentials: 'include',
         headers: { authorization: `Bearer ${token}` },
         body: formData,
       });
+
       setModal(false);
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {

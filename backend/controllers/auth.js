@@ -102,7 +102,7 @@ exports.auth = async (req, res) => {
           'SELECT user_id, username, admin, avatar_url FROM users WHERE user_id=$1',
           [decodedUserId]
         );
-        res.status(200).json(userInfo.rows[0]);
+        res.status(200).json({ token: token, ...userInfo.rows[0] });
       }
     });
 

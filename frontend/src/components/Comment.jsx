@@ -13,6 +13,7 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
   async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
@@ -103,35 +104,6 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
                       </button>
                     )}
                   </div>
-                  {/* <div className="flex justify-between items-center mt-4 w-8/12">
-                    <div className="flex flex-col">
-                      {i.commentbody && (
-                        <div className="mb-4">{i.commentbody}</div>
-                      )}
-
-                      {i.imageurl && (
-                        <img
-                          src={i.imageurl}
-                          alt={`Commentaire de ${i.username}`}
-                          className="w-full object-cover rounded-xl mb-4"
-                        />
-                      )}
-                    </div>
-                    {(userId === i.user_id || admin) && (
-                      <button
-                        onClick={() => {
-                          deleteComment(i.comment_id, userId, postId);
-                        }}
-                        className="self-start w-2/12"
-                      >
-                        <img
-                          src={deleteBtn}
-                          alt="supprimer cette commentaire"
-                          className="w-5 h-5"
-                        />
-                      </button>
-                    )}
-                  </div> */}
                 </div>
               );
             })}
