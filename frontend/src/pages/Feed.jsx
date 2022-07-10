@@ -27,6 +27,7 @@ function Feed() {
   const { userId, admin, dispatchLogout } = useLogStatus();
   const [noPostMsg, setNoPostMsg] = useState(false);
   const navigate = useNavigate();
+  const [newComment, setNewComment] = useState(false);
   const { data, isLoaded, error, setRefresh, status } = useFetch(
     'http://localhost:3000/api/posts'
   );
@@ -155,6 +156,7 @@ function Feed() {
                             post_id={post.post_id}
                             setFlashMessage={setFlashMessage}
                             setRefresh={setRefresh}
+                            setNewComment={setNewComment}
                           />
                         </div>
                       </div>
@@ -165,6 +167,8 @@ function Feed() {
                           postId={post.post_id}
                           setFlashMessage={setFlashMessage}
                           feedSetRefresh={setRefresh}
+                          newComment={newComment}
+                          setNewComment={setNewComment}
                         />
                       ) : null}
                     </div>

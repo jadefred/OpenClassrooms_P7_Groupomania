@@ -2,7 +2,12 @@ import React, { useState, useRef, memo } from 'react';
 import useLogStatus from '../Context';
 import commentIcon from '../assets/commentBtn.svg';
 
-function CommentButton({ post_id, setFlashMessage, setRefresh }) {
+function CommentButton({
+  post_id,
+  setFlashMessage,
+  setRefresh,
+  setNewComment,
+}) {
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -101,6 +106,7 @@ function CommentButton({ post_id, setFlashMessage, setRefresh }) {
       if (response.ok) {
         setFlashMessage('Vous avez posté un commentaire');
         setRefresh(true);
+        setNewComment(true);
       }
       //fail flash message
       else {

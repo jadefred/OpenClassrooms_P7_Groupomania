@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
 import useFetch from '../hooks/useFetch';
 
-function Comment({ postId, setFlashMessage, feedSetRefresh }) {
+function Comment({
+  postId,
+  setFlashMessage,
+  feedSetRefresh,
+  newComment,
+  setNewComment,
+}) {
   const { userId, token, admin } = useLogStatus();
   const { data, isLoaded, error, setRefresh } = useFetch(
     `http://localhost:3000/api/posts/comments/${postId}`
   );
+
+  //CommentButton component set newComment state as true when user left a comment.
+  //useEffect will be triggered and refresh comment in order to display all the latest comments
+  useEffect(() => {
+    if (newComment) {
+      setRefresh(true);
+      setNewComment(false);
+    }
+  }, [newComment, setRefresh, setNewComment]);
 
   async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
@@ -24,7 +39,6 @@ function Comment({ postId, setFlashMessage, feedSetRefresh }) {
     //flash success message if res is ok, then reset state to make it disappear
     if (response.ok) {
       setFlashMessage('Vous avez supprimé un commentaire');
-
       setRefresh(true);
       feedSetRefresh(true);
     }
