@@ -69,8 +69,6 @@ exports.deleteComment = async (req, res) => {
   try {
     const { commentId, userId, postId } = req.body;
 
-    console.table({ commentId, userId, postId });
-
     //function to delete uploaded image by its file name
     function deleteImage(url) {
       fs.unlink(`image/${url}`, (err) => {
