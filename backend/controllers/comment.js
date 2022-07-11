@@ -7,10 +7,8 @@ exports.createComment = async (req, res) => {
     let imageUrl = null;
     const { postId, userId, content } = req.body;
 
-    console.log(userId);
-
-    const wordCount = content.split('').length;
-
+    //send bad request if comment body is over 255 characters
+    const wordCount = content?.split('').length;
     if (wordCount > 255) {
       return res
         .status(400)

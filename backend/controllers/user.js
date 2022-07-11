@@ -91,7 +91,16 @@ exports.deleteUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    console.log(userId);
+    //function to delete uploaded image by its file name
+    function deleteImage(url) {
+      fs.unlink(`image/${url}`, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.log('successfully deleted local image');
+        }
+      });
+    }
 
     //delete all related comments, and get all comments' id
     const deleteUserComment = await pool.query(
@@ -99,17 +108,18 @@ exports.deleteUser = async (req, res) => {
       [userId]
     );
 
-    console.log('deleteComment.rows');
-    console.log(deleteUserComment.rows);
-
     //use result of deleteComment, loop through post id and related comment id in order to update comment id array and total comment count in the table of posts
     if (deleteUserComment.rows.length > 0) {
-      console.log('deleting commentid array and comment count');
       for (const i of deleteUserComment.rows) {
         await pool.query(
           'UPDATE posts SET commentId = array_remove(commentId, $1), totalComment = (totalComment - 1) WHERE post_id = $2;',
           [i.comment_id, i.post_id]
         );
+
+        //if imageurl in comment is not null or empty, call delete local image function
+        if (i.imageurl) {
+          deleteImage(i.imageurl.split('/').pop());
+        }
       }
     }
 
@@ -136,17 +146,24 @@ exports.deleteUser = async (req, res) => {
     }
 
     //delete all posts which related to user
-    await pool.query('DELETE FROM posts WHERE user_id = $1 RETURNING *', [
-      userId,
-    ]);
-
-    //delete user account
-    const deleteUser = await pool.query(
-      'DELETE FROM users WHERE user_id = $1 RETURNING *',
+    const deleteAllPost = await pool.query(
+      'DELETE FROM posts WHERE user_id = $1 RETURNING *',
       [userId]
     );
 
-    console.log(deleteUser.rows);
+    //loop through all posts, if imageurl is not null nor empty, call delete image function
+    if (deleteAllPost.rows.length > 0) {
+      for (const i of deleteAllPost.rows) {
+        if (i.imageurl) {
+          deleteImage(i.imageurl.split('/').pop());
+        }
+      }
+    }
+
+    //delete user account
+    await pool.query('DELETE FROM users WHERE user_id = $1 RETURNING *', [
+      userId,
+    ]);
 
     res.status(204).json({ message: 'Successfully deleted user' });
   } catch (error) {
