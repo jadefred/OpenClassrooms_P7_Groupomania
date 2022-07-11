@@ -91,8 +91,56 @@ exports.deleteUser = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    //before delete user account, need to handle all related foreign key data - comments, posts
+    console.log(userId);
 
+    //delete all related comments, and get all comments' id
+    const deleteUserComment = await pool.query(
+      'DELETE FROM comments WHERE user_id = $1 RETURNING *',
+      [userId]
+    );
+
+    console.log('deleteComment.rows');
+    console.log(deleteUserComment.rows);
+
+    //use result of deleteComment, loop through post id and related comment id in order to update comment id array and total comment count in the table of posts
+    if (deleteUserComment.rows.length > 0) {
+      console.log('deleting commentid array and comment count');
+      for (const i of deleteUserComment.rows) {
+        await pool.query(
+          'UPDATE posts SET commentId = array_remove(commentId, $1), totalComment = (totalComment - 1) WHERE post_id = $2;',
+          [i.comment_id, i.post_id]
+        );
+      }
+    }
+
+    //delete all likes that user has gave
+    await pool.query(
+      'UPDATE posts SET likeUserId = array_remove(likeUserId, $1), likes = (likes - 1) WHERE $1 = ANY(likeUserId)',
+      [userId]
+    );
+
+    //get all post id that user created
+    const allPostOfUser = await pool.query(
+      'SELECT post_id FROM posts WHERE user_id = $1',
+      [userId]
+    );
+
+    //if the posts have comments, delete them all
+    if (allPostOfUser.rows.length > 0) {
+      for (const i of allPostOfUser.rows) {
+        await pool.query(
+          'DELETE FROM comments WHERE post_id = $1 RETURNING *',
+          [i.post_id]
+        );
+      }
+    }
+
+    //delete all posts which related to user
+    await pool.query('DELETE FROM posts WHERE user_id = $1 RETURNING *', [
+      userId,
+    ]);
+
+    //delete user account
     const deleteUser = await pool.query(
       'DELETE FROM users WHERE user_id = $1 RETURNING *',
       [userId]

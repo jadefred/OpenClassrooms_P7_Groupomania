@@ -7,6 +7,8 @@ exports.createComment = async (req, res) => {
     let imageUrl = null;
     const { postId, userId, content } = req.body;
 
+    console.log(userId);
+
     const wordCount = content.split('').length;
 
     if (wordCount > 255) {
