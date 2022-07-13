@@ -39,8 +39,6 @@ function App() {
     }
   }, [persistLogin, auth]);
 
-  console.log(Boolean(auth));
-
   return (
     <>
       <Router>
