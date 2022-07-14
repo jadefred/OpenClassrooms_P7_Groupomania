@@ -8,9 +8,18 @@ function PostHeader({
   user_id,
   userId,
   admin,
-  toggleModal,
   post_id,
+  setModal,
 }) {
+  console.log('PostHeader');
+
+  //toggle modal when clicked modifer post button
+  const toggleModal = (id) => {
+    setModal((prev) =>
+      Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
+    );
+  };
+
   return (
     <div className="flex justify-between px-3 py-1 text-white bg-lightGray rounded-t-md">
       <div className="flex items-center gap-x-3">

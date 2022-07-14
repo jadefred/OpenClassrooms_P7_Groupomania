@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import useLogStatus from '../Context';
 
 function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
+  console.log('editPost');
+
   const [image, setImage] = useState();
   const [input, setInput] = useState({
     title: post.title,

@@ -18,10 +18,8 @@ module.exports = (req, res, next) => {
 
     jwt.verify(token, accessTokenSecretKey, (err, user) => {
       if (err) {
-        console.log('ready to refresh token');
         valdidateRefreshToken(decodedUserId);
       } else {
-        console.log('access token is valid');
         next();
       }
     });

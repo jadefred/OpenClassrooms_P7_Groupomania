@@ -32,7 +32,7 @@ function Feed() {
     'http://localhost:3000/api/posts'
   );
 
-  //useAuth();
+  console.log('Feed');
 
   //if authentication is failed, force user to log out
   useEffect(() => {
@@ -59,12 +59,12 @@ function Feed() {
     );
   }, []);
 
-  //toggle modal when clicked modifer post button (useCallback to memorize function before pass it as props to child)
-  const toggleModal = useCallback((id) => {
-    setModal((prev) =>
-      Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
-    );
-  }, []);
+  // //toggle modal when clicked modifer post button (useCallback to memorize function before pass it as props to child)
+  // const toggleModal = useCallback((id) => {
+  //   setModal((prev) =>
+  //     Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
+  //   );
+  // }, []);
 
   return (
     <>
@@ -97,83 +97,81 @@ function Feed() {
             {/* map throught allPosts state to display all content */}
             {data.map((post) => {
               return (
-                <>
-                  <div
-                    key={post.post_id}
-                    className="border-2 border-gray-500 rounded-xl"
-                  >
+                <div
+                  key={post.post_id}
+                  className="border-2 border-gray-500 rounded-xl"
+                >
+                  <div>
+                    {/* header of each post - username, avatar and edit button */}
+                    <MemoizedPostHeader
+                      avatar_url={post.avatar_url}
+                      username={post.username}
+                      user_id={post.user_id}
+                      userId={userId}
+                      admin={admin}
+                      post_id={post.post_id}
+                      setModal={setModal}
+                    />
                     <div>
-                      {/* header of each post - username, avatar and edit button */}
-                      <MemoizedPostHeader
-                        avatar_url={post.avatar_url}
-                        username={post.username}
-                        user_id={post.user_id}
-                        userId={userId}
-                        admin={admin}
-                        toggleModal={toggleModal}
-                        post_id={post.post_id}
-                      />
-                      <div>
-                        {/* render edit post component when content according post_id */}
-                        {modal[post.post_id] && (
-                          <EditPost
-                            post={post}
-                            modal={modal}
-                            setModal={setModal}
-                            setFlashMessage={setFlashMessage}
-                            setRefresh={setRefresh}
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Block of title, content, like, comment buttons */}
-                    <div>
-                      <MemoizedPostContent
-                        title={post.title}
-                        content={post.content}
-                        imageurl={post.imageurl}
-                      />
-                      <div className="w-full mt-5 mb-2">
-                        {/*Number of likes and comments*/}
-                        <MemoizedNumLikeComment
-                          likes={post.likes}
-                          totalcomment={post.totalcomment}
-                          post_id={post.post_id}
-                          toggleComment={toggleComment}
-                        />
-                      </div>
-                      <div className="flex border-t-2 border-gray-300 py-1">
-                        <div className="basis-1/2 text-center my-1">
-                          <MemoizedLikePost
-                            likeUserId={post.likeuserid}
-                            post_id={post.post_id}
-                            setRefresh={setRefresh}
-                          />
-                        </div>
-                        <div className="basis-1/2 text-center my-1">
-                          <MemoizedCommentButton
-                            post_id={post.post_id}
-                            setFlashMessage={setFlashMessage}
-                            setRefresh={setRefresh}
-                            setNewComment={setNewComment}
-                          />
-                        </div>
-                      </div>
-                      {/* Pass comment id to the component for fetch the comment data */}
-                      {showComment[post.post_id] ? (
-                        <Comment
-                          commentId={post.commentid}
-                          postId={post.post_id}
+                      {/* render edit post component when content according post_id */}
+                      {modal[post.post_id] && (
+                        <EditPost
+                          post={post}
+                          modal={modal}
+                          setModal={setModal}
                           setFlashMessage={setFlashMessage}
-                          feedSetRefresh={setRefresh}
-                          newComment={newComment}
-                          setNewComment={setNewComment}
+                          setRefresh={setRefresh}
                         />
-                      ) : null}
+                      )}
                     </div>
                   </div>
-                </>
+
+                  {/* Block of title, content, like, comment buttons */}
+                  <div>
+                    <MemoizedPostContent
+                      title={post.title}
+                      content={post.content}
+                      imageurl={post.imageurl}
+                    />
+                    <div className="w-full mt-5 mb-2">
+                      {/*Number of likes and comments*/}
+                      <MemoizedNumLikeComment
+                        likes={post.likes}
+                        totalcomment={post.totalcomment}
+                        post_id={post.post_id}
+                        toggleComment={toggleComment}
+                      />
+                    </div>
+                    <div className="flex border-t-2 border-gray-300 py-1">
+                      <div className="basis-1/2 text-center my-1">
+                        <MemoizedLikePost
+                          likeUserId={post.likeuserid}
+                          post_id={post.post_id}
+                          setRefresh={setRefresh}
+                        />
+                      </div>
+                      <div className="basis-1/2 text-center my-1">
+                        <MemoizedCommentButton
+                          post_id={post.post_id}
+                          setFlashMessage={setFlashMessage}
+                          setRefresh={setRefresh}
+                          setNewComment={setNewComment}
+                        />
+                      </div>
+                    </div>
+                    {/* Pass comment id to the component for fetch the comment data */}
+                    {showComment[post.post_id] ? (
+                      <Comment
+                        commentId={post.commentid}
+                        postId={post.post_id}
+                        setFlashMessage={setFlashMessage}
+                        feedSetRefresh={setRefresh}
+                        newComment={newComment}
+                        setNewComment={setNewComment}
+                      />
+                    ) : null}
+                  </div>
+                </div>
               );
             })}
           </div>

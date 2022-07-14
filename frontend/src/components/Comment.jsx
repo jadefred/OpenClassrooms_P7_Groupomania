@@ -11,6 +11,7 @@ function Comment({
   newComment,
   setNewComment,
 }) {
+  console.log('comment ');
   const { userId, token, admin } = useLogStatus();
   const { data, isLoaded, error, setRefresh } = useFetch(
     `http://localhost:3000/api/posts/comments/${postId}`
