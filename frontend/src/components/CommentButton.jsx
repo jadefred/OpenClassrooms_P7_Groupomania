@@ -8,6 +8,7 @@ function CommentButton({
   setRefresh,
   setNewComment,
 }) {
+  console.log('comment button');
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);

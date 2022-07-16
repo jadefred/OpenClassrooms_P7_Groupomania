@@ -1,8 +1,15 @@
 import React, { useState, useRef } from 'react';
 import useLogStatus from '../Context';
 
-function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
-  console.log('editPost');
+function EditPost({
+  modal,
+  setModal,
+  post,
+  setFlashMessage,
+  setRefresh,
+  refresh,
+}) {
+  console.log('EditPost - refresh : ', refresh);
 
   const [image, setImage] = useState();
   const [input, setInput] = useState({
@@ -94,7 +101,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez modifié un post');
-        setRefresh(true);
+        setRefresh((prev) => !prev);
       }
       //fail flash message
       else {
@@ -134,7 +141,7 @@ function EditPost({ modal, setModal, post, setFlashMessage, setRefresh }) {
       //flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez supprimé un post');
-        setRefresh(true);
+        setRefresh((prev) => !prev);
       }
       //fail flash message
       else {

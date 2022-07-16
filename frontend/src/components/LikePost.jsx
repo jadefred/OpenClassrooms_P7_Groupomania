@@ -7,6 +7,8 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
   const { userId, token } = useLogStatus();
   const [liked, setLiked] = useState(false);
 
+  console.log('LikePost');
+
   //useEffect to get initial value to see whether user has already liked this post
   useEffect(() => {
     if (likeUserId.length > 0) {
@@ -27,7 +29,6 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
       setLiked(false);
     }
 
-    setRefresh(true);
     //props from Feed, change state when user clicked like button to trigger useEffect to re-render all post in Feed
     const response = await fetch('http://localhost:3000/api/posts/like', {
       method: 'POST',
@@ -39,6 +40,10 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
     });
     const data = await response.json();
     console.log(data);
+
+    if (response.ok) {
+      setRefresh((prev) => !prev);
+    }
   }
 
   return (

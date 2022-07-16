@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 //custom hooks
-import useFetch from '../hooks/useFetch';
+//import useFetch from '../hooks/useFetch';
 import useFlashMessage from '../hooks/useFlashMessage';
 //import useAuth from '../hooks/useAuth';
 
@@ -28,11 +28,48 @@ function Feed() {
   const [noPostMsg, setNoPostMsg] = useState(false);
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState(false);
-  const { data, isLoaded, error, setRefresh, status } = useFetch(
-    'http://localhost:3000/api/posts'
-  );
+  // const { data, isLoaded, error, setRefresh, status } = useFetch(
+  //   'http://localhost:3000/api/posts'
+  // );
 
-  console.log('Feed');
+  const [data, setData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [refresh, setRefresh] = useState(true);
+
+  console.log(refresh);
+
+  useEffect(() => {
+    console.log('useEffect is called');
+    //fetch all post data
+    async function getAllData() {
+      try {
+        const response = await fetch('http://localhost:3000/api/posts', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            authorization: `Bearer ${Cookies.get('accessToken')}`,
+          },
+        });
+        const fetchData = await response.json();
+
+        setData(fetchData);
+        setStatus(response.status);
+        setIsLoaded(true);
+      } catch (error) {
+        setError(true);
+        setIsLoaded(true);
+      }
+    }
+
+    getAllData();
+  }, [refresh]);
+
+  //change useFetch to async fetch and wrap it in useEffect to prevent too much rendering
+
+  console.count('Feed rendered :');
+  console.log('Feed ', data);
 
   //if authentication is failed, force user to log out
   useEffect(() => {
@@ -121,6 +158,7 @@ function Feed() {
                           setModal={setModal}
                           setFlashMessage={setFlashMessage}
                           setRefresh={setRefresh}
+                          refresh={refresh}
                         />
                       )}
                     </div>
