@@ -1,6 +1,30 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 
-function NumLikeComment({ likes, totalcomment, post_id, toggleComment }) {
+function NumLikeComment({
+  likes,
+  totalcomment,
+  post_id,
+  toggleComment,
+  setShowComment,
+  showComment,
+}) {
+  //if total comment is 0 and in the object of showComment is containing the post related value
+  //trigger useEffect to remove the post related value from showComment object
+  useEffect(() => {
+    if (totalcomment === 0 && showComment[post_id]) {
+      setShowComment((prev) => {
+        const newObj = Object.keys(prev)
+          .filter((i) => i !== post_id)
+          .reduce((i, key) => {
+            i[key] = prev[key];
+            return i;
+          }, {});
+
+        return newObj;
+      });
+    }
+  }, [post_id, showComment, totalcomment, setShowComment]);
+
   return (
     <div className="w-9/12 flex mx-auto justify-end gap-x-8 ">
       {/* number of people liked this post, hide p whee like is 0 */}

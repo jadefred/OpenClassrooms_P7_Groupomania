@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
-//import Cookies from 'js-cookie';
 import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 

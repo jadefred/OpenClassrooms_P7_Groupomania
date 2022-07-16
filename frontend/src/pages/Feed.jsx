@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 //custom hooks
 //import useFetch from '../hooks/useFetch';
 import useFlashMessage from '../hooks/useFlashMessage';
-//import useAuth from '../hooks/useAuth';
 
 //components
 import { MemoizedNavBar } from '../components/NavBar.jsx';
@@ -38,8 +37,6 @@ function Feed() {
   const [status, setStatus] = useState(null);
   const [refresh, setRefresh] = useState(true);
 
-  console.log(refresh);
-
   useEffect(() => {
     console.log('useEffect is called');
     //fetch all post data
@@ -70,6 +67,8 @@ function Feed() {
 
   console.count('Feed rendered :');
   console.log('Feed ', data);
+  console.log('Feed - refresh ', refresh);
+  console.log('ShowComment :', showComment);
 
   //if authentication is failed, force user to log out
   useEffect(() => {
@@ -178,6 +177,8 @@ function Feed() {
                         totalcomment={post.totalcomment}
                         post_id={post.post_id}
                         toggleComment={toggleComment}
+                        showComment={showComment}
+                        setShowComment={setShowComment}
                       />
                     </div>
                     <div className="flex border-t-2 border-gray-300 py-1">
@@ -206,6 +207,7 @@ function Feed() {
                         feedSetRefresh={setRefresh}
                         newComment={newComment}
                         setNewComment={setNewComment}
+                        setShowComment={setShowComment}
                       />
                     ) : null}
                   </div>

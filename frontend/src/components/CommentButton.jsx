@@ -8,7 +8,7 @@ function CommentButton({
   setRefresh,
   setNewComment,
 }) {
-  console.log('comment button');
+  console.count('comment button render :');
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -106,7 +106,7 @@ function CommentButton({
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez posté un commentaire');
-        setRefresh(true);
+        setRefresh((prev) => !prev);
         setNewComment(true);
       }
       //fail flash message

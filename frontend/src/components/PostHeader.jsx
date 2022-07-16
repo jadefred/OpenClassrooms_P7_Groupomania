@@ -11,8 +11,6 @@ function PostHeader({
   post_id,
   setModal,
 }) {
-  console.log('PostHeader');
-
   //toggle modal when clicked modifer post button
   const toggleModal = (id) => {
     setModal((prev) =>

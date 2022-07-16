@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
-import useFetch from '../hooks/useFetch';
+//import useFetch from '../hooks/useFetch';
 
 function Comment({
   postId,
@@ -10,12 +11,54 @@ function Comment({
   feedSetRefresh,
   newComment,
   setNewComment,
+  setShowComment,
 }) {
-  console.log('comment ');
   const { userId, token, admin } = useLogStatus();
-  const { data, isLoaded, error, setRefresh } = useFetch(
-    `http://localhost:3000/api/posts/comments/${postId}`
-  );
+  // const { data, isLoaded, error, setRefresh } = useFetch(
+  //   `http://localhost:3000/api/posts/comments/${postId}`
+  // );
+
+  const [data, setData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const [refresh, setRefresh] = useState(null);
+
+  console.count('Comment :');
+  console.log('Comment - data ', data);
+
+  useEffect(() => {
+    async function getComment() {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/posts/comments/${postId}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              authorization: `Bearer ${Cookies.get('accessToken')}`,
+            },
+          }
+        );
+        const fetchData = await response.json();
+
+        setData(fetchData);
+        setIsLoaded(true);
+      } catch (error) {
+        setError(true);
+        setIsLoaded(true);
+      }
+    }
+    getComment();
+  }, [postId, refresh]);
+
+  // setShowComment((prev) => {
+  //   Object.keys(prev)
+  //     .filter((i) => i !== postId)
+  //     .reduce((i, key) => {
+  //       i[key] = prev[key];
+  //       return i;
+  //     }, {});
+  // });
 
   //CommentButton component set newComment state as true when user left a comment.
   //useEffect will be triggered and refresh comment in order to display all the latest comments
@@ -41,7 +84,7 @@ function Comment({
     if (response.ok) {
       setFlashMessage('Vous avez supprimé un commentaire');
       setRefresh(true);
-      feedSetRefresh(true);
+      feedSetRefresh((prev) => !prev);
     }
     //fail flash message
     else {
