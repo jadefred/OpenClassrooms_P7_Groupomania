@@ -68,7 +68,6 @@ function Feed() {
   console.count('Feed rendered :');
   console.log('Feed ', data);
   console.log('Feed - refresh ', refresh);
-  console.log('ShowComment :', showComment);
 
   //if authentication is failed, force user to log out
   useEffect(() => {
@@ -207,7 +206,6 @@ function Feed() {
                         feedSetRefresh={setRefresh}
                         newComment={newComment}
                         setNewComment={setNewComment}
-                        setShowComment={setShowComment}
                       />
                     ) : null}
                   </div>

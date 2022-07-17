@@ -11,7 +11,6 @@ function Comment({
   feedSetRefresh,
   newComment,
   setNewComment,
-  setShowComment,
 }) {
   const { userId, token, admin } = useLogStatus();
   // const { data, isLoaded, error, setRefresh } = useFetch(
@@ -51,20 +50,11 @@ function Comment({
     getComment();
   }, [postId, refresh]);
 
-  // setShowComment((prev) => {
-  //   Object.keys(prev)
-  //     .filter((i) => i !== postId)
-  //     .reduce((i, key) => {
-  //       i[key] = prev[key];
-  //       return i;
-  //     }, {});
-  // });
-
   //CommentButton component set newComment state as true when user left a comment.
   //useEffect will be triggered and refresh comment in order to display all the latest comments
   useEffect(() => {
     if (newComment) {
-      setRefresh(true);
+      setRefresh((prev) => !prev);
       setNewComment(false);
     }
   }, [newComment, setRefresh, setNewComment]);
@@ -83,7 +73,7 @@ function Comment({
     //flash success message if res is ok, then reset state to make it disappear
     if (response.ok) {
       setFlashMessage('Vous avez supprimé un commentaire');
-      setRefresh(true);
+      setRefresh((prev) => !prev);
       feedSetRefresh((prev) => !prev);
     }
     //fail flash message
