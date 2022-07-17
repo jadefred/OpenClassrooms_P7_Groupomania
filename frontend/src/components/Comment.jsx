@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
+import loader from '../assets/loadingSpinner-gray.svg';
 //import useFetch from '../hooks/useFetch';
 
 function Comment({
@@ -90,6 +91,17 @@ function Comment({
           <p className="text-center">
             Un problème a apparu, veuillez réessayer plus tard
           </p>
+        </div>
+      )}
+
+      {/* isLoaded is false */}
+      {!isLoaded && (
+        <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
+          <img
+            src={loader}
+            alt="chargement"
+            className="animate-spin w-10 h-10 mx-auto"
+          />
         </div>
       )}
 
