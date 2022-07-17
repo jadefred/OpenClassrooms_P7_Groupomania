@@ -98,7 +98,7 @@ function NewPost({ setFlashMessage, setRefresh }) {
       // flash success message if res is ok, then reset state to make it disappear
       if (response.ok) {
         setFlashMessage('Vous avez créé un post');
-        setRefresh(true);
+        setRefresh((prev) => !prev);
       }
       //fail flash message
       else {

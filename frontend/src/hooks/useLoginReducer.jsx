@@ -5,7 +5,6 @@ export const initialState = {
   token: '',
   admin: false,
   avatarUrl: '',
-  message: '',
 };
 
 const userReducer = (state, action) => {
@@ -43,11 +42,6 @@ const userReducer = (state, action) => {
         token: payload.token,
         admin: payload.admin,
         avatarUrl: payload.avatarUrl,
-      };
-
-    case 'FLASH_MESSAGE':
-      return {
-        message: payload.message,
       };
 
     default:

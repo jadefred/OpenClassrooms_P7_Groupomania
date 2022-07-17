@@ -155,11 +155,3 @@ exports.auth = async (req, res) => {
     res.status(403).json({ error: 'Authentication failed' });
   }
 };
-
-// exports.tokenRoute = (req, res) => {
-//   try {
-//     res.status(200).json({ message: 'Valid token' });
-//   } catch (error) {
-//     res.status(500).json(err);
-//   }
-// };

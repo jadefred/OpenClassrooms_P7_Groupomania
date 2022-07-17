@@ -15,7 +15,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     `http://localhost:3000/api/user/${userId}`
   );
   const [image, setImage] = useState(null);
-  const [formNotComplete, setFormNotComplete] = useState(false);
+  const [formNotComplete, setFormNotComplete] = useState('');
   const [btnDisable, setBtnDisable] = useState(true);
   const [input, setInput] = useState({
     username: '',
@@ -42,7 +42,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     setBtnDisable(false);
     //remove warning message when user entred something in the field of username
     if (input.username !== '') {
-      setFormNotComplete(false);
+      setFormNotComplete('');
     }
   };
 
@@ -80,8 +80,11 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     e.preventDefault();
 
     //pop error message if title / body content is empty and return function
-    if (input.username === '') {
-      setFormNotComplete(true);
+    const regexUsername = /[\w]{3,30}$/;
+    if (input.username === '' || !regexUsername.test(input.username)) {
+      setFormNotComplete(
+        'Le pseudo doit contenir entre 3 et 30 caractères. Utiliser uniquement des lettres minuscules, majuscules, nombres et tiret du bas'
+      );
       return;
     }
 
@@ -217,7 +220,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
               <div className="text-tertiaire flex flex-col gap-y-5">
                 <div className="flex gap-x-1 sm:gap-x-5 items-center">
                   <label htmlFor="username" className="font-semibold text-lg">
-                    Nom d'utilisateur :{' '}
+                    Pseudo :{' '}
                   </label>
                   <input
                     onChange={handleInput}
@@ -251,9 +254,9 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
             </div>
 
             {/* warning message pops up when form is username is empty */}
-            {formNotComplete && (
+            {formNotComplete !== '' && (
               <p className="text-primaire text-center text-lg">
-                Veuillez saisir un nom d'utilisateur
+                {formNotComplete}
               </p>
             )}
 

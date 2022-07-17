@@ -14,8 +14,6 @@ function NavBar() {
     navigate('/');
   }
 
-  console.log('navbar');
-
   return (
     <>
       <div className="bg-primaire flex flex-col md:flex-row gap-y-3 justify-between items-center px-7 py-3">

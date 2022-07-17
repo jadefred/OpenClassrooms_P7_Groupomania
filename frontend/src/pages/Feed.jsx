@@ -59,8 +59,6 @@ function Feed() {
   }, [refresh]);
 
   console.count('Feed rendered :');
-  console.log('Feed ', data);
-  console.log('Feed - refresh ', refresh);
 
   //if authentication is failed, force user to log out
   useEffect(() => {

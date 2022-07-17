@@ -7,8 +7,6 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
   const { userId, token } = useLogStatus();
   const [liked, setLiked] = useState(false);
 
-  console.log('LikePost');
-
   //useEffect to get initial value to see whether user has already liked this post
   useEffect(() => {
     if (likeUserId.length > 0) {

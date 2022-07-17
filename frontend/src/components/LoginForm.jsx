@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
+import Cookies from 'js-cookie';
 
 function LoginForm() {
   const email = useRef();
@@ -45,10 +46,6 @@ function LoginForm() {
         }
 
         const data = await response.json();
-        //set access token as cookie once received data
-        const { token } = data;
-        //Cookies.set('accessToken', token);
-
         //verify token (function from utils), return false if it is not validate
         const tokenValid = await verifyToken();
         if (tokenValid === false) {
@@ -61,7 +58,7 @@ function LoginForm() {
           userId: data._id,
           username: data.username,
           auth: true,
-          token: token,
+          token: Cookies.get('accessToken'),
           admin: data.admin,
           avatarUrl: data.avatarUrl,
         };
@@ -73,7 +70,7 @@ function LoginForm() {
       } catch (err) {
         //catch block, console error and display error message
         console.log(err.message);
-        //setError(true)
+        setError('Une erreur apparu, veuillez réessayer plus tard');
         dispatchLogout();
       }
     }

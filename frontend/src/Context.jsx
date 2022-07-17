@@ -37,15 +37,6 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const flashMessageContext = (message) => {
-    dispatch({
-      type: 'FLASH_MESSAGE',
-      payload: {
-        message: message,
-      },
-    });
-  };
-
   const value = {
     userId: state.userId,
     username: state.username,
@@ -53,11 +44,9 @@ export const UserProvider = ({ children }) => {
     token: state.token,
     admin: state.admin,
     avatarUrl: state.avatarUrl,
-    message: state.message,
     dispatchLogin,
     dispatchLogout,
     persistLogin,
-    flashMessageContext,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

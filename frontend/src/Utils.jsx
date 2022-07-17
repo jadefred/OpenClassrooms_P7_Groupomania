@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 
 //to verify if access token is exist
 export async function verifyToken() {
+  //Backend has set token as cookie
   const accessToken = Cookies.get('accessToken');
 
   if (accessToken === null || accessToken === undefined) {
@@ -23,11 +24,6 @@ async function requestLogin(accessToken) {
       'content-type': 'application/json',
     },
   });
-  // const data = await response.json();
-  // //see if backend has sent a new access token, if so, set it as new access token
-  // if (data.token) {
-  //   Cookies.set('accessToken', data.token);
-  // }
 
   return response.ok;
 }

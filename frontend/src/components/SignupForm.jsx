@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-//import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 
@@ -162,10 +162,6 @@ function SignupForm() {
           }
 
           const data = await response.json();
-          //set access token as cookie once received data
-          const { token } = data;
-          //Cookies.set('accessToken', token);
-
           //verify token (function from utils), return false if it is not validate
           const tokenValid = await verifyToken();
           if (tokenValid === false) {
@@ -180,7 +176,7 @@ function SignupForm() {
             userId: data._id,
             username: data.username,
             auth: true,
-            token: token,
+            token: Cookies.get('accessToken'),
             admin: data.admin,
             avatarUrl: data.avatarUrl,
           };
