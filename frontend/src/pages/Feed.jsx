@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 //custom hooks
-//import useFetch from '../hooks/useFetch';
 import useFlashMessage from '../hooks/useFlashMessage';
 
 //components
@@ -18,6 +17,7 @@ import { MemoizedLikePost } from '../components/LikePost';
 import { MemoizedPostHeader } from '../components/PostHeader';
 import { MemoizedPostContent } from '../components/PostContent';
 import { MemoizedNumLikeComment } from '../components/NumLikeComment';
+import Loading from '../components/Loading.jsx';
 
 function Feed() {
   const [showComment, setShowComment] = useState({});
@@ -27,19 +27,14 @@ function Feed() {
   const [noPostMsg, setNoPostMsg] = useState(false);
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState(false);
-  // const { data, isLoaded, error, setRefresh, status } = useFetch(
-  //   'http://localhost:3000/api/posts'
-  // );
-
   const [data, setData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
   const [refresh, setRefresh] = useState(true);
 
+  //useEffect to fetch all data - re-fetch when refresh state is changed
   useEffect(() => {
-    console.log('useEffect is called');
-    //fetch all post data
     async function getAllData() {
       try {
         const response = await fetch('http://localhost:3000/api/posts', {
@@ -62,8 +57,6 @@ function Feed() {
 
     getAllData();
   }, [refresh]);
-
-  //change useFetch to async fetch and wrap it in useEffect to prevent too much rendering
 
   console.count('Feed rendered :');
   console.log('Feed ', data);
@@ -94,13 +87,6 @@ function Feed() {
     );
   }, []);
 
-  // //toggle modal when clicked modifer post button (useCallback to memorize function before pass it as props to child)
-  // const toggleModal = useCallback((id) => {
-  //   setModal((prev) =>
-  //     Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
-  //   );
-  // }, []);
-
   return (
     <>
       <MemoizedNavBar />
@@ -126,6 +112,8 @@ function Feed() {
             Aucun post... Vous voulez créer un post ?
           </p>
         )}
+
+        {!isLoaded && <Loading />}
 
         {isLoaded && !error && data && data.length > 0 && (
           <div className="w-full flex flex-col gap-y-10 text-tertiaire">

@@ -4,7 +4,6 @@ import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
 import loader from '../assets/loadingSpinner-gray.svg';
-//import useFetch from '../hooks/useFetch';
 
 function Comment({
   postId,
@@ -14,18 +13,12 @@ function Comment({
   setNewComment,
 }) {
   const { userId, token, admin } = useLogStatus();
-  // const { data, isLoaded, error, setRefresh } = useFetch(
-  //   `http://localhost:3000/api/posts/comments/${postId}`
-  // );
-
   const [data, setData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refresh, setRefresh] = useState(null);
 
-  console.count('Comment :');
-  console.log('Comment - data ', data);
-
+  //fetch comment data when comment is loaded and refresh state is changed
   useEffect(() => {
     async function getComment() {
       try {
@@ -60,6 +53,7 @@ function Comment({
     }
   }, [newComment, setRefresh, setNewComment]);
 
+  //delete comment function
   async function deleteComment(commentId, userId, postId) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
@@ -71,7 +65,7 @@ function Comment({
       body: JSON.stringify({ commentId, userId, postId }),
     });
 
-    //flash success message if res is ok, then reset state to make it disappear
+    //flash success message if res is ok, change refresh state in order to re-fetch data in both feed and comment components
     if (response.ok) {
       setFlashMessage('Vous avez supprimé un commentaire');
       setRefresh((prev) => !prev);
@@ -94,7 +88,7 @@ function Comment({
         </div>
       )}
 
-      {/* isLoaded is false */}
+      {/* animation when is still loading (isLoaded is false) */}
       {!isLoaded && (
         <div className="bg-gray-200 py-6 flex flex-col gap-y-4 rounded-b-xl">
           <img
