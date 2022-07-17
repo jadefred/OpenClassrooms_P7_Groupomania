@@ -37,6 +37,10 @@ export const UserProvider = ({ children }) => {
     });
   };
 
+  const changeUsername = (username) => {
+    dispatch({ type: 'CHANGE_USERNAME', payload: { username } });
+  };
+
   const value = {
     userId: state.userId,
     username: state.username,
@@ -47,6 +51,7 @@ export const UserProvider = ({ children }) => {
     dispatchLogin,
     dispatchLogout,
     persistLogin,
+    changeUsername,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

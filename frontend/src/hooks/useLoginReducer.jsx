@@ -44,6 +44,12 @@ const userReducer = (state, action) => {
         avatarUrl: payload.avatarUrl,
       };
 
+    case 'CHANGE_USERNAME':
+      return {
+        ...state,
+        username: payload.username,
+      };
+
     default:
       throw new Error(`No case for type ${type} found in shopReducer.`);
   }

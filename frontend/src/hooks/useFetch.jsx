@@ -10,8 +10,6 @@ function useFetch(url) {
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    console.log('useFetch ', refresh);
-
     if (refresh) {
       fetch(url, {
         method: 'GET',

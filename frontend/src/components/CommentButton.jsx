@@ -8,7 +8,6 @@ function CommentButton({
   setRefresh,
   setNewComment,
 }) {
-  console.count('comment button render :');
   const [modal, setModal] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);

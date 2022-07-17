@@ -10,7 +10,7 @@ import Loading from '../components/Loading.jsx';
 
 function UserProfile({ setFlashMessage, setDeleteAccount }) {
   const imageRef = useRef();
-  const { userId, token } = useLogStatus();
+  const { userId, token, changeUsername } = useLogStatus();
   const { data, isLoaded, error } = useFetch(
     `http://localhost:3000/api/user/${userId}`
   );
@@ -87,6 +87,9 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
       );
       return;
     }
+
+    //update context username - as newPost component will consume context username directly and might not fire fetch data
+    changeUsername(input.username);
 
     //create form data, append image when user added
     const formData = new FormData();
