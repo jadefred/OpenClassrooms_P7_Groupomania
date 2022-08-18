@@ -9,7 +9,7 @@ import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
 //pages - components
-import Home from './Home.jsx';
+import Home from './Home.tsx';
 import Feed from './Feed.jsx';
 import Profile from './Profile.jsx';
 import NotFound from '../components/NotFound';

@@ -7,7 +7,7 @@ import SignupForm from '../components/SignupForm';
 import logoOrange from '../assets/logo-orange.svg';
 
 function Home() {
-  const [guest, setGuest] = useState(false);
+  const [guest, setGuest] = useState<boolean>(false);
   return (
     <>
       <HomeNavBar guest={guest} setGuest={setGuest} />
