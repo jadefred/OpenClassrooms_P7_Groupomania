@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 
 //components
 import HomeNavBar from '../components/HomeNavBar';
@@ -6,7 +6,7 @@ import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
 import logoOrange from '../assets/logo-orange.svg';
 
-function Home() {
+const Home: FC = () => {
   const [guest, setGuest] = useState<boolean>(false);
   return (
     <>
