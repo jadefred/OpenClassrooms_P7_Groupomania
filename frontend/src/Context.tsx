@@ -1,13 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useReducer,
-  ReactNode,
-  Dispatch,
-} from 'react';
+import { createContext, useContext, useReducer, ReactNode } from 'react';
 import userReducer from './hooks/useLoginReducer';
 import { IUserContext, IPersistLogin } from './interfaces';
-import { UserActionKind, UserAction } from './hooks/useLoginReducer';
+import { UserActionKind } from './hooks/useLoginReducer';
 
 const initialState: IUserContext = {
   userId: '',
@@ -19,17 +13,23 @@ const initialState: IUserContext = {
 };
 
 type Action = {
-  initialState: IUserContext;
+  // initialState: IUserContext;
+  userId: IUserContext['userId'];
+  username: IUserContext['username'];
+  auth: IUserContext['auth'];
+  token: IUserContext['token'];
+  admin: IUserContext['admin'];
+  avatarUrl: IUserContext['avatarUrl'];
   dispatchLogin: (payload: IUserContext) => void;
-  dispatchLogout: (payload: IUserContext) => void;
+  dispatchLogout: () => void;
   persistLogin: (payload: IPersistLogin) => void;
   changeUsername: (username: string) => void;
 };
 
-interface IUserContextValue {
-  state: IUserContext;
-  dispatch: Action;
-}
+// interface IUserContextValue {
+//   state: IUserContext;
+//   dispatch: Action;
+// }
 
 //user information
 //const UserContext = createContext({ initialState });
@@ -106,13 +106,13 @@ export const UserProvider = ({ children }: IProps) => {
   };
 
   const value = {
-    initialState,
-    // userId: state.userId,
-    // username: state.username,
-    // auth: state.auth,
-    // token: state.token,
-    // admin: state.admin,
-    // avatarUrl: state.avatarUrl,
+    // initialState,
+    userId: state.userId,
+    username: state.username,
+    auth: state.auth,
+    token: state.token,
+    admin: state.admin,
+    avatarUrl: state.avatarUrl,
     dispatchLogin,
     dispatchLogout,
     persistLogin,

@@ -4,18 +4,9 @@ import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
-interface IUserInfo {
-  method: string;
-  credentials: string;
-  headers: {
-    'Content-Type': string;
-  };
-  body: string;
-}
-
 function LoginForm() {
-  const email = useRef<HTMLInputElement>();
-  const password = useRef<HTMLInputElement>();
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { dispatchLogin, dispatchLogout } = useLogStatus();
@@ -23,7 +14,7 @@ function LoginForm() {
   function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
 
-    let userInfo = {
+    let userInfo: RequestInit = {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -66,7 +57,7 @@ function LoginForm() {
           userId: data._id,
           username: data.username,
           auth: true,
-          token: Cookies.get('accessToken'),
+          token: Cookies.get('accessToken')!,
           admin: data.admin,
           avatarUrl: data.avatarUrl,
         };
@@ -77,7 +68,7 @@ function LoginForm() {
         navigate('/feed');
       } catch (err) {
         //catch block, console error and display error message
-        console.log(err.message);
+        console.log(err);
         setError('Une erreur apparu, veuillez réessayer plus tard');
         dispatchLogout();
       }
