@@ -5,7 +5,8 @@ import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 
 function SignupForm() {
-  const { dispatchLogin, dispatchLogout } = useLogStatus();
+  const { dispatchLogin } = useLogStatus();
+  const { dispatchLogout } = useLogStatus();
   const [usernameValidate, setUsernameValidate] = useState(false);
   const [emailValidated, setEmailValidated] = useState(false);
   const [pwValidated, setPwValidated] = useState(false);
