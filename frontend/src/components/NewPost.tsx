@@ -1,16 +1,21 @@
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, FC } from 'react';
 import '../styles/newPost.css';
 import useLogStatus from '../Context';
 
-function NewPost({ setFlashMessage, setRefresh }) {
-  const [modal, setModal] = useState(false);
-  const titleRef = useRef();
-  const contentRef = useRef();
-  const imageRef = useRef();
-  const [image, setImage] = useState();
-  const [preview, setPreview] = useState();
-  const [formNotComplete, setFormNotComplete] = useState(false);
-  const [btnDisable, setBtnDisable] = useState(true);
+interface IProps {
+  setFlashMessage: React.Dispatch<React.SetStateAction<string>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const NewPost: FC<IProps> = ({ setFlashMessage, setRefresh }) => {
+  const [modal, setModal] = useState<boolean>(false);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
+  const [formNotComplete, setFormNotComplete] = useState<boolean>(false);
+  const [btnDisable, setBtnDisable] = useState<boolean>(true);
   const { userId, username, token } = useLogStatus();
 
   function toggleModal() {
@@ -33,8 +38,8 @@ function NewPost({ setFlashMessage, setRefresh }) {
   //enable submit button when title is detected
   function handleRefChange() {
     if (
-      titleRef.current.value !== '' &&
-      (contentRef.current.value !== '' || imageRef.current.value !== '')
+      titleRef.current!.value !== '' &&
+      (contentRef.current!.value !== '' || imageRef.current!.value !== '')
     ) {
       setBtnDisable(false);
     } else {
@@ -43,34 +48,37 @@ function NewPost({ setFlashMessage, setRefresh }) {
   }
 
   //handle image input, check mime type before set to the state, set image local url as preview
-  function handleImage(e) {
-    const file = e.target.files[0];
-    const mimeType =
-      file.type === 'image/jpg' ||
-      file.type === 'image/jpeg' ||
-      file.type === 'image/png'
-        ? true
-        : false;
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files[0];
 
-    if (file && mimeType) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImage(null);
+      const mimeType =
+        file.type === 'image/jpg' ||
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png'
+          ? true
+          : false;
+
+      if (file && mimeType) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImage(null);
+      }
     }
   }
 
-  function createNewPost(e) {
+  function createNewPost(e: { preventDefault: () => void }) {
     e.preventDefault();
     //pop error message if title / body content is empty and return function
     if (
-      titleRef.current.value === '' ||
-      (titleRef.current.value !== '' &&
-        contentRef.current.value === '' &&
+      titleRef.current!.value === '' ||
+      (titleRef.current!.value !== '' &&
+        contentRef.current!.value === '' &&
         !image)
     ) {
       setFormNotComplete(true);
@@ -80,8 +88,8 @@ function NewPost({ setFlashMessage, setRefresh }) {
     //create form data, append image when user added
     const formData = new FormData();
     formData.append('userId', userId);
-    formData.append('title', titleRef.current.value);
-    formData.append('content', contentRef.current.value);
+    formData.append('title', titleRef.current!.value);
+    formData.append('content', contentRef.current!.value);
 
     //append image if it exists
     if (image) {
@@ -110,7 +118,7 @@ function NewPost({ setFlashMessage, setRefresh }) {
 
   function removeSelectedImg() {
     setImage(null);
-    imageRef.current.value = null;
+    imageRef.current!.value = '';
     handleRefChange();
   }
 
@@ -150,8 +158,8 @@ function NewPost({ setFlashMessage, setRefresh }) {
                   ref={contentRef}
                   onChange={handleRefChange}
                   name="content"
-                  cols="40"
-                  rows="3"
+                  cols={40}
+                  rows={3}
                 ></textarea>
               </div>
               <div className="formInputField">
@@ -170,7 +178,7 @@ function NewPost({ setFlashMessage, setRefresh }) {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    imageRef.current.click();
+                    imageRef.current!.click();
                   }}
                   className="NewPost--add-image-btn"
                 >
@@ -181,7 +189,7 @@ function NewPost({ setFlashMessage, setRefresh }) {
                 <div className="NewPost--file">
                   <img
                     className="NewPost--file__image"
-                    src={preview}
+                    src={typeof preview === 'string' ? preview : ''}
                     alt="Téléchargement"
                   />
                   <button
@@ -215,7 +223,7 @@ function NewPost({ setFlashMessage, setRefresh }) {
       )}
     </>
   );
-}
+};
 
 export default NewPost;
 export const MemoizedNewPost = memo(NewPost);

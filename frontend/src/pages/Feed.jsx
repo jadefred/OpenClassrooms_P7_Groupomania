@@ -9,7 +9,8 @@ import useFlashMessage from '../hooks/useFlashMessage';
 //components
 import { MemoizedNavBar } from '../components/NavBar';
 import Comment from '../components/Comment';
-import { MemoizedNewPost } from '../components/NewPost.jsx';
+import { MemoizedNewPost } from '../components/NewPost.tsx';
+
 import EditPost from '../components/EditPost.jsx';
 import FlashMessage from '../components/FlashMessage';
 import { MemoizedCommentButton } from '../components/CommentButton';
