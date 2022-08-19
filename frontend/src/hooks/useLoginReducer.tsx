@@ -9,7 +9,7 @@ export enum UserActionKind {
 }
 
 // An interface for our actions
-interface UserAction {
+export interface UserAction {
   type: UserActionKind;
   payload: IUserContext;
 }

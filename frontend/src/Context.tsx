@@ -1,7 +1,13 @@
-import { createContext, useContext, useReducer, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  Dispatch,
+} from 'react';
 import userReducer from './hooks/useLoginReducer';
 import { IUserContext, IPersistLogin } from './interfaces';
-import { UserActionKind } from './hooks/useLoginReducer';
+import { UserActionKind, UserAction } from './hooks/useLoginReducer';
 
 const initialState: IUserContext = {
   userId: '',
@@ -12,8 +18,36 @@ const initialState: IUserContext = {
   avatarUrl: '',
 };
 
+type Action = {
+  initialState: IUserContext;
+  dispatchLogin: (payload: IUserContext) => void;
+  dispatchLogout: (payload: IUserContext) => void;
+  persistLogin: (payload: IPersistLogin) => void;
+  changeUsername: (username: string) => void;
+};
+
+interface IUserContextValue {
+  state: IUserContext;
+  dispatch: Action;
+}
+
 //user information
-const UserContext = createContext({ initialState });
+//const UserContext = createContext({ initialState });
+const UserContext = createContext({} as Action);
+
+// const UserContext = createContext<IUserContextValue>({
+//   state: initialState,
+//   dispatch: (action) =>
+//     console.error(
+//       'Dispatched action outside of an AuthContext provider',
+//       action
+//     ),
+// });
+
+// const UserContext = createContext<[IUserContext, React.Dispatch<any>]>([
+//   initialState,
+//   () => {},
+// ]);
 
 interface IProps {
   children: ReactNode;
@@ -73,12 +107,12 @@ export const UserProvider = ({ children }: IProps) => {
 
   const value = {
     initialState,
-    userId: state.userId,
-    username: state.username,
-    auth: state.auth,
-    token: state.token,
-    admin: state.admin,
-    avatarUrl: state.avatarUrl,
+    // userId: state.userId,
+    // username: state.username,
+    // auth: state.auth,
+    // token: state.token,
+    // admin: state.admin,
+    // avatarUrl: state.avatarUrl,
     dispatchLogin,
     dispatchLogout,
     persistLogin,

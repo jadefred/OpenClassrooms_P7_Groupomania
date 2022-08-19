@@ -4,24 +4,32 @@ import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
+interface IUserInfo {
+  method: string;
+  credentials: string;
+  headers: {
+    'Content-Type': string;
+  };
+  body: string;
+}
+
 function LoginForm() {
-  const email = useRef();
-  const password = useRef();
-  const [error, setError] = useState('');
+  const email = useRef<HTMLInputElement>();
+  const password = useRef<HTMLInputElement>();
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { dispatchLogin, dispatchLogout } = useLogStatus();
 
-  function handleLogin(e) {
+  function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
 
-    //object for POST request
-    const userInfo = {
+    let userInfo = {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: email.current.value,
-        password: password.current.value,
+        email: email.current!.value,
+        password: password.current!.value,
       }),
     };
 
