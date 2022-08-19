@@ -1,18 +1,34 @@
-import { createContext, useContext, useReducer } from 'react';
-import userReducer, { initialState } from './hooks/useLoginReducer';
+import { createContext, useContext, useReducer, ReactNode } from 'react';
+import userReducer from './hooks/useLoginReducer';
+import { IUserContext, IPersistLogin } from './interfaces';
+import { UserActionKind } from './hooks/useLoginReducer';
+
+const initialState: IUserContext = {
+  userId: '',
+  username: '',
+  auth: false,
+  token: '',
+  admin: false,
+  avatarUrl: '',
+};
 
 //user information
 const UserContext = createContext({ initialState });
 
-export const UserProvider = ({ children }) => {
+interface IProps {
+  children: ReactNode;
+}
+
+export const UserProvider = ({ children }: IProps) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
-  const dispatchLogin = (loginInfo) => {
+  const dispatchLogin = (loginInfo: IUserContext) => {
     dispatch({
-      type: 'LOGIN',
+      type: UserActionKind.LOGIN,
       payload: {
         userId: loginInfo.userId,
         username: loginInfo.username,
+        auth: true,
         token: loginInfo.token,
         admin: loginInfo.admin,
         avatarUrl: loginInfo.avatarUrl,
@@ -21,15 +37,26 @@ export const UserProvider = ({ children }) => {
   };
 
   const dispatchLogout = () => {
-    dispatch({ type: 'LOGOUT' });
+    dispatch({
+      type: UserActionKind.LOGOUT,
+      payload: {
+        userId: '',
+        username: '',
+        auth: false,
+        token: '',
+        admin: false,
+        avatarUrl: '',
+      },
+    });
   };
 
-  const persistLogin = (userInfo) => {
+  const persistLogin = (userInfo: IPersistLogin) => {
     dispatch({
-      type: 'PERSIST_LOGIN',
+      type: UserActionKind.PERSIST_LOGIN,
       payload: {
         userId: userInfo.user_id,
         username: userInfo.username,
+        auth: true,
         token: userInfo.token,
         admin: userInfo.admin,
         avatarUrl: userInfo.avatarUrl,
@@ -37,11 +64,15 @@ export const UserProvider = ({ children }) => {
     });
   };
 
-  const changeUsername = (username) => {
-    dispatch({ type: 'CHANGE_USERNAME', payload: { username } });
+  const changeUsername = (username: string) => {
+    dispatch({
+      type: UserActionKind.CHANGE_USERNAME,
+      payload: { ...state, username },
+    });
   };
 
   const value = {
+    initialState,
     userId: state.userId,
     username: state.username,
     auth: state.auth,

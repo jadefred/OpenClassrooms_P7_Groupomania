@@ -15,4 +15,13 @@ type IUserContext = {
   avatarUrl: string;
 };
 
-export type { IDispatchLogin, IUserContext };
+type IPersistLogin = {
+  user_id: string;
+  username: string;
+  auth: boolean;
+  token: string;
+  admin: boolean;
+  avatarUrl: string;
+};
+
+export type { IDispatchLogin, IUserContext, IPersistLogin };

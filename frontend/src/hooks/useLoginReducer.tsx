@@ -1,21 +1,12 @@
 import { IUserContext } from '../interfaces';
 
 // An enum with all the types of actions to use in our reducer
-enum UserActionKind {
+export enum UserActionKind {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   PERSIST_LOGIN = 'PERSIST_LOGIN',
   CHANGE_USERNAME = 'CHANGE_USERNAME',
 }
-
-export const initialState: IUserContext = {
-  userId: '',
-  username: '',
-  auth: false,
-  token: '',
-  admin: false,
-  avatarUrl: '',
-};
 
 // An interface for our actions
 interface UserAction {
