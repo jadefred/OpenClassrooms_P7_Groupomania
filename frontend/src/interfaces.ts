@@ -24,4 +24,19 @@ type IPersistLogin = {
   avatarUrl: string;
 };
 
-export type { IDispatchLogin, IUserContext, IPersistLogin };
+interface IDataFeed {
+  avatar_url: string;
+  commentid: string[];
+  content: string;
+  created_at: string;
+  imageurl: string | null;
+  likes: number;
+  likeuserid: string[];
+  post_id: string;
+  title: string;
+  totalcomment: number;
+  user_id: string;
+  username: string;
+}
+
+export type { IDispatchLogin, IUserContext, IPersistLogin, IDataFeed };

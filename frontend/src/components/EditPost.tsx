@@ -1,27 +1,39 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, FC } from 'react';
 import useLogStatus from '../Context';
+import { IDataFeed } from '../interfaces';
 
-function EditPost({
+interface IProps {
+  modal: {};
+  setModal: React.Dispatch<React.SetStateAction<{}>>;
+  post: IDataFeed;
+  setFlashMessage: React.Dispatch<React.SetStateAction<string>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const EditPost: FC<IProps> = ({
   modal,
   setModal,
   post,
   setFlashMessage,
   setRefresh,
-  refresh,
-}) {
-  console.log('EditPost - refresh : ', refresh);
-
-  const [image, setImage] = useState();
-  const [input, setInput] = useState({
+}) => {
+  const [image, setImage] = useState<File | null>();
+  const [input, setInput] = useState<{
+    title: string;
+    content: string;
+    imageUrl: string | null;
+  }>({
     title: post.title,
     content: post.content,
     imageUrl: post.imageurl,
   });
-  const [preview, setPreview] = useState(input.imageUrl);
-  const [formNotComplete, setFormNotComplete] = useState(false);
-  const [btnDisable, setBtnDisable] = useState(true);
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(
+    input.imageUrl
+  );
+  const [formNotComplete, setFormNotComplete] = useState<boolean>(false);
+  const [btnDisable, setBtnDisable] = useState<boolean>(true);
   const { userId, token } = useLogStatus();
-  const imageRef = useRef();
+  const imageRef = useRef<HTMLInputElement>(null);
 
   //close modal after clicked overlay
   function closeModal() {
@@ -37,35 +49,37 @@ function EditPost({
   }
 
   //handle title and content input change
-  function handleEditPost(e) {
+  function handleEditPost(e: { target: { name: any; value: any } }) {
     setInput({ ...input, [e.target.name]: e.target.value });
     setBtnDisable(false);
   }
 
   //handle image input, check mime type before set to the state
-  function handleImage(e) {
-    setBtnDisable(false);
-    const file = e.target.files[0];
-    const mimeType =
-      file.type === 'image/jpg' ||
-      file.type === 'image/jpeg' ||
-      file.type === 'image/png'
-        ? true
-        : false;
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      setBtnDisable(false);
+      const file = e.target.files[0];
+      const mimeType =
+        file.type === 'image/jpg' ||
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png'
+          ? true
+          : false;
 
-    if (file && mimeType) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImage(null);
+      if (file && mimeType) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImage(null);
+      }
     }
   }
 
-  function handleModifyPost(e) {
+  function handleModifyPost(e: { preventDefault: () => void }) {
     e.preventDefault();
     //pop error message if title / body content is empty and return function
     if (
@@ -87,8 +101,7 @@ function EditPost({
     if (image) {
       formData.append('image', image);
     } else {
-      formData.append('image', input.imageUrl);
-      console.log(input.imageUrl);
+      if (input.imageUrl) formData.append('image', input.imageUrl);
     }
 
     async function modifyPost() {
@@ -173,8 +186,8 @@ function EditPost({
                 <textarea
                   onChange={handleEditPost}
                   name="content"
-                  cols="40"
-                  rows="3"
+                  cols={40}
+                  rows={3}
                   value={input.content}
                 ></textarea>
               </div>
@@ -191,7 +204,7 @@ function EditPost({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    imageRef.current.click();
+                    imageRef.current!.click();
                   }}
                   className="NewPost--add-image-btn"
                 >
@@ -201,7 +214,7 @@ function EditPost({
               {preview && (
                 <div className="NewPost--file">
                   <img
-                    src={preview}
+                    src={typeof preview === 'string' ? preview : ''}
                     alt="téléchargement"
                     className="NewPost--file__image"
                   />
@@ -244,6 +257,6 @@ function EditPost({
       )}
     </>
   );
-}
+};
 
 export default EditPost;

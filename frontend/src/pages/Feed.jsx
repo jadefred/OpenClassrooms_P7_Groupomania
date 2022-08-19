@@ -11,7 +11,7 @@ import { MemoizedNavBar } from '../components/NavBar';
 import Comment from '../components/Comment';
 import { MemoizedNewPost } from '../components/NewPost.tsx';
 
-import EditPost from '../components/EditPost.jsx';
+import EditPost from '../components/EditPost.tsx';
 import FlashMessage from '../components/FlashMessage';
 import { MemoizedCommentButton } from '../components/CommentButton';
 import { MemoizedLikePost } from '../components/LikePost';
@@ -46,6 +46,7 @@ function Feed() {
           },
         });
         const fetchData = await response.json();
+        console.log(fetchData);
 
         setData(fetchData);
         setStatus(response.status);
@@ -143,7 +144,6 @@ function Feed() {
                           setModal={setModal}
                           setFlashMessage={setFlashMessage}
                           setRefresh={setRefresh}
-                          refresh={refresh}
                         />
                       )}
                     </div>
