@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, FC } from 'react';
 import { useNavigate } from 'react-router';
 import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
-function LoginForm() {
+const LoginForm: FC = () => {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string>('');
@@ -108,6 +108,6 @@ function LoginForm() {
       </div>
     </>
   );
-}
+};
 
 export default LoginForm;

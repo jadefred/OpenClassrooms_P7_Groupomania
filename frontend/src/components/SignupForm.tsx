@@ -1,29 +1,28 @@
-import React, { useState } from 'react';
+import { useState, FC } from 'react';
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import { verifyToken } from '../Utils.jsx';
 import useLogStatus from '../Context';
 
-function SignupForm() {
-  const { dispatchLogin } = useLogStatus();
-  const { dispatchLogout } = useLogStatus();
-  const [usernameValidate, setUsernameValidate] = useState(false);
-  const [emailValidated, setEmailValidated] = useState(false);
-  const [pwValidated, setPwValidated] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [error, setError] = useState('');
+const SignupForm: FC = () => {
+  const { dispatchLogin, dispatchLogout } = useLogStatus();
+  const [usernameValidate, setUsernameValidate] = useState<boolean>(false);
+  const [emailValidated, setEmailValidated] = useState<boolean>(false);
+  const [pwValidated, setPwValidated] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
   //password error message
-  const [eightChar, setEightChar] = useState(false);
-  const [uppercase, setUppercase] = useState(false);
-  const [lowercase, setLowercase] = useState(false);
-  const [number, setNumber] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(true);
+  const [eightChar, setEightChar] = useState<boolean>(false);
+  const [uppercase, setUppercase] = useState<boolean>(false);
+  const [lowercase, setLowercase] = useState<boolean>(false);
+  const [number, setNumber] = useState<boolean>(false);
+  const [confirmPassword, setConfirmPassword] = useState<boolean>(true);
 
   //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 30 characters
-  function verifyUsername(e) {
-    const regexUsername = /[\w]{3,30}$/;
+  function verifyUsername(e: { target: { value: string } }) {
+    const regexUsername: RegExp = /[\w]{3,30}$/;
     if (regexUsername.test(e.target.value)) {
       setUsernameValidate(true);
     } else {
@@ -31,8 +30,9 @@ function SignupForm() {
     }
   }
 
-  function verifyEmail(e) {
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  function verifyEmail(e: { target: { value: string } }) {
+    const emailPattern: RegExp =
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (emailPattern.test(e.target.value)) {
       setEmailValidated(true);
     } else {
@@ -40,9 +40,9 @@ function SignupForm() {
     }
   }
 
-  function verifyPassword(e) {
+  function verifyPassword(e: { target: { value: string } }) {
     //password must contain 8 characters
-    const regexLength = /.{8,}/;
+    const regexLength: RegExp = /.{8,}/;
     if (regexLength.test(e.target.value)) {
       setEightChar(true);
     } else {
@@ -50,7 +50,7 @@ function SignupForm() {
     }
 
     //password contains 1 uppercase
-    const regexUppercase = /[A-Z]/;
+    const regexUppercase: RegExp = /[A-Z]/;
     if (regexUppercase.test(e.target.value)) {
       setUppercase(true);
     } else {
@@ -58,7 +58,7 @@ function SignupForm() {
     }
 
     //password contains 1 lowercase
-    const regexLowercase = /[a-z]/;
+    const regexLowercase: RegExp = /[a-z]/;
     if (regexLowercase.test(e.target.value)) {
       setLowercase(true);
     } else {
@@ -66,7 +66,7 @@ function SignupForm() {
     }
 
     //password contains 1 number
-    const regexNumber = /[\d]/;
+    const regexNumber: RegExp = /[\d]/;
     if (regexNumber.test(e.target.value)) {
       setNumber(true);
     } else {
@@ -74,7 +74,8 @@ function SignupForm() {
     }
 
     //Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
-    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const regexPassword: RegExp =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (regexPassword.test(e.target.value)) {
       setPwValidated(true);
     } else {
@@ -82,29 +83,41 @@ function SignupForm() {
     }
   }
 
-  function handleSignup(e) {
+  function handleSignup(e: React.SyntheticEvent) {
     e.preventDefault();
+
+    const target = e.target as typeof e.target & {
+      signupPassword: { value: string };
+      signupConfirmPassword: { value: string };
+      signupUsername: { value: string };
+      signupEmail: { value: string };
+    };
+
+    const signupEmail = target.signupEmail.value;
+    const signupPassword = target.signupPassword.value;
+    const signupConfirmPassword = target.signupConfirmPassword.value;
+    const signupUsername = target.signupUsername.value;
 
     //Check if all input values are good
     if (
       usernameValidate &&
       emailValidated &&
       pwValidated &&
-      e.target.signupPassword.value === e.target.signupConfirmPassword.value
+      signupPassword === signupConfirmPassword
     ) {
       //Signup info for POST - signup
       const signupForm = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: e.target.signupUsername.value,
-          email: e.target.signupEmail.value,
-          password: e.target.signupPassword.value,
+          username: signupUsername,
+          email: signupEmail,
+          password: signupPassword,
         }),
       };
 
       //async POST request to server to create account
-      async function signup() {
+      const signup = async () => {
         try {
           const response = await fetch(
             'http://localhost:3000/api/auth/signup',
@@ -130,21 +143,21 @@ function SignupForm() {
         } catch (err) {
           console.log(err);
         }
-      }
+      };
 
       //Object for login POST request
-      const loginForm = {
+      const loginForm: RequestInit = {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: e.target.signupEmail.value,
-          password: e.target.signupPassword.value,
+          email: signupEmail,
+          password: signupPassword,
         }),
       };
 
       //async POST data to server
-      async function login() {
+      const login = async () => {
         try {
           const response = await fetch(
             'http://localhost:3000/api/auth/login',
@@ -177,7 +190,7 @@ function SignupForm() {
             userId: data._id,
             username: data.username,
             auth: true,
-            token: Cookies.get('accessToken'),
+            token: Cookies.get('accessToken')!,
             admin: data.admin,
             avatarUrl: data.avatarUrl,
           };
@@ -191,7 +204,7 @@ function SignupForm() {
           console.log(err);
           dispatchLogout();
         }
-      }
+      };
 
       signup();
       setErrorMessage(false);
@@ -199,9 +212,7 @@ function SignupForm() {
     //pop error message if password is not matched
     //setErrorMessage set as true, the input field which are not correct will prompt error message accordingly
     else {
-      if (
-        e.target.signupPassword.value !== e.target.signupConfirmPassword.value
-      ) {
+      if (signupPassword !== signupConfirmPassword) {
         setConfirmPassword(false);
       } else {
         setConfirmPassword(true);
@@ -303,6 +314,6 @@ function SignupForm() {
       </div>
     </>
   );
-}
+};
 
 export default SignupForm;
