@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import useFlashMessage from '../hooks/useFlashMessage'
 
 //components
-import NavBar from '../components/NavBar.jsx'
+import NavBar from '../components/NavBar'
 import UserProfile from '../components/UserProfile.jsx'
 import FlashMessage from '../components/FlashMessage'
 import DeleteUser from '../components/DeleteUser.jsx'

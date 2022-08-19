@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import NavBar from '../components/NavBar.jsx';
+import NavBar from '../components/NavBar';
 import notFound from '../assets/notFound.svg';
 
 function NotFound() {

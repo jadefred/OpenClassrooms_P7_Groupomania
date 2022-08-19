@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import useFlashMessage from '../hooks/useFlashMessage';
 
 //components
-import { MemoizedNavBar } from '../components/NavBar.jsx';
-import Comment from '../components/Comment.jsx';
+import { MemoizedNavBar } from '../components/NavBar';
+import Comment from '../components/Comment';
 import { MemoizedNewPost } from '../components/NewPost.jsx';
 import EditPost from '../components/EditPost.jsx';
 import FlashMessage from '../components/FlashMessage';

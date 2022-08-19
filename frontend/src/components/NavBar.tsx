@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
+import { memo, FC } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import useLogStatus from '../Context';
 import whiteLogo from '../assets/logo-white.svg';
 
-function NavBar() {
+const NavBar: FC = () => {
   const { dispatchLogout } = useLogStatus();
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function NavBar() {
       </div>
     </>
   );
-}
+};
 
 export default NavBar;
 export const MemoizedNavBar = memo(NavBar);

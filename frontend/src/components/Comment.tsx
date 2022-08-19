@@ -1,22 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import Cookies from 'js-cookie';
 import useLogStatus from '../Context';
 import deleteBtn from '../assets/deleteBtn.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
 import loader from '../assets/loadingSpinner-gray.svg';
 
-function Comment({
+interface IProps {
+  postId: string;
+  setFlashMessage: React.Dispatch<React.SetStateAction<string>>;
+  feedSetRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  newComment: boolean;
+  setNewComment: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface ICommentDate {
+  avatar_url: string;
+  comment_id: string;
+  commentbody: string;
+  created_at: string;
+  imageurl: string | null;
+  post_id: string;
+  user_id: string;
+  username: string;
+}
+
+const Comment: FC<IProps> = ({
   postId,
   setFlashMessage,
   feedSetRefresh,
   newComment,
   setNewComment,
-}) {
+}) => {
   const { userId, token, admin } = useLogStatus();
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
-  const [refresh, setRefresh] = useState(null);
+  const [data, setData] = useState<ICommentDate[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   //fetch comment data when comment is loaded and refresh state is changed
   useEffect(() => {
@@ -33,7 +52,7 @@ function Comment({
           }
         );
         const fetchData = await response.json();
-
+        console.log(fetchData);
         setData(fetchData);
         setIsLoaded(true);
       } catch (error) {
@@ -54,7 +73,11 @@ function Comment({
   }, [newComment, setRefresh, setNewComment]);
 
   //delete comment function
-  async function deleteComment(commentId, userId, postId) {
+  async function deleteComment(
+    commentId: string,
+    userId: string,
+    postId: string
+  ) {
     const response = await fetch('http://localhost:3000/api/posts/comments', {
       method: 'DELETE',
       credentials: 'include',
@@ -165,6 +188,6 @@ function Comment({
       )}
     </>
   );
-}
+};
 
 export default Comment;
