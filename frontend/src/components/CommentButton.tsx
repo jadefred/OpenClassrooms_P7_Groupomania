@@ -1,20 +1,27 @@
-import React, { useState, useRef, memo } from 'react';
+import { useState, useRef, memo, FC } from 'react';
 import useLogStatus from '../Context';
 import commentIcon from '../assets/commentBtn.svg';
 
-function CommentButton({
+interface IProps {
+  post_id: string;
+  setFlashMessage: React.Dispatch<React.SetStateAction<string>>;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewComment: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CommentButton: FC<IProps> = ({
   post_id,
   setFlashMessage,
   setRefresh,
   setNewComment,
-}) {
-  const [modal, setModal] = useState(false);
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const imageRef = useRef();
-  const contentRef = useRef();
-  const [formNotComplete, setFormNotComplete] = useState(false);
-  const [btnDisable, setBtnDisable] = useState(true);
+}) => {
+  const [modal, setModal] = useState<boolean>(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const [formNotComplete, setFormNotComplete] = useState<boolean>(false);
+  const [btnDisable, setBtnDisable] = useState<boolean>(true);
   const { userId, token } = useLogStatus();
 
   function toggleModal() {
@@ -36,7 +43,7 @@ function CommentButton({
 
   //enable submit button when content is detected
   function handleInput() {
-    if (contentRef.current.value !== '') {
+    if (contentRef.current!.value !== '') {
       setBtnDisable(false);
     } else {
       setBtnDisable(true);
@@ -44,39 +51,41 @@ function CommentButton({
   }
 
   //handle image input, check mime type before set to the state, and render preview image, enable submit if image is there
-  function handleImage(e) {
-    setBtnDisable(false);
-    const file = e.target.files[0];
-    const mimeType =
-      file.type === 'image/jpg' ||
-      file.type === 'image/jpeg' ||
-      file.type === 'image/png'
-        ? true
-        : false;
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      setBtnDisable(false);
+      const file = e.target.files[0];
+      const mimeType =
+        file.type === 'image/jpg' ||
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png'
+          ? true
+          : false;
 
-    if (file && mimeType) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImage(null);
+      if (file && mimeType) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImage(null);
+      }
     }
   }
 
   function removeSelectedImg() {
     setImage(null);
-    imageRef.current.value = null;
+    imageRef.current!.value = '';
   }
 
   //fetch comment to endpoint
-  function creatComment(e) {
+  function creatComment(e: { preventDefault: () => void }) {
     e.preventDefault();
 
     //comment has to contain either content or image
-    if (contentRef.current.value === '' && !image) {
+    if (contentRef.current!.value === '' && !image) {
       setFormNotComplete(true);
       return;
     }
@@ -89,8 +98,8 @@ function CommentButton({
     if (image) {
       formData.append('image', image);
     }
-    if (contentRef.current.value !== '') {
-      formData.append('content', contentRef.current.value);
+    if (contentRef.current!.value !== '') {
+      formData.append('content', contentRef.current!.value);
     }
 
     async function createComment() {
@@ -144,8 +153,8 @@ function CommentButton({
                   onChange={handleInput}
                   ref={contentRef}
                   name="content"
-                  cols="40"
-                  rows="3"
+                  cols={40}
+                  rows={3}
                 ></textarea>
               </div>
               <div className="formInputField">
@@ -161,7 +170,7 @@ function CommentButton({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    imageRef.current.click();
+                    imageRef.current!.click();
                   }}
                   className="NewPost--add-image-btn"
                 >
@@ -171,7 +180,7 @@ function CommentButton({
               {image && (
                 <div className="NewPost--file">
                   <img
-                    src={preview}
+                    src={typeof preview === 'string' ? preview : ''}
                     alt="téléchargement"
                     className="NewPost--file__image"
                   />
@@ -206,7 +215,7 @@ function CommentButton({
       )}
     </>
   );
-}
+};
 
 export default CommentButton;
 export const MemoizedCommentButton = memo(CommentButton);
