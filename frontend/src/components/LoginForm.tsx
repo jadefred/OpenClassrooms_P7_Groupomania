@@ -69,7 +69,8 @@ const LoginForm: FC = () => {
       } catch (err) {
         //catch block, console error and display error message
         console.log(err);
-        setError('Une erreur apparu, veuillez réessayer plus tard');
+        if (error === '')
+          setError('Une erreur apparu, veuillez réessayer plus tard');
         dispatchLogout();
       }
     }
