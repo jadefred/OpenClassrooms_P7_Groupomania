@@ -1,11 +1,17 @@
-import React, { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, FC } from 'react';
 import useLogStatus from '../Context';
 import thumbOrange from '../assets/thumbUp-orange.svg';
 import thumbgray from '../assets/thumbUp-gray.svg';
 
-function LikePost({ likeUserId, post_id, setRefresh }) {
+interface IProps {
+  likeUserId: string[];
+  post_id: string;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const LikePost: FC<IProps> = ({ likeUserId, post_id, setRefresh }) => {
   const { userId, token } = useLogStatus();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState<boolean>(false);
 
   //useEffect to get initial value to see whether user has already liked this post
   useEffect(() => {
@@ -14,7 +20,11 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
     }
   }, [likeUserId, userId]);
 
-  async function likePost(userId, likeUserId, post_id) {
+  async function likePost(
+    userId: string,
+    likeUserId: string[],
+    post_id: string
+  ) {
     //use some to determine if the user has already liked this post
     //send 0 if he already liked -> retrieve the like
     //send 1 if he hasn't react to the post
@@ -63,7 +73,7 @@ function LikePost({ likeUserId, post_id, setRefresh }) {
       </button>
     </>
   );
-}
+};
 
 export default LikePost;
 export const MemoizedLikePost = memo(LikePost);

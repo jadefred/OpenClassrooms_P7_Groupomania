@@ -13,8 +13,8 @@ import Comment from '../components/Comment';
 import { MemoizedNewPost } from '../components/NewPost';
 import EditPost from '../components/EditPost';
 import FlashMessage from '../components/FlashMessage';
-
 import { MemoizedCommentButton } from '../components/CommentButton';
+
 import { MemoizedLikePost } from '../components/LikePost';
 import { MemoizedPostHeader } from '../components/PostHeader';
 import { MemoizedPostContent } from '../components/PostContent';
