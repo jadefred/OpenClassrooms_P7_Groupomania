@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { IDataFeed } from '../interfaces';
+import { IDataFeed, IUnknownObjectKey } from '../interfaces';
 
 //custom hooks
 import useFlashMessage from '../hooks/useFlashMessage';
@@ -14,17 +14,14 @@ import { MemoizedNewPost } from '../components/NewPost';
 import EditPost from '../components/EditPost';
 import FlashMessage from '../components/FlashMessage';
 import { MemoizedCommentButton } from '../components/CommentButton';
-
 import { MemoizedLikePost } from '../components/LikePost';
+
 import { MemoizedPostHeader } from '../components/PostHeader';
 import { MemoizedPostContent } from '../components/PostContent';
 import { MemoizedNumLikeComment } from '../components/NumLikeComment';
 import Loading from '../components/Loading.jsx';
 
-//Index Signature - for showComment and modal useState
-type IUnknownObjectKey = {
-  [key: string]: boolean;
-};
+
 
 function Feed() {
   const [showComment, setShowComment] = useState<IUnknownObjectKey>({});

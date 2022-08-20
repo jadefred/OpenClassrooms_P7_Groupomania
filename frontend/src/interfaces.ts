@@ -39,4 +39,9 @@ interface IDataFeed {
   username: string;
 }
 
-export type { IDispatchLogin, IUserContext, IPersistLogin, IDataFeed };
+//Index Signature - for showComment and modal useState in feed
+type IUnknownObjectKey = {
+  [key: string]: boolean;
+};
+
+export type { IDispatchLogin, IUserContext, IPersistLogin, IDataFeed, IUnknownObjectKey };
