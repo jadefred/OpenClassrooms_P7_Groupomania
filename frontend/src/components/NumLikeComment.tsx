@@ -1,21 +1,33 @@
-import React, { memo, useEffect } from 'react';
+import { memo, useEffect, FC } from 'react';
+import { IUnknownObjectKey } from '../interfaces';
 
-function NumLikeComment({
+interface IProps {
+  likes: number;
+  totalcomment: number;
+  post_id: string;
+  toggleComment: (id: string) => void;
+  setShowComment: React.Dispatch<React.SetStateAction<IUnknownObjectKey>>;
+  showComment: IUnknownObjectKey;
+}
+
+const NumLikeComment: FC<IProps> = ({
   likes,
   totalcomment,
   post_id,
   toggleComment,
   setShowComment,
   showComment,
-}) {
+}) => {
   //if total comment is 0 and in the object of showComment is containing the post related value
   //trigger useEffect to remove the post related value from showComment object
+  //to prevent the problem showComment object saved the obsolete key (to display comment or not)
+  //and cause the problem of toggle the comment when new comment is added
   useEffect(() => {
     if (totalcomment === 0 && showComment[post_id]) {
       setShowComment((prev) => {
         const newObj = Object.keys(prev)
           .filter((i) => i !== post_id)
-          .reduce((i, key) => {
+          .reduce((i: IUnknownObjectKey, key) => {
             i[key] = prev[key];
             return i;
           }, {});
@@ -44,7 +56,7 @@ function NumLikeComment({
       )}
     </div>
   );
-}
+};
 
 export default NumLikeComment;
 export const MemoizedNumLikeComment = memo(NumLikeComment);

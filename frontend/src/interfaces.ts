@@ -44,4 +44,10 @@ type IUnknownObjectKey = {
   [key: string]: boolean;
 };
 
-export type { IDispatchLogin, IUserContext, IPersistLogin, IDataFeed, IUnknownObjectKey };
+export type {
+  IDispatchLogin,
+  IUserContext,
+  IPersistLogin,
+  IDataFeed,
+  IUnknownObjectKey,
+};

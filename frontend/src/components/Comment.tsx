@@ -52,7 +52,6 @@ const Comment: FC<IProps> = ({
           }
         );
         const fetchData = await response.json();
-        console.log(fetchData);
         setData(fetchData);
         setIsLoaded(true);
       } catch (error) {

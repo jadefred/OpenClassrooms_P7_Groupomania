@@ -17,6 +17,7 @@ const EditPost: FC<IProps> = ({
   setFlashMessage,
   setRefresh,
 }) => {
+  console.log('editpost');
   const [image, setImage] = useState<File | null>();
   const [input, setInput] = useState<{
     title: string;
@@ -84,7 +85,8 @@ const EditPost: FC<IProps> = ({
     //pop error message if title / body content is empty and return function
     if (
       input.title === '' ||
-      (input.imageUrl === '' && input.content === '' && !image)
+      (input.imageUrl === '' && input.content === '' && !image) ||
+      (input.imageUrl === null && input.content === '' && !image)
     ) {
       setFormNotComplete(true);
       return;
@@ -188,7 +190,7 @@ const EditPost: FC<IProps> = ({
                   name="content"
                   cols={40}
                   rows={3}
-                  value={input.content}
+                  value={input.content ? input.content : ''}
                 ></textarea>
               </div>
               <div className="formInputField">

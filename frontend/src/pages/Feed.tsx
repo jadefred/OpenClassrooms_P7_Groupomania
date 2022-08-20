@@ -15,13 +15,11 @@ import EditPost from '../components/EditPost';
 import FlashMessage from '../components/FlashMessage';
 import { MemoizedCommentButton } from '../components/CommentButton';
 import { MemoizedLikePost } from '../components/LikePost';
-
 import { MemoizedPostHeader } from '../components/PostHeader';
 import { MemoizedPostContent } from '../components/PostContent';
+
 import { MemoizedNumLikeComment } from '../components/NumLikeComment';
 import Loading from '../components/Loading.jsx';
-
-
 
 function Feed() {
   const [showComment, setShowComment] = useState<IUnknownObjectKey>({});
@@ -61,8 +59,6 @@ function Feed() {
 
     getAllData();
   }, [refresh]);
-
-  console.count('Feed rendered :');
 
   //if authentication is failed, force user to log out
   useEffect(() => {
