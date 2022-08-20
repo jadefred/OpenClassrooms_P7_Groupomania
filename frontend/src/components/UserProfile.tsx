@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import { Link } from 'react-router-dom';
 import defaultProfil from '../assets/defaultProfil.svg';
 import { asyncFetch } from '../Utils';
@@ -6,18 +6,28 @@ import { asyncFetch } from '../Utils';
 //custom hooks
 import useFetch from '../hooks/useFetch';
 import useLogStatus from '../Context';
-import Loading from '../components/Loading.jsx';
+import Loading from '../components/Loading';
 
-function UserProfile({ setFlashMessage, setDeleteAccount }) {
-  const imageRef = useRef();
+interface IProps {
+  setFlashMessage: React.Dispatch<React.SetStateAction<string>>;
+  setDeleteAccount: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
+  const imageRef = useRef<HTMLInputElement>(null);
   const { userId, token, changeUsername } = useLogStatus();
   const { data, isLoaded, error } = useFetch(
     `http://localhost:3000/api/user/${userId}`
   );
-  const [image, setImage] = useState(null);
-  const [formNotComplete, setFormNotComplete] = useState('');
-  const [btnDisable, setBtnDisable] = useState(true);
-  const [input, setInput] = useState({
+  const [image, setImage] = useState<File | null>(null);
+  const [formNotComplete, setFormNotComplete] = useState<string>('');
+  const [btnDisable, setBtnDisable] = useState<boolean>(true);
+  const [input, setInput] = useState<{
+    username: string;
+    email: string;
+    avatarUrl: string | ArrayBuffer | null;
+    admin: boolean;
+  }>({
     username: '',
     email: '',
     avatarUrl: '',
@@ -37,7 +47,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
   }, [data]);
 
   //update username state
-  const handleInput = (e) => {
+  const handleInput = (e: { target: { name: string; value: string } }) => {
     setInput({ ...input, [e.target.name]: e.target.value });
     setBtnDisable(false);
     //remove warning message when user entred something in the field of username
@@ -47,25 +57,27 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
   };
 
   //handle image input, check mime type before set to the state
-  function handleImage(e) {
-    const file = e.target.files[0];
-    const mimeType =
-      file.type === 'image/jpg' ||
-      file.type === 'image/jpeg' ||
-      file.type === 'image/png'
-        ? true
-        : false;
+  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const mimeType =
+        file.type === 'image/jpg' ||
+        file.type === 'image/jpeg' ||
+        file.type === 'image/png'
+          ? true
+          : false;
 
-    if (file && mimeType) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setInput({ ...input, avatarUrl: reader.result });
-      };
-      reader.readAsDataURL(file);
-      setBtnDisable(false);
-    } else {
-      setImage(null);
+      if (file && mimeType) {
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInput({ ...input, avatarUrl: reader.result });
+        };
+        reader.readAsDataURL(file);
+        setBtnDisable(false);
+      } else {
+        setImage(null);
+      }
     }
   }
 
@@ -76,7 +88,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     setBtnDisable(false);
   }
 
-  function handleUserAccount(e) {
+  function handleUserAccount(e: { preventDefault: () => void }) {
     e.preventDefault();
 
     //pop error message if title / body content is empty and return function
@@ -100,7 +112,8 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
     if (image) {
       formData.append('image', image);
     } else {
-      formData.append('image', input.avatarUrl);
+      if (typeof input.avatarUrl === 'string')
+        formData.append('image', input.avatarUrl);
     }
 
     //async function from Utils to do POST request
@@ -176,7 +189,9 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
                 {/* if avatarUrl is not empty, display image. Display default svg profile picture when avatarUrl is empty */}
                 {input.avatarUrl ? (
                   <img
-                    src={input.avatarUrl}
+                    src={
+                      typeof input.avatarUrl === 'string' ? input.avatarUrl : ''
+                    }
                     alt="l'avatar d'utilisateur"
                     className="w-40 h-40 object-cover rounded-full"
                   />
@@ -198,7 +213,7 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    imageRef.current.click();
+                    imageRef.current!.click();
                   }}
                   className="bg-tertiaire text-white px-2 py-1 rounded-md w-40"
                 >
@@ -295,6 +310,6 @@ function UserProfile({ setFlashMessage, setDeleteAccount }) {
       )}
     </>
   );
-}
+};
 
 export default UserProfile;

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
-function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
+function useFetch(url: string) {
+  const [data, setData] = useState<any>(null);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [error, setError] = useState<any>(null);
   const token = Cookies.get('accessToken');
-  const [refresh, setRefresh] = useState(true);
-  const [status, setStatus] = useState('');
+  const [refresh, setRefresh] = useState<boolean>(true);
+  const [status, setStatus] = useState<number>();
 
   useEffect(() => {
     if (refresh) {
@@ -27,7 +27,10 @@ function useFetch(url) {
         .catch((err) => {
           setError(err);
         })
-        .finally(setIsLoaded(true), setRefresh(false));
+        .finally(() => {
+          setIsLoaded(true);
+          setRefresh(false);
+        });
     }
   }, [url, refresh, token]);
 

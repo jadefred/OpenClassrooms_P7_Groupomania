@@ -17,9 +17,8 @@ import { MemoizedCommentButton } from '../components/CommentButton';
 import { MemoizedLikePost } from '../components/LikePost';
 import { MemoizedPostHeader } from '../components/PostHeader';
 import { MemoizedPostContent } from '../components/PostContent';
-
 import { MemoizedNumLikeComment } from '../components/NumLikeComment';
-import Loading from '../components/Loading.jsx';
+import Loading from '../components/Loading';
 
 function Feed() {
   const [showComment, setShowComment] = useState<IUnknownObjectKey>({});
