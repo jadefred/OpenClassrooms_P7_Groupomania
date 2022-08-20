@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { IDataFeed } from '../interfaces';
 
 //custom hooks
 import useFlashMessage from '../hooks/useFlashMessage';
@@ -9,9 +10,9 @@ import useFlashMessage from '../hooks/useFlashMessage';
 //components
 import { MemoizedNavBar } from '../components/NavBar';
 import Comment from '../components/Comment';
-import { MemoizedNewPost } from '../components/NewPost.tsx';
+import { MemoizedNewPost } from '../components/NewPost';
+import EditPost from '../components/EditPost';
 
-import EditPost from '../components/EditPost.tsx';
 import FlashMessage from '../components/FlashMessage';
 import { MemoizedCommentButton } from '../components/CommentButton';
 import { MemoizedLikePost } from '../components/LikePost';
@@ -20,19 +21,24 @@ import { MemoizedPostContent } from '../components/PostContent';
 import { MemoizedNumLikeComment } from '../components/NumLikeComment';
 import Loading from '../components/Loading.jsx';
 
+//Index Signature - for showComment and modal useState
+type IUnknownObjectKey = {
+  [key: string]: boolean;
+};
+
 function Feed() {
-  const [showComment, setShowComment] = useState({});
-  const [modal, setModal] = useState({});
+  const [showComment, setShowComment] = useState<IUnknownObjectKey>({});
+  const [modal, setModal] = useState<IUnknownObjectKey>({});
   const { flashMessage, setFlashMessage } = useFlashMessage();
   const { userId, admin, dispatchLogout } = useLogStatus();
-  const [noPostMsg, setNoPostMsg] = useState(false);
+  const [noPostMsg, setNoPostMsg] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [newComment, setNewComment] = useState(false);
-  const [data, setData] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
-  const [status, setStatus] = useState(null);
-  const [refresh, setRefresh] = useState(true);
+  const [newComment, setNewComment] = useState<boolean>(false);
+  const [data, setData] = useState<IDataFeed[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [status, setStatus] = useState<number | null>(null);
+  const [refresh, setRefresh] = useState<boolean>(true);
 
   //useEffect to fetch all data - re-fetch when refresh state is changed
   useEffect(() => {
@@ -46,7 +52,6 @@ function Feed() {
           },
         });
         const fetchData = await response.json();
-        console.log(fetchData);
 
         setData(fetchData);
         setStatus(response.status);
@@ -81,7 +86,7 @@ function Feed() {
   }, [data]);
 
   //toggle comment block, map id key to target clicked element
-  const toggleComment = useCallback((id) => {
+  const toggleComment = useCallback((id: string) => {
     setShowComment((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
     );
@@ -187,7 +192,6 @@ function Feed() {
                     {/* Pass comment id to the component for fetch the comment data */}
                     {showComment[post.post_id] ? (
                       <Comment
-                        commentId={post.commentid}
                         postId={post.post_id}
                         setFlashMessage={setFlashMessage}
                         feedSetRefresh={setRefresh}
