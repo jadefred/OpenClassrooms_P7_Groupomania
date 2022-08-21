@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import useLogStatus from '../Context';
 
-function DeleteUser() {
+const DeleteUser: FC = () => {
   const { dispatchLogout } = useLogStatus();
   const navigate = useNavigate();
 
@@ -24,6 +24,6 @@ function DeleteUser() {
       </div>
     </>
   );
-}
+};
 
 export default DeleteUser;
