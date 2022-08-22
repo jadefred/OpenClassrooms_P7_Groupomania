@@ -26,28 +26,7 @@ type Action = {
   changeUsername: (username: string) => void;
 };
 
-// interface IUserContextValue {
-//   state: IUserContext;
-//   dispatch: Action;
-// }
-
-//user information
-//const UserContext = createContext({ initialState });
 const UserContext = createContext({} as Action);
-
-// const UserContext = createContext<IUserContextValue>({
-//   state: initialState,
-//   dispatch: (action) =>
-//     console.error(
-//       'Dispatched action outside of an AuthContext provider',
-//       action
-//     ),
-// });
-
-// const UserContext = createContext<[IUserContext, React.Dispatch<any>]>([
-//   initialState,
-//   () => {},
-// ]);
 
 interface IProps {
   children: ReactNode;

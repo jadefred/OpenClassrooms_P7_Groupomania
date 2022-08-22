@@ -1,7 +1,7 @@
 import { useState, FC } from 'react';
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
-import { verifyToken } from '../Utils.jsx';
+import { verifyToken } from '../Utils';
 import useLogStatus from '../Context';
 
 const SignupForm: FC = () => {

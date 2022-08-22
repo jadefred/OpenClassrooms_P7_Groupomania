@@ -17,7 +17,6 @@ const EditPost: FC<IProps> = ({
   setFlashMessage,
   setRefresh,
 }) => {
-  console.log('editpost');
   const [image, setImage] = useState<File | null>();
   const [input, setInput] = useState<{
     title: string;

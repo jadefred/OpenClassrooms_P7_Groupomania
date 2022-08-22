@@ -147,7 +147,8 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
         `http://localhost:3000/api/user/${userId}`,
         'DELETE',
         token,
-        JSON.stringify({ userId: userId })
+        JSON.stringify({ userId: userId }),
+        false
       )
         .then((response) => {
           if (!response.ok) {

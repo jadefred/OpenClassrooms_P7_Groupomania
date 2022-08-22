@@ -1,6 +1,6 @@
 import { useRef, useState, FC } from 'react';
 import { useNavigate } from 'react-router';
-import { verifyToken } from '../Utils.jsx';
+import { verifyToken } from '../Utils';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
