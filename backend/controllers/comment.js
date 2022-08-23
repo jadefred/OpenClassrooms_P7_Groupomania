@@ -57,7 +57,7 @@ exports.getAllComments = async (req, res) => {
   try {
     const post_id = req.params.id;
     const relatedComments = await pool.query(
-      'SELECT (comments).*, users.username, users.avatar_url FROM comments JOIN users ON comments.user_id = users.user_id WHERE comments.post_id = $1',
+      'SELECT (comments).*, users.username, users.avatar_url FROM comments JOIN users ON comments.user_id = users.user_id WHERE comments.post_id = $1 ORDER BY comments.created_at DESC',
       [post_id]
     );
 
