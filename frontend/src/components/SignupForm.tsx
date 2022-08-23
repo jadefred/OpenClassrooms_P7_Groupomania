@@ -23,7 +23,7 @@ const SignupForm: FC = () => {
   //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 30 characters
   function verifyUsername(e: { target: { value: string } }) {
     const regexUsername: RegExp = /[\w]{3,30}$/;
-    if (regexUsername.test(e.target.value)) {
+    if (regexUsername.test(e.target.value) || e.target.value.length <= 30) {
       setUsernameValidate(true);
     } else {
       setUsernameValidate(false);
@@ -142,6 +142,7 @@ const SignupForm: FC = () => {
           login();
         } catch (err) {
           console.log(err);
+          
         }
       };
 

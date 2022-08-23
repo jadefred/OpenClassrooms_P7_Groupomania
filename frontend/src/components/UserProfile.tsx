@@ -93,7 +93,11 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
 
     //pop error message if title / body content is empty and return function
     const regexUsername = /[\w]{3,30}$/;
-    if (input.username === '' || !regexUsername.test(input.username)) {
+    if (
+      input.username === '' ||
+      !regexUsername.test(input.username) ||
+      input.username.length > 30
+    ) {
       setFormNotComplete(
         'Le pseudo doit contenir entre 3 et 30 caractères. Utiliser uniquement des lettres minuscules, majuscules, nombres et tiret du bas'
       );
@@ -142,7 +146,7 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
   //pop up confirm block, setDeleteAccount as true, page will render DeleteUser component
   //if fetch not success, it will stay in same page and prompt flash error message in the same component
   function deleteUser() {
-    if (window.confirm('Vous êtes sûr de supprimer ce post ?')) {
+    if (window.confirm('Vous êtes sûr de supprimer votre compte ?')) {
       asyncFetch(
         `http://localhost:3000/api/user/${userId}`,
         'DELETE',
