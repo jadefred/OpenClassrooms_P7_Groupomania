@@ -22,8 +22,12 @@ const SignupForm: FC = () => {
 
   //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 30 characters
   function verifyUsername(e: { target: { value: string } }) {
-    const regexUsername: RegExp = /[\w]{3,30}$/;
-    if (regexUsername.test(e.target.value) || e.target.value.length <= 30) {
+    const regexUsername: RegExp = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
+    if (
+      regexUsername.test(e.target.value) &&
+      e.target.value.length <= 30 &&
+      e.target.value.length >= 3
+    ) {
       setUsernameValidate(true);
     } else {
       setUsernameValidate(false);
@@ -126,7 +130,12 @@ const SignupForm: FC = () => {
           //response not okay, throw error and display error message
           if (!response.ok) {
             if (response.status === 401) {
-              setError("Le format d'adresse est incorrecte.");
+              console.log(response);
+              if ((await response.text()) === '{"error":"Username invalide"}') {
+                setError('Le format de nom utilisateur est incorrecte.');
+                throw Error('This username is invalid');
+              }
+              setError("Le format d'adresse mail est incorrecte.");
               throw Error('This email is invalid');
             }
             if (response.status === 409) {
@@ -142,7 +151,6 @@ const SignupForm: FC = () => {
           login();
         } catch (err) {
           console.log(err);
-          
         }
       };
 

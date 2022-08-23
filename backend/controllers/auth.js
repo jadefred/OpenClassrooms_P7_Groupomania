@@ -9,12 +9,22 @@ exports.signup = async (req, res) => {
   try {
     console.log('try to signup');
     const { username, email, password } = req.body;
+
+    //check username validity
+    const userNameRegex = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
+    if (
+      username.length < 3 ||
+      username.length > 30 ||
+      !userNameRegex.test(username)
+    ) {
+      return res.status(401).json({ error: 'Username invalide' });
+    }
+
     //check email validity
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(email)) {
-      console.log(email);
-      console.log('email not valid');
-      res.status(401).json({ error: 'Email is invalid' });
+      console.log('wrong email');
+      return res.status(401).json({ error: 'Email is invalid' });
     }
 
     //hash password before save to DB

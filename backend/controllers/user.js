@@ -23,7 +23,6 @@ exports.getUserInfo = async (req, res) => {
 exports.modifyUserInfo = async (req, res) => {
   try {
     const user_id = req.params.id;
-
     let avatarUrl = null;
     const { username, image } = req.body;
 
