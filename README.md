@@ -23,7 +23,7 @@ Dans cette application, l'utilisateur peut créer, modifier et supprimer son com
 
 <ins>Frontend</ins>
 
-- **React** pour créer l'interface du site et le management de state
+- **React** et **TypeScript** pour créer l'interface du site et le management de state
 
 <ins>Base de données</ins>
 

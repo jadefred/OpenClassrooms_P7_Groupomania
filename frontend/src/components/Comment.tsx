@@ -147,7 +147,7 @@ const Comment: FC<IProps> = ({
                         className="w-8 h-8 object-cover rounded-full"
                       />
                     )}
-                    <p className="font-semibold">{i.username}</p>
+                    <p className="font-semibold truncate">{i.username}</p>
                   </div>
 
                   {/* body of comment and delete button */}

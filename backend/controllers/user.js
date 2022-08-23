@@ -26,6 +26,16 @@ exports.modifyUserInfo = async (req, res) => {
     let avatarUrl = null;
     const { username, image } = req.body;
 
+    //check username validity
+    const userNameRegex = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
+    if (
+      username.length < 3 ||
+      username.length > 30 ||
+      !userNameRegex.test(username)
+    ) {
+      return res.status(401).json({ error: 'Username invalide' });
+    }
+
     //query to get saved imageUrl
     const avatarInDB = await pool.query(
       'SELECT avatar_url FROM users WHERE user_id = $1',

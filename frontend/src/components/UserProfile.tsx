@@ -92,11 +92,12 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
     e.preventDefault();
 
     //pop error message if title / body content is empty and return function
-    const regexUsername = /[\w]{3,30}$/;
+    const regexUsername = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
     if (
       input.username === '' ||
       !regexUsername.test(input.username) ||
-      input.username.length > 30
+      input.username.length > 30 ||
+      input.username.length < 3
     ) {
       setFormNotComplete(
         'Le pseudo doit contenir entre 3 et 30 caractères. Utiliser uniquement des lettres minuscules, majuscules, nombres et tiret du bas'
@@ -139,7 +140,7 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
       })
       .catch((err) => {
         console.log(err);
-        setFlashMessage('Un problème a apparu..');
+        setFlashMessage('Un problème a apparu.. Veuillez réessayer');
       });
   }
 
