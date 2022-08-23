@@ -1,17 +1,24 @@
-export const initialState = {
-  userId: '',
-  username: '',
-  auth: false,
-  token: '',
-  admin: false,
-  avatarUrl: '',
-};
+import { IUserContext } from '../interfaces';
 
-const userReducer = (state, action) => {
+// An enum with all the types of actions to use in our reducer
+export enum UserActionKind {
+  LOGIN = 'LOGIN',
+  LOGOUT = 'LOGOUT',
+  PERSIST_LOGIN = 'PERSIST_LOGIN',
+  CHANGE_USERNAME = 'CHANGE_USERNAME',
+}
+
+// An interface for our actions
+export interface UserAction {
+  type: UserActionKind;
+  payload: IUserContext;
+}
+
+const userReducer = (state: IUserContext, action: UserAction) => {
   const { type, payload } = action;
 
   switch (type) {
-    case 'LOGIN':
+    case UserActionKind.LOGIN:
       return {
         ...state,
         userId: payload.userId,
@@ -22,7 +29,7 @@ const userReducer = (state, action) => {
         avatarUrl: payload.avatarUrl,
       };
 
-    case 'LOGOUT':
+    case UserActionKind.LOGOUT:
       return {
         ...state,
         userId: '',
@@ -33,7 +40,7 @@ const userReducer = (state, action) => {
         avatarUrl: '',
       };
 
-    case 'PERSIST_LOGIN':
+    case UserActionKind.PERSIST_LOGIN:
       return {
         ...state,
         userId: payload.userId,
@@ -44,7 +51,7 @@ const userReducer = (state, action) => {
         avatarUrl: payload.avatarUrl,
       };
 
-    case 'CHANGE_USERNAME':
+    case UserActionKind.CHANGE_USERNAME:
       return {
         ...state,
         username: payload.username,

@@ -1,7 +1,7 @@
-import React from 'react'
-import loader from '../assets/loadingSpinner.svg'
+import { FC } from 'react';
+import loader from '../assets/loadingSpinner.svg';
 
-function Loading() {
+const Loading: FC = () => {
   return (
     <>
       <img
@@ -10,7 +10,7 @@ function Loading() {
         className="animate-spin w-32 h-32 mx-auto mt-44"
       />
     </>
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;

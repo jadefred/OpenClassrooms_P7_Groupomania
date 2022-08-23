@@ -1,6 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 
-function HomeNavBar({ guest, setGuest }) {
+interface IProps {
+  guest: boolean;
+  setGuest: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const HomeNavBar: FC<IProps> = ({ guest, setGuest }) => {
   return (
     <>
       <div className="flex md:justify-end justify-center gap-x-10 px-7 py-4 border-b-2 border-lightPrimary bg-lightRed ">
@@ -8,7 +13,6 @@ function HomeNavBar({ guest, setGuest }) {
           onClick={() => {
             setGuest(true);
           }}
-          //className="text-white font-semibold bg-lightPrimary hover:bg-primaire px-4 py-2 rounded-md shadow-md shadow-gray-300"
           className={`text-white font-semibold px-4 py-2 rounded-md shadow-md shadow-gray-300 ${
             guest
               ? 'bg-tertiaire hover:bg-darkGray'
@@ -32,6 +36,6 @@ function HomeNavBar({ guest, setGuest }) {
       </div>
     </>
   );
-}
+};
 
 export default HomeNavBar;

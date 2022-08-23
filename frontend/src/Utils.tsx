@@ -15,7 +15,7 @@ export async function verifyToken() {
 }
 
 //set access token as headers and fetch to endpoint to verify it
-async function requestLogin(accessToken) {
+async function requestLogin(accessToken: string) {
   const response = await fetch('http://localhost:3000/api/auth/access', {
     method: 'POST',
     credentials: 'include',
@@ -29,9 +29,9 @@ async function requestLogin(accessToken) {
 }
 
 //async function for POST, POST, DELETE request
-export async function asyncFetch(url, method, token, body, file) {
+export async function asyncFetch(url: string, method: string, token: string, body: BodyInit, file: boolean) {
   //headers content will depended on image, if it is true no json header will be added, vice versa
-  const header = file
+  const header: HeadersInit = file
     ? {
         authorization: `Bearer ${token}`,
       }

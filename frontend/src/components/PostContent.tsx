@@ -1,7 +1,12 @@
-import React, { memo } from 'react';
+import { memo, FC } from 'react';
 
-function PostContent({ title, content, imageurl }) {
+interface IProps {
+  title: string;
+  content: string;
+  imageurl: string | null;
+}
 
+const PostContent: FC<IProps> = ({ title, content, imageurl }) => {
   return (
     <div className="flex flex-col gap-y-4 w-9/12 mx-auto my-3">
       <h2 className="font-bold text-2xl">{title}</h2>
@@ -12,7 +17,7 @@ function PostContent({ title, content, imageurl }) {
       )}
     </div>
   );
-}
+};
 
 export default PostContent;
 export const MemoizedPostContent = memo(PostContent);

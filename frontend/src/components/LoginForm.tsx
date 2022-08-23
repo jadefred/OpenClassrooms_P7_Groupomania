@@ -1,27 +1,26 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, FC } from 'react';
 import { useNavigate } from 'react-router';
-import { verifyToken } from '../Utils.jsx';
+import { verifyToken } from '../Utils';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
 
-function LoginForm() {
-  const email = useRef();
-  const password = useRef();
-  const [error, setError] = useState('');
+const LoginForm: FC = () => {
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { dispatchLogin, dispatchLogout } = useLogStatus();
 
-  function handleLogin(e) {
+  function handleLogin(e: { preventDefault: () => void }) {
     e.preventDefault();
 
-    //object for POST request
-    const userInfo = {
+    let userInfo: RequestInit = {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: email.current.value,
-        password: password.current.value,
+        email: email.current!.value,
+        password: password.current!.value,
       }),
     };
 
@@ -58,7 +57,7 @@ function LoginForm() {
           userId: data._id,
           username: data.username,
           auth: true,
-          token: Cookies.get('accessToken'),
+          token: Cookies.get('accessToken')!,
           admin: data.admin,
           avatarUrl: data.avatarUrl,
         };
@@ -69,8 +68,9 @@ function LoginForm() {
         navigate('/feed');
       } catch (err) {
         //catch block, console error and display error message
-        console.log(err.message);
-        setError('Une erreur apparu, veuillez réessayer plus tard');
+        console.log(err);
+        if (error === '')
+          setError('Une erreur apparu, veuillez réessayer plus tard');
         dispatchLogout();
       }
     }
@@ -109,6 +109,6 @@ function LoginForm() {
       </div>
     </>
   );
-}
+};
 
 export default LoginForm;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,14 +7,15 @@ import {
 } from 'react-router-dom';
 import useLogStatus from '../Context';
 import Cookies from 'js-cookie';
+import { IPersistLogin } from '../interfaces';
 
 //pages - components
-import Home from './Home.jsx';
-import Feed from './Feed.jsx';
-import Profile from './Profile.jsx';
+import Home from './Home';
+import Feed from './Feed';
+import Profile from './Profile';
 import NotFound from '../components/NotFound';
 
-function App() {
+const App: FC = () => {
   const { auth, persistLogin } = useLogStatus();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ function App() {
           authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
       });
-      const data = await response.json();
+      const data: IPersistLogin = await response.json();
       return data;
     }
 
@@ -51,6 +52,6 @@ function App() {
       </Router>
     </>
   );
-}
+};
 
 export default App;

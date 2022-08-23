@@ -10,11 +10,11 @@ import { UserProvider } from './Context';
 //   worker.start()
 // }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+let root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  //<React.StrictMode>
-  <UserProvider>
-    <App />
-  </UserProvider>
-  //</React.StrictMode>
+  <React.StrictMode>
+    <UserProvider>
+      <App />
+    </UserProvider>
+  </React.StrictMode>
 );

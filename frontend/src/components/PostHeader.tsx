@@ -1,8 +1,19 @@
-import React, { memo } from 'react';
+import { memo, FC } from 'react';
 import editPostLogo from '../assets/editPost.svg';
 import defaultProfil from '../assets/defaultProfil.svg';
+import { IUnknownObjectKey } from '../interfaces';
 
-function PostHeader({
+interface IProps {
+  avatar_url: string;
+  username: string;
+  user_id: string;
+  userId: string;
+  admin: boolean;
+  post_id: string;
+  setModal: React.Dispatch<React.SetStateAction<IUnknownObjectKey>>;
+}
+
+const PostHeader: FC<IProps> = ({
   avatar_url,
   username,
   user_id,
@@ -10,9 +21,9 @@ function PostHeader({
   admin,
   post_id,
   setModal,
-}) {
+}) => {
   //toggle modal when clicked modifer post button
-  const toggleModal = (id) => {
+  const toggleModal = (id: string) => {
     setModal((prev) =>
       Boolean(!prev[id]) ? { ...prev, [id]: true } : { ...prev, [id]: false }
     );
@@ -44,7 +55,7 @@ function PostHeader({
       )}
     </div>
   );
-}
+};
 
 export default PostHeader;
 

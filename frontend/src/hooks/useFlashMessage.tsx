@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const useFlashMessage = () => {
-  const [flashMessage, setFlashMessage] = useState('');
+  const [flashMessage, setFlashMessage] = useState<string>('');
 
   //when flashMessage is set, trigger timeout function and clear message
   useEffect(() => {

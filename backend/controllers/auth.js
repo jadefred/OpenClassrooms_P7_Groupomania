@@ -7,11 +7,13 @@ dotenv.config();
 
 exports.signup = async (req, res) => {
   try {
+    console.log('try to signup');
     const { username, email, password } = req.body;
-
     //check email validity
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(email)) {
+      console.log(email);
+      console.log('email not valid');
       res.status(401).json({ error: 'Email is invalid' });
     }
 
@@ -37,7 +39,6 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     //search user by email, return email and hashed password, if no matching email is found, throw error
     const user = await pool.query(
       'SELECT user_id, username, admin, avatar_url, pw_hashed FROM users WHERE email=$1',

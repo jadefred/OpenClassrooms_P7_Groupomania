@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, FC } from 'react';
 
 //components
 import HomeNavBar from '../components/HomeNavBar';
@@ -6,8 +6,8 @@ import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
 import logoOrange from '../assets/logo-orange.svg';
 
-function Home() {
-  const [guest, setGuest] = useState(false);
+const Home: FC = () => {
+  const [guest, setGuest] = useState<boolean>(false);
   return (
     <>
       <HomeNavBar guest={guest} setGuest={setGuest} />
@@ -28,6 +28,6 @@ function Home() {
       </div>
     </>
   );
-}
+};
 
 export default Home;
