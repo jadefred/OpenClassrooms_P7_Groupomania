@@ -169,6 +169,17 @@ exports.deleteUser = async (req, res) => {
       }
     }
 
+    //delete user profile picture if any
+    const avatarInDB = await pool.query(
+      'SELECT avatar_url FROM users WHERE user_id = $1',
+      [userId]
+    );
+
+    //If imageUrl in DB is not null, call function to delete old image
+    if (avatarInDB.rows[0].avatar_url) {
+      deleteImage(avatarInDB.rows[0].avatar_url.split('/').pop());
+    }
+
     //delete user account
     await pool.query('DELETE FROM users WHERE user_id = $1 RETURNING *', [
       userId,
