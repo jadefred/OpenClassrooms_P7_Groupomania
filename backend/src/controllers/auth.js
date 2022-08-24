@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const pool = require('../database/database.js');
+const pool = require('../../database/database');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();

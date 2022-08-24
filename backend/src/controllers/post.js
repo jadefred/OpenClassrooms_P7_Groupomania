@@ -1,4 +1,4 @@
-const pool = require('../database/database.js');
+const pool = require('../../database/database');
 const fs = require('fs');
 
 exports.getAllPosts = async (req, res) => {

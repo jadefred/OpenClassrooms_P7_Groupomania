@@ -3,10 +3,10 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 const path = require('path');
-const authRoutes = require('./routes/auth');
-const postRoutes = require('./routes/post.js');
-const commentRoutes = require('./routes/comment.js');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./src/routes/auth');
+const postRoutes = require('./src/routes/post.js');
+const commentRoutes = require('./src/routes/comment.js');
+const userRoutes = require('./src/routes/user');
 const cookieParser = require('cookie-parser');
 
 //CORS setting
