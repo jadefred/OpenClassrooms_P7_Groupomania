@@ -1,6 +1,5 @@
 import express from 'express';
 const router = express.Router();
-//const auth = require('../middlewares/authentication');
 
 //controller
 import userCtrl from '../controllers/auth';
