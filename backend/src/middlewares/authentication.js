@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const pool = require('../../database/database');
+const pool = require('../database/database');
 dotenv.config();
 
 const accessTokenSecretKey = process.env.ACCESS_TOKEN;
