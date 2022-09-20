@@ -44,4 +44,4 @@ const multerExport = multer({
   fileFilter: fileFilter,
 }).single('image');
 
-export = multerExport;
+export default multerExport;

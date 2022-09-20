@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_1 = __importDefault(require("../database/database"));
@@ -68,4 +69,4 @@ const authFunction = (req, res, next) => {
         res.status(403).json({ error: 'Authentication failed' });
     }
 };
-module.exports = authFunction;
+exports.default = authFunction;

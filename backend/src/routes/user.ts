@@ -12,4 +12,4 @@ router.put('/:id', auth, multer, userCtrl.modifyUserInfo);
 router.delete('/:id', auth, userCtrl.deleteUser);
 
 //module.exports = router;
-export = router;
+export default router;

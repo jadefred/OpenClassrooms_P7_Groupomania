@@ -17,4 +17,4 @@ router.delete('/', auth, postCtrl.deletePost);
 router.post('/like', postCtrl.likePost);
 
 //module.exports = router;
-export = router;
+export default router;

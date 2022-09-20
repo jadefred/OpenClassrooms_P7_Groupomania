@@ -14,4 +14,4 @@ router.post('/access', userCtrl.auth);
 
 //module.exports = router;
 
-export = router;
+export default router;

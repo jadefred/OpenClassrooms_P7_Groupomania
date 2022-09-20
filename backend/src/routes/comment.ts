@@ -12,4 +12,4 @@ router.get('/comments/:id', auth, commentCtrl.getAllComments);
 router.delete('/comments', auth, commentCtrl.deleteComment);
 
 //module.exports = router;
-export = router;
+export default router;

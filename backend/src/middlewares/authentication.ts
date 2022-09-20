@@ -69,4 +69,4 @@ const authFunction = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export = authFunction;
+export default authFunction;

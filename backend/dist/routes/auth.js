@@ -2,6 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 //controller
@@ -12,4 +13,5 @@ const passwordValidator_1 = __importDefault(require("../middlewares/passwordVali
 router.post('/signup', usernameValidate_1.default, passwordValidator_1.default, auth_1.default.signup);
 router.post('/login', auth_1.default.login);
 router.post('/access', auth_1.default.auth);
-module.exports = router;
+//module.exports = router;
+exports.default = router;

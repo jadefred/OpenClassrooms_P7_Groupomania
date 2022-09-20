@@ -1,7 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //middleware to check username, throw error when username is empty or violated the requirement
 //username can containe only uppercase, lowercase letter, number and underscore, between 3 & 30 characters
-module.exports = (req, res, next) => {
+const usernameValidator = (req, res, next) => {
     try {
         const { username } = req.body;
         const regexUsername = /[\w]{3,30}$/;
@@ -11,6 +12,12 @@ module.exports = (req, res, next) => {
         next();
     }
     catch (error) {
-        res.status(401).json({ error });
+        let message;
+        if (error instanceof Error)
+            message = error.message;
+        else
+            message = String(error);
+        res.status(401).json({ message });
     }
 };
+exports.default = usernameValidator;

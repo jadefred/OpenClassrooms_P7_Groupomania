@@ -1,4 +1,5 @@
-const passwordValidator = require('password-validator');
+import passwordValidator from 'password-validator';
+import { Request, Response, NextFunction } from 'express';
 
 const passwordSchema = new passwordValidator();
 
@@ -20,14 +21,17 @@ passwordSchema
   .not()
   .oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
-module.exports = (req, res, next) => {
-  if (passwordSchema.validate(req.body.password)) {
+const validatePassword = (req: Request, res: Response, next: NextFunction) => {
+  const password: string = req.body.password;
+  if (passwordSchema.validate(password)) {
     next();
   } else {
     res.status(405).json({
       error:
         'The password is not strong enough, missing ' +
-        passwordSchema.validate(req.body.password, { list: true }),
+        passwordSchema.validate(password, { list: true }),
     });
   }
 };
+
+export default validatePassword;
