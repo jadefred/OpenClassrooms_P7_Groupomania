@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const multer = require('../middlewares/multer-config');
-const auth = require('../middlewares/authentication');
+import multer from '../middlewares/multer-config';
+import auth from '../middlewares/authentication';
 
 //controller
-const postCtrl = require('../controllers/post.js');
+import postCtrl from '../controllers/post';
 
 //routes
 //CRUD posts
@@ -16,4 +16,5 @@ router.delete('/', auth, postCtrl.deletePost);
 //like
 router.post('/like', postCtrl.likePost);
 
-module.exports = router;
+//module.exports = router;
+export = router;
