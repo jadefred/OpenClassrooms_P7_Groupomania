@@ -13,13 +13,10 @@ interface IJwtPayload {
 
 const authFunction = (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('token function');
     const token = req.headers['authorization']?.split(' ')[1];
     if (token) {
       const decodedJWT = jwt.decode(token) as IJwtPayload;
-      console.log('decodedJWT', decodedJWT);
       const decodedUserId = decodedJWT.userId;
-      console.log('decodedUserID', decodedUserId);
 
       if (!token || token === 'undefined') {
         return res
@@ -27,7 +24,7 @@ const authFunction = (req: Request, res: Response, next: NextFunction) => {
           .json({ error: 'No authentication token is found' });
       }
 
-      jwt.verify(token, accessTokenSecretKey, (err, user) => {
+      jwt.verify(token, accessTokenSecretKey, (err) => {
         if (err) {
           valdidateRefreshToken(decodedUserId);
         } else {

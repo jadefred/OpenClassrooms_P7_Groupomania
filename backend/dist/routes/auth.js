@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-//const auth = require('../middlewares/authentication');
 //controller
 const auth_1 = __importDefault(require("../controllers/auth"));
 //middlewares

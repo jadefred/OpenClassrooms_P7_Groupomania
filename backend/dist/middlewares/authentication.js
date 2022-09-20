@@ -21,7 +21,6 @@ const authFunction = (req, res, next) => {
     var _a;
     try {
         const token = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
-        //const decodedUserId = jwt.decode(token)?.userId;
         if (token) {
             const decodedJWT = jsonwebtoken_1.default.decode(token);
             const decodedUserId = decodedJWT.userId;
@@ -30,7 +29,7 @@ const authFunction = (req, res, next) => {
                     .status(401)
                     .json({ error: 'No authentication token is found' });
             }
-            jsonwebtoken_1.default.verify(token, accessTokenSecretKey, (err, user) => {
+            jsonwebtoken_1.default.verify(token, accessTokenSecretKey, (err) => {
                 if (err) {
                     valdidateRefreshToken(decodedUserId);
                 }
