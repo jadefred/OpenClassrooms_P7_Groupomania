@@ -4,12 +4,12 @@ import { multerExport } from '../middlewares/multer-config';
 import auth from '../middlewares/authentication';
 
 //controller
-import userCtrl from '../controllers/user';
+import { getUserInfo, modifyUserInfo, deleteUser } from '../controllers/user';
 
 //routes
-router.get('/:id', auth, userCtrl.getUserInfo);
-router.put('/:id', auth, multerExport, userCtrl.modifyUserInfo);
-router.delete('/:id', auth, userCtrl.deleteUser);
+router.get('/:id', auth, getUserInfo);
+router.put('/:id', auth, multerExport, modifyUserInfo);
+router.delete('/:id', auth, deleteUser);
 
 //module.exports = router;
 export default router;

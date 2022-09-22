@@ -34,8 +34,6 @@ const UserProfile: FC<IProps> = ({ setFlashMessage, setDeleteAccount }) => {
     admin: false,
   });
 
-  console.log(typeof data);
-
   //once fetch's data is loaded, update state
   useEffect(() => {
     if (data) {
