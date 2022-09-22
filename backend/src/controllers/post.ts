@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { QueryResult, QueryResultRow } from 'pg';
 import pool from '../database/database';
 import fs from 'fs';

@@ -4,12 +4,16 @@ import { multerExport } from '../middlewares/multer-config';
 import auth from '../middlewares/authentication';
 
 //controller
-import commentCtrl from '../controllers/comment';
+import {
+  createComment,
+  getAllComments,
+  deleteComment,
+} from '../controllers/comment';
 
 //comment
-router.post('/comments', auth, multerExport, commentCtrl.createComment);
-router.get('/comments/:id', auth, commentCtrl.getAllComments);
-router.delete('/comments', auth, commentCtrl.deleteComment);
+router.post('/comments', auth, multerExport, createComment);
+router.get('/comments/:id', auth, getAllComments);
+router.delete('/comments', auth, deleteComment);
 
 //module.exports = router;
 export default router;
