@@ -32,7 +32,9 @@ export const createPost = async (req: Request, res: Response) => {
 
     //if user has sent file, create url for the image
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+      imageUrl = `${req.protocol}://${req.get('host')}/image/${
+        req.file.filename
+      }`;
     }
 
     //save all data into database, content and imageUrl could be empty string or null
@@ -64,7 +66,7 @@ export const modifyPost = async (req: Request, res: Response) => {
 
     //function to delete uploaded image by its file name
     function deleteImage(url: string) {
-      fs.unlink(`image/${url}`, (err) => {
+      fs.unlink(`src/image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
         } else {
@@ -161,7 +163,7 @@ export const deletePost = async (req: Request, res: Response) => {
 
     //function to delete uploaded image by its file name
     function deleteImage(url: string) {
-      fs.unlink(`image/${url}`, (err) => {
+      fs.unlink(`src/image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
         } else {
