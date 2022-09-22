@@ -10,7 +10,8 @@ const storage = multer.diskStorage({
     file: Express.Multer.File,
     cb: DestinationCallback
   ): void {
-    cb(null, 'image');
+    cb(null, './src/image');
+    //image
   },
   filename: function (
     req: Request,
@@ -37,11 +38,7 @@ const fileFilter = (
   }
 };
 
-// module.exports
-
 export const multerExport = multer({
   storage: storage,
   fileFilter: fileFilter,
 }).single('image');
-
-//export default multerExport;

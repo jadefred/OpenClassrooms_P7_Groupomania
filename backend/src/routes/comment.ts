@@ -15,5 +15,4 @@ router.post('/comments', auth, multerExport, createComment);
 router.get('/comments/:id', auth, getAllComments);
 router.delete('/comments', auth, deleteComment);
 
-//module.exports = router;
 export default router;

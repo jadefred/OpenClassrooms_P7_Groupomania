@@ -1,6 +1,6 @@
 import express from 'express';
 const app = express();
-const port = 3000;
+const port: number = 3000;
 import cors from 'cors';
 import path from 'path';
 import authRoutes from './routes/auth';
