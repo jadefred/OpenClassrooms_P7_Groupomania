@@ -1,20 +1,27 @@
 import express from 'express';
 const router = express.Router();
-import multer from '../middlewares/multer-config';
+import { multerExport } from '../middlewares/multer-config';
 import auth from '../middlewares/authentication';
 
 //controller
-import postCtrl from '../controllers/post';
+//import postCtrl from '../controllers/post';
+import {
+  getAllPosts,
+  createPost,
+  modifyPost,
+  deletePost,
+  likePost,
+} from '../controllers/post';
 
 //routes
 //CRUD posts
-router.get('/', auth, postCtrl.getAllPosts);
-router.post('/', auth, multer, postCtrl.createPost);
-router.put('/', auth, multer, postCtrl.modifyPost);
-router.delete('/', auth, postCtrl.deletePost);
+router.get('/', auth, getAllPosts);
+router.post('/', auth, multerExport, createPost);
+router.put('/', auth, multerExport, modifyPost);
+router.delete('/', auth, deletePost);
 
 //like
-router.post('/like', postCtrl.likePost);
+router.post('/like', likePost);
 
 //module.exports = router;
 export default router;

@@ -1,10 +1,21 @@
-const pool = require('../database/database');
-const fs = require('fs');
+import { Request, Response, NextFunction } from 'express';
+import { QueryResult, QueryResultRow } from 'pg';
+import pool from '../database/database';
+import fs from 'fs';
 
-exports.getAllPosts = async (req, res) => {
+interface IRequestBody {
+  userId: string;
+  title: string;
+  content: string;
+  postId: string;
+  image: string;
+  like: number;
+}
+
+export const getAllPosts = async (req: Request, res: Response) => {
   try {
     //get all posts in descending order
-    const allPosts = await pool.query(
+    const allPosts: QueryResult<QueryResultRow> = await pool.query(
       'SELECT (posts).*, users.username, users.avatar_url FROM posts JOIN users ON posts.user_id = users.user_id ORDER BY posts.created_at DESC'
     );
 
@@ -14,10 +25,10 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
-exports.createPost = async (req, res) => {
+export const createPost = async (req: Request, res: Response) => {
   try {
-    let imageUrl = null;
-    const { userId, title, content } = req.body;
+    let imageUrl: string | null = null;
+    const { userId, title, content }: IRequestBody = req.body;
 
     //if user has sent file, create url for the image
     if (req.file) {
@@ -25,7 +36,7 @@ exports.createPost = async (req, res) => {
     }
 
     //save all data into database, content and imageUrl could be empty string or null
-    const saveToDb = await pool.query(
+    const saveToDb: QueryResult<QueryResultRow> = await pool.query(
       'INSERT INTO posts (post_id, user_id, title, content, imageUrl) VALUES(uuid_generate_v4(), $1, $2, $3, $4) RETURNING *',
       [userId, title, content, imageUrl]
     );
@@ -40,19 +51,19 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.modifyPost = async (req, res) => {
+export const modifyPost = async (req: Request, res: Response) => {
   try {
-    let imageUrl = null;
-    const { postId, userId, title, content, image } = req.body;
+    let imageUrl: string | null = null;
+    const { postId, userId, title, content, image }: IRequestBody = req.body;
 
     //query to get saved imageUrl
-    const imageInDB = await pool.query(
+    const imageInDB: QueryResult<QueryResultRow> = await pool.query(
       'SELECT imageUrl FROM posts WHERE post_id = $1',
       [postId]
     );
 
     //function to delete uploaded image by its file name
-    function deleteImage(url) {
+    function deleteImage(url: string) {
       fs.unlink(`image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
@@ -72,12 +83,12 @@ exports.modifyPost = async (req, res) => {
       }
 
       //Update DB
-      const updatePost = await pool.query(
+      const updatePost: QueryResult<QueryResultRow> = await pool.query(
         'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
         [title, content, imageUrl, postId, userId]
       );
       if (updatePost.rows.length === 0) {
-        res.status(500).json({ error });
+        res.status(500).json({ error: 'no result is found' });
       }
       res
         .status(200)
@@ -95,13 +106,13 @@ exports.modifyPost = async (req, res) => {
       }
 
       //update DB
-      const updatePost = await pool.query(
+      const updatePost: QueryResult<QueryResultRow> = await pool.query(
         'UPDATE posts SET title = $1, content = $2, imageUrl = $3 WHERE post_id = $4 AND user_id = $5 RETURNING *',
         [title, content, imageUrl, postId, userId]
       );
 
       if (updatePost.rows.length === 0) {
-        res.status(500).json({ error });
+        res.status(500).json({ error: 'no result is found' });
       }
 
       res.status(200).json({ message: "Successfully updated post's content" });
@@ -111,18 +122,18 @@ exports.modifyPost = async (req, res) => {
   }
 };
 
-exports.deletePost = async (req, res) => {
+export const deletePost = async (req: Request, res: Response) => {
   try {
-    const { userId, postId } = req.body;
+    const { userId, postId }: IRequestBody = req.body;
 
     //see if user is admin
-    const isAdmin = await pool.query(
+    const isAdmin: QueryResult<QueryResultRow> = await pool.query(
       'SELECT admin FROM users WHERE user_id = $1',
       [userId]
     );
 
     //is user is the OP
-    const isOP = await pool.query(
+    const isOP: QueryResult<QueryResultRow> = await pool.query(
       'SELECT user_id FROM posts WHERE post_id = $1',
       [postId]
     );
@@ -139,7 +150,7 @@ exports.deletePost = async (req, res) => {
       postId,
     ]);
 
-    const deletePost = await pool.query(
+    const deletePost: QueryResult<QueryResultRow> = await pool.query(
       'DELETE FROM posts WHERE post_id = $1 RETURNING *',
       [postId]
     );
@@ -149,7 +160,7 @@ exports.deletePost = async (req, res) => {
     }
 
     //function to delete uploaded image by its file name
-    function deleteImage(url) {
+    function deleteImage(url: string) {
       fs.unlink(`image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
@@ -171,14 +182,14 @@ exports.deletePost = async (req, res) => {
 };
 
 //like post
-exports.likePost = async (req, res) => {
+export const likePost = async (req: Request, res: Response) => {
   try {
-    const { userId, post_id, like } = req.body;
+    const { userId, postId, like }: IRequestBody = req.body;
 
     //query to check if user's id is in the array
-    const hasLiked = await pool.query(
+    const hasLiked: QueryResult<QueryResultRow> = await pool.query(
       'SELECT post_id FROM posts WHERE $1 = ANY(likeUserId) AND post_id = $2',
-      [userId, post_id]
+      [userId, postId]
     );
 
     switch (like) {
@@ -194,7 +205,7 @@ exports.likePost = async (req, res) => {
         //if it's good, remove user's id from array and number of like minus 1
         await pool.query(
           'UPDATE posts SET likeUserId = array_remove(likeUserId, $1), likes = (likes - 1) WHERE post_id = $2',
-          [userId, post_id]
+          [userId, postId]
         );
         res.status(200).json({ message: 'Removed the like from this post' });
         break;
@@ -211,7 +222,7 @@ exports.likePost = async (req, res) => {
         //if it's good, add user's id from array and number of like plus 1
         await pool.query(
           'UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + 1) WHERE post_id = $2',
-          [userId, post_id]
+          [userId, postId]
         );
         res.status(200).json({ message: 'Liked this post' });
         break;

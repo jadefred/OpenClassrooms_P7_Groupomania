@@ -14,7 +14,7 @@ interface IJwtPayload {
 const authFunction = (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers['authorization']?.split(' ')[1];
-    if (token) {
+    if (token && accessTokenSecretKey) {
       const decodedJWT = jwt.decode(token) as IJwtPayload;
       const decodedUserId = decodedJWT.userId;
 
@@ -45,23 +45,25 @@ const authFunction = (req: Request, res: Response, next: NextFunction) => {
       if (hasRefreshToken.rows.length === 0)
         return res.status(403).json({ error: 'Authentication failed' });
 
-      const refreshToken = hasRefreshToken.rows[0].refresh_token;
-      jwt.verify(refreshToken, refreshTokenSecretKey, async (err: any) => {
-        //if error is detected, throw fail status code
-        if (err) {
-          return res.status(403).json({ error: 'Authentication failed' });
-        }
+      if (refreshTokenSecretKey && accessTokenSecretKey) {
+        const refreshToken = hasRefreshToken.rows[0].refresh_token;
+        jwt.verify(refreshToken, refreshTokenSecretKey, async (err: any) => {
+          //if error is detected, throw fail status code
+          if (err) {
+            return res.status(403).json({ error: 'Authentication failed' });
+          }
 
-        //if verification is good, send new access token to front end
-        const assessToken = jwt.sign({ userId: id }, process.env.ACCESS_TOKEN, {
-          expiresIn: '30m',
+          //if verification is good, send new access token to front end
+          const assessToken = jwt.sign({ userId: id }, accessTokenSecretKey, {
+            expiresIn: '30m',
+          });
+
+          console.log('set refresh token - middleware');
+          res.cookie('accessToken', assessToken);
+
+          next();
         });
-
-        console.log('set refresh token - middleware');
-        res.cookie('accessToken', assessToken);
-
-        next();
-      });
+      }
     }
   } catch (error) {
     console.log(error);

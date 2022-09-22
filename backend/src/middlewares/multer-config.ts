@@ -39,9 +39,9 @@ const fileFilter = (
 
 // module.exports
 
-const multerExport = multer({
+export const multerExport = multer({
   storage: storage,
   fileFilter: fileFilter,
 }).single('image');
 
-export default multerExport;
+//export default multerExport;

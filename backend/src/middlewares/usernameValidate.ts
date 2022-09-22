@@ -16,7 +16,7 @@ const usernameValidator = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch (error) {
-    let message;
+    let message: Error | string;
     if (error instanceof Error) message = error.message;
     else message = String(error);
     res.status(401).json({ message });

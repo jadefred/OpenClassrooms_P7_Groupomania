@@ -4,8 +4,8 @@ const port = 3000;
 import cors from 'cors';
 import path from 'path';
 import authRoutes from './routes/auth';
-import postRoutes from './routes/post.js';
-import commentRoutes from './routes/comment.js';
+import postRoutes from './routes/post';
+import commentRoutes from './routes/comment';
 import userRoutes from './routes/user';
 import cookieParser from 'cookie-parser';
 

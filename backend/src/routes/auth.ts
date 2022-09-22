@@ -2,16 +2,15 @@ import express from 'express';
 const router = express.Router();
 
 //controller
-import userCtrl from '../controllers/auth';
+//import userCtrl from '../controllers/auth';
+import { signup, login, auth } from '../controllers/auth';
 
 //middlewares
 import usernameValidator from '../middlewares/usernameValidate';
 import passwordValidator from '../middlewares/passwordValidator';
 
-router.post('/signup', usernameValidator, passwordValidator, userCtrl.signup);
-router.post('/login', userCtrl.login);
-router.post('/access', userCtrl.auth);
-
-//module.exports = router;
+router.post('/signup', usernameValidator, passwordValidator, signup);
+router.post('/login', login);
+router.post('/access', auth);
 
 export default router;
