@@ -4,7 +4,6 @@ import { multerExport } from '../middlewares/multer-config';
 import auth from '../middlewares/authentication';
 
 //controller
-//import postCtrl from '../controllers/post';
 import {
   getAllPosts,
   createPost,

@@ -18,12 +18,13 @@ Dans cette application, l'utilisateur peut créer, modifier et supprimer son com
 
 <ins>Backend</ins>
 
-- **Node.js** et **express** pour créer un serveur web et gérer des requêtes et des réponses
+- **NodeJS** (**TypeScript**) et **express** pour créer un serveur web et gérer des requêtes et des réponses
 - **JWT** pour l'authentification et la session de cookie
+- **multer** pour gérer le téléchargement des images
 
 <ins>Frontend</ins>
 
-- **React** et **TypeScript** pour créer l'interface du site et le management de state
+- **React** (**TypeScript**) pour créer l'interface du site et le management de state
 
 <ins>Base de données</ins>
 

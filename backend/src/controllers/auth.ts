@@ -36,7 +36,7 @@ export const signup = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Email is invalid' });
     }
 
-    //check if email has already registered, if so send 409
+    //check if email has already registered, if so, send conficted status code
     const repeatedEmail = await pool.query(
       'SELECT email FROM users WHERE email = $1',
       [email]

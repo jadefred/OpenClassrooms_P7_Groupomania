@@ -2,7 +2,6 @@ import express from 'express';
 const router = express.Router();
 
 //controller
-//import userCtrl from '../controllers/auth';
 import { signup, login, auth } from '../controllers/auth';
 
 //middlewares
