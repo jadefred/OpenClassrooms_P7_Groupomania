@@ -2,14 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import pool from '../database/database';
+import { IJwtPayload } from '../config/interface';
 dotenv.config();
 
 const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 const refreshTokenSecretKey = process.env.REFRESH_TOKEN;
-
-interface IJwtPayload {
-  userId: string;
-}
 
 const authFunction = (req: Request, res: Response, next: NextFunction) => {
   try {

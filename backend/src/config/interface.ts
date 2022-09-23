@@ -9,7 +9,7 @@ interface IRequestBodyPost {
   username: string;
 }
 
-interface IResponseBodyAccount {
+interface IRequestBodyAccount {
   username: string;
   email: string;
   password: string;
@@ -26,4 +26,15 @@ interface IJwtPayload {
   userId: string;
 }
 
-export type { IRequestBodyPost, IResponseBodyAccount, IUserQuery, IJwtPayload };
+//multer config types
+type DestinationCallback = (error: Error | null, destination: string) => void;
+type FileNameCallback = (error: Error | null, filename: string) => void;
+
+export type {
+  IRequestBodyPost,
+  IRequestBodyAccount,
+  IUserQuery,
+  IJwtPayload,
+  DestinationCallback,
+  FileNameCallback,
+};

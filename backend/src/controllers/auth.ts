@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { QueryResult, QueryResultRow } from 'pg';
 import {
-  IResponseBodyAccount,
+  IRequestBodyAccount,
   IUserQuery,
   IJwtPayload,
 } from '../config/interface';
@@ -17,8 +17,7 @@ const refreshTokenSecretKey = process.env.REFRESH_TOKEN;
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    console.log('try to signup');
-    const { username, email, password }: IResponseBodyAccount = req.body;
+    const { username, email, password }: IRequestBodyAccount = req.body;
 
     //check username validity
     const userNameRegex = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
@@ -53,7 +52,7 @@ export const signup = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password }: IResponseBodyAccount = req.body;
+    const { email, password }: IRequestBodyAccount = req.body;
     //search user by email, return email and hashed password, if no matching email is found, throw error
     const user = await pool.query(
       'SELECT user_id, username, admin, avatar_url, pw_hashed FROM users WHERE email=$1',
