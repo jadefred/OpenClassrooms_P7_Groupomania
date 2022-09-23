@@ -226,6 +226,7 @@ export const likePost = async (req: Request, res: Response) => {
           'UPDATE posts SET likeUserId = array_append(likeUserId, $1), likes = (likes + 1) WHERE post_id = $2',
           [userId, postId]
         );
+
         res.status(200).json({ message: 'Liked this post' });
         break;
       default:

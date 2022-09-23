@@ -44,7 +44,7 @@ const LikePost: FC<IProps> = ({ likeUserId, post_id, setRefresh }) => {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, post_id, like: userliked }),
+      body: JSON.stringify({ userId, postId: post_id, like: userliked }),
     });
     const data = await response.json();
     console.log(data);
