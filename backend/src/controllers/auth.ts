@@ -5,24 +5,12 @@ import pool from '../database/database';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { QueryResult, QueryResultRow } from 'pg';
+import {
+  IResponseBodyAccount,
+  IUserQuery,
+  IJwtPayload,
+} from '../config/interface';
 dotenv.config();
-
-interface IResponseBody {
-  username: string;
-  email: string;
-  password: string;
-}
-
-interface IUserQuery {
-  userId: string;
-  username: string;
-  admin: boolean;
-  avatarUrl: string;
-}
-
-interface IJwtPayload {
-  userId: string;
-}
 
 const accessTokenSecretKey = process.env.ACCESS_TOKEN;
 const refreshTokenSecretKey = process.env.REFRESH_TOKEN;
@@ -30,7 +18,7 @@ const refreshTokenSecretKey = process.env.REFRESH_TOKEN;
 export const signup = async (req: Request, res: Response) => {
   try {
     console.log('try to signup');
-    const { username, email, password }: IResponseBody = req.body;
+    const { username, email, password }: IResponseBodyAccount = req.body;
 
     //check username validity
     const userNameRegex = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
@@ -60,24 +48,12 @@ export const signup = async (req: Request, res: Response) => {
     res.status(201).json({ message: 'Signup success' });
   } catch (error) {
     res.status(500).json({ error: error });
-
-    // let message: Error | string;
-    // // if (error instanceof Error) message = error.message;
-    // if(error instanceof Error) error = new Error(error)
-    // else message = String(error);
-
-    // //unique_violation error
-    // if (error.code === '23505') {
-    //   res.status(409).json({ message: 'This email has already used' });
-    // } else {
-    //   res.status(500).json({ error: error.message });
-    // }
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password }: IResponseBody = req.body;
+    const { email, password }: IResponseBodyAccount = req.body;
     //search user by email, return email and hashed password, if no matching email is found, throw error
     const user = await pool.query(
       'SELECT user_id, username, admin, avatar_url, pw_hashed FROM users WHERE email=$1',

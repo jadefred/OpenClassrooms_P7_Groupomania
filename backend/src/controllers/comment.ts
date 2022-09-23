@@ -2,19 +2,13 @@ import { Request, Response } from 'express';
 import { QueryResult, QueryResultRow } from 'pg';
 import pool from '../database/database';
 import fs from 'fs';
-
-interface IRequestBody {
-  postId: string;
-  userId: string;
-  content: string;
-  commentId: string;
-}
+import { IRequestBodyPost } from '../config/interface';
 
 //create comment
 export const createComment = async (req: Request, res: Response) => {
   try {
     let imageUrl: string | null = null;
-    const { postId, userId, content }: IRequestBody = req.body;
+    const { postId, userId, content }: IRequestBodyPost = req.body;
 
     //send bad request if comment body is over 255 characters
     const wordCount = content?.split('').length;
@@ -26,7 +20,9 @@ export const createComment = async (req: Request, res: Response) => {
 
     //if user has sent file, create url for the image
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/image/${req.file.filename}`;
+      imageUrl = `${req.protocol}://${req.get('host')}/image/${
+        req.file.filename
+      }`;
     }
 
     //save all data into database, content and imageUrl could be empty string or null
@@ -84,7 +80,7 @@ export const getAllComments = async (req: Request, res: Response) => {
 //delete comment
 export const deleteComment = async (req: Request, res: Response) => {
   try {
-    const { commentId, userId, postId }: IRequestBody = req.body;
+    const { commentId, userId, postId }: IRequestBodyPost = req.body;
 
     //function to delete uploaded image by its file name
     function deleteImage(url: string) {

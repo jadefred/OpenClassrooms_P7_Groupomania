@@ -2,15 +2,7 @@ import { Request, Response } from 'express';
 import { QueryResult, QueryResultRow } from 'pg';
 import pool from '../database/database';
 import fs from 'fs';
-
-interface IRequestBody {
-  userId: string;
-  title: string;
-  content: string;
-  postId: string;
-  image: string;
-  like: number;
-}
+import { IRequestBodyPost } from '../config/interface';
 
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
@@ -28,7 +20,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
 export const createPost = async (req: Request, res: Response) => {
   try {
     let imageUrl: string | null = null;
-    const { userId, title, content }: IRequestBody = req.body;
+    const { userId, title, content }: IRequestBodyPost = req.body;
 
     //if user has sent file, create url for the image
     if (req.file) {
@@ -56,7 +48,8 @@ export const createPost = async (req: Request, res: Response) => {
 export const modifyPost = async (req: Request, res: Response) => {
   try {
     let imageUrl: string | null = null;
-    const { postId, userId, title, content, image }: IRequestBody = req.body;
+    const { postId, userId, title, content, image }: IRequestBodyPost =
+      req.body;
 
     //query to get saved imageUrl
     const imageInDB: QueryResult<QueryResultRow> = await pool.query(
@@ -126,7 +119,7 @@ export const modifyPost = async (req: Request, res: Response) => {
 
 export const deletePost = async (req: Request, res: Response) => {
   try {
-    const { userId, postId }: IRequestBody = req.body;
+    const { userId, postId }: IRequestBodyPost = req.body;
 
     //see if user is admin
     const isAdmin: QueryResult<QueryResultRow> = await pool.query(
@@ -186,7 +179,7 @@ export const deletePost = async (req: Request, res: Response) => {
 //like post
 export const likePost = async (req: Request, res: Response) => {
   try {
-    const { userId, postId, like }: IRequestBody = req.body;
+    const { userId, postId, like }: IRequestBodyPost = req.body;
 
     //query to check if user's id is in the array
     const hasLiked: QueryResult<QueryResultRow> = await pool.query(

@@ -2,12 +2,7 @@ import { Request, Response } from 'express';
 import { QueryResult, QueryResultRow } from 'pg';
 import pool from '../database/database';
 import fs from 'fs';
-
-interface IRequestBody {
-  username: string;
-  image: string;
-  userId: string
-}
+import { IRequestBodyPost } from '../config/interface';
 
 export const getUserInfo = async (req: Request, res: Response) => {
   try {
@@ -32,7 +27,7 @@ export const modifyUserInfo = async (req: Request, res: Response) => {
   try {
     const user_id: string = req.params.id;
     let avatarUrl: string | null = null;
-    const { username, image }: IRequestBody = req.body;
+    const { username, image }: IRequestBodyPost = req.body;
 
     //check username validity
     const userNameRegex: RegExp = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
@@ -63,7 +58,9 @@ export const modifyUserInfo = async (req: Request, res: Response) => {
 
     //When user has uploaded an avatar
     if (req.file) {
-      avatarUrl = `${req.protocol}://${req.get('host')}/${req.file.filename}`;
+      avatarUrl = `${req.protocol}://${req.get('host')}/image/${
+        req.file.filename
+      }`;
 
       //If imageUrl in DB is not null, call function to delete old image
       if (avatarInDB.rows[0].avatar_url) {
@@ -106,7 +103,7 @@ export const modifyUserInfo = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { userId }: IRequestBody = req.body;
+    const { userId }: IRequestBodyPost = req.body;
 
     //function to delete uploaded image by its file name
     function deleteImage(url: string) {
