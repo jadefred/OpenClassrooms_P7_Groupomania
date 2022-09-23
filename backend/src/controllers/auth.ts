@@ -36,6 +36,18 @@ export const signup = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Email is invalid' });
     }
 
+    //check if email has already registered, if so send 409
+    const repeatedEmail = await pool.query(
+      'SELECT email FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (repeatedEmail.rows.length !== 0) {
+      return res
+        .status(409)
+        .json({ error: 'This email has already registered' });
+    }
+
     //hash password before save to DB
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
