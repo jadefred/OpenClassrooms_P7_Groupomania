@@ -46,8 +46,7 @@ const LikePost: FC<IProps> = ({ likeUserId, post_id, setRefresh }) => {
       },
       body: JSON.stringify({ userId, postId: post_id, like: userliked }),
     });
-    const data = await response.json();
-    console.log(data);
+    await response.json();
 
     if (response.ok) {
       setRefresh((prev) => !prev);

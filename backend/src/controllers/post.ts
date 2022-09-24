@@ -70,7 +70,9 @@ export const modifyPost = async (req: Request, res: Response) => {
 
     //When user has uploaded an image
     if (req.file) {
-      imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+      imageUrl = `${req.protocol}://${req.get('host')}/image/${
+        req.file.filename
+      }`;
 
       //If imageUrl in DB is not null, call function to delete old image
       if (imageInDB.rows[0].imageurl) {
