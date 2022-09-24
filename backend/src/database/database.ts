@@ -1,5 +1,3 @@
-//const Pool = require("pg").Pool;
-
 import poolconfig from 'pg';
 const Pool = poolconfig.Pool;
 
