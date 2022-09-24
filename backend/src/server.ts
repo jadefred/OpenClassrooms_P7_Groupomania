@@ -1,13 +1,13 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const port = 3000;
-const cors = require('cors');
-const path = require('path');
-const authRoutes = require('./src/routes/auth');
-const postRoutes = require('./src/routes/post.js');
-const commentRoutes = require('./src/routes/comment.js');
-const userRoutes = require('./src/routes/user');
-const cookieParser = require('cookie-parser');
+const port: number = 3000;
+import cors from 'cors';
+import path from 'path';
+import authRoutes from './routes/auth';
+import postRoutes from './routes/post';
+import commentRoutes from './routes/comment';
+import userRoutes from './routes/user';
+import cookieParser from 'cookie-parser';
 
 //CORS setting
 const corsOptions = {

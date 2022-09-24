@@ -1,11 +1,14 @@
-const pool = require('../../database/database');
-const fs = require('fs');
+import { Request, Response } from 'express';
+import { QueryResult, QueryResultRow } from 'pg';
+import pool from '../database/database';
+import fs from 'fs';
+import { IRequestBodyPost } from '../config/interface';
 
-exports.getUserInfo = async (req, res) => {
+export const getUserInfo = async (req: Request, res: Response) => {
   try {
-    const user_id = req.params.id;
+    const user_id: string = req.params.id;
 
-    const userInfo = await pool.query(
+    const userInfo: QueryResult<QueryResultRow> = await pool.query(
       'SELECT username, avatar_url, email, admin FROM users WHERE user_id = $1',
       [user_id]
     );
@@ -20,14 +23,14 @@ exports.getUserInfo = async (req, res) => {
   }
 };
 
-exports.modifyUserInfo = async (req, res) => {
+export const modifyUserInfo = async (req: Request, res: Response) => {
   try {
-    const user_id = req.params.id;
-    let avatarUrl = null;
-    const { username, image } = req.body;
+    const user_id: string = req.params.id;
+    let avatarUrl: string | null = null;
+    const { username, image }: IRequestBodyPost = req.body;
 
     //check username validity
-    const userNameRegex = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
+    const userNameRegex: RegExp = /[a-zA-Z0-9_éèçàÉÈÇÀîÎïÏùÙ]{3,30}$/;
     if (
       username.length < 3 ||
       username.length > 30 ||
@@ -37,14 +40,14 @@ exports.modifyUserInfo = async (req, res) => {
     }
 
     //query to get saved imageUrl
-    const avatarInDB = await pool.query(
+    const avatarInDB: QueryResult<QueryResultRow> = await pool.query(
       'SELECT avatar_url FROM users WHERE user_id = $1',
       [user_id]
     );
 
     //function to delete uploaded image by its file name
-    function deleteImage(url) {
-      fs.unlink(`image/${url}`, (err) => {
+    function deleteImage(url: string) {
+      fs.unlink(`src/image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
         } else {
@@ -55,7 +58,9 @@ exports.modifyUserInfo = async (req, res) => {
 
     //When user has uploaded an avatar
     if (req.file) {
-      avatarUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+      avatarUrl = `${req.protocol}://${req.get('host')}/image/${
+        req.file.filename
+      }`;
 
       //If imageUrl in DB is not null, call function to delete old image
       if (avatarInDB.rows[0].avatar_url) {
@@ -63,12 +68,12 @@ exports.modifyUserInfo = async (req, res) => {
       }
 
       //Update DB
-      const updateUser = await pool.query(
+      const updateUser: QueryResult<QueryResultRow> = await pool.query(
         'UPDATE users SET username = $1, avatar_url = $2 WHERE user_id = $3 RETURNING *',
         [username, avatarUrl, user_id]
       );
       if (updateUser.rows.length === 0) {
-        res.status(500).json({ error });
+        res.status(500).json({ error: 'no result is found' });
       }
       res.status(200).json({ message: "Successfully updated user's profile" });
     }
@@ -80,13 +85,13 @@ exports.modifyUserInfo = async (req, res) => {
       }
 
       //update DB
-      const updateUser = await pool.query(
+      const updateUser: QueryResult<QueryResultRow> = await pool.query(
         'UPDATE users SET username = $1, avatar_url = $2 WHERE user_id = $3 RETURNING *',
         [username, image, user_id]
       );
 
       if (updateUser.rows.length === 0) {
-        res.status(500).json({ error });
+        res.status(500).json({ error: 'no result is found' });
       }
 
       res.status(200).json({ message: "Successfully updated user's profile" });
@@ -96,13 +101,13 @@ exports.modifyUserInfo = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.body;
+    const { userId }: IRequestBodyPost = req.body;
 
     //function to delete uploaded image by its file name
-    function deleteImage(url) {
-      fs.unlink(`image/${url}`, (err) => {
+    function deleteImage(url: string) {
+      fs.unlink(`src/image/${url}`, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
         } else {
@@ -112,7 +117,7 @@ exports.deleteUser = async (req, res) => {
     }
 
     //delete all related comments, and get all comments' id
-    const deleteUserComment = await pool.query(
+    const deleteUserComment: QueryResult<QueryResultRow> = await pool.query(
       'DELETE FROM comments WHERE user_id = $1 RETURNING *',
       [userId]
     );
@@ -139,7 +144,7 @@ exports.deleteUser = async (req, res) => {
     );
 
     //get all post id that user created
-    const allPostOfUser = await pool.query(
+    const allPostOfUser: QueryResult<QueryResultRow> = await pool.query(
       'SELECT post_id FROM posts WHERE user_id = $1',
       [userId]
     );
@@ -155,7 +160,7 @@ exports.deleteUser = async (req, res) => {
     }
 
     //delete all posts which related to user
-    const deleteAllPost = await pool.query(
+    const deleteAllPost: QueryResult<QueryResultRow> = await pool.query(
       'DELETE FROM posts WHERE user_id = $1 RETURNING *',
       [userId]
     );
@@ -170,7 +175,7 @@ exports.deleteUser = async (req, res) => {
     }
 
     //delete user profile picture if any
-    const avatarInDB = await pool.query(
+    const avatarInDB: QueryResult<QueryResultRow> = await pool.query(
       'SELECT avatar_url FROM users WHERE user_id = $1',
       [userId]
     );
