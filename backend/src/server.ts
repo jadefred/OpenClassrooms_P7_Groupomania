@@ -8,6 +8,7 @@ import postRoutes from './routes/post';
 import commentRoutes from './routes/comment';
 import userRoutes from './routes/user';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 //CORS setting
 const corsOptions = {
@@ -20,6 +21,8 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
 //routes
 app.use('/api/auth', authRoutes);

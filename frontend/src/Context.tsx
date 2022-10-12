@@ -13,7 +13,6 @@ const initialState: IUserContext = {
 };
 
 type Action = {
-  // initialState: IUserContext;
   userId: IUserContext['userId'];
   username: IUserContext['username'];
   auth: IUserContext['auth'];
@@ -85,7 +84,6 @@ export const UserProvider = ({ children }: IProps) => {
   };
 
   const value = {
-    // initialState,
     userId: state.userId,
     username: state.username,
     auth: state.auth,
