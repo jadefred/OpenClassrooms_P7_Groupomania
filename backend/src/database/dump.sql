@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: comments; Type: TABLE; Schema: public; Owner: -
+-- Name: comments; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.comments (
@@ -48,8 +48,10 @@ CREATE TABLE public.comments (
 );
 
 
+ALTER TABLE public.comments OWNER TO postgres;
+
 --
--- Name: posts; Type: TABLE; Schema: public; Owner: -
+-- Name: posts; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.posts (
@@ -68,8 +70,10 @@ CREATE TABLE public.posts (
 );
 
 
+ALTER TABLE public.posts OWNER TO postgres;
+
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.users (
@@ -83,42 +87,42 @@ CREATE TABLE public.users (
 );
 
 
+ALTER TABLE public.users OWNER TO postgres;
+
 --
--- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.comments (comment_id, user_id, post_id, commentbody, imageurl, created_at) FROM stdin;
-e5686ea7-5742-4b2b-ab60-fff171032ce2	fbfd8610-7834-4927-9879-3567aaf80433	64da40e7-6394-4df0-ac8e-8398df77c8f0	Il est mignon	\N	2022-08-25 21:22:19.591629+02
-bfcd924c-495b-4923-aad7-58cdcfed399c	12924fda-493a-40d8-94e5-abb656d9da40	196666e8-6f44-4bf1-aae7-85e17479d1cd	Salut tout le monde	\N	2022-08-25 21:27:17.470717+02
-a2d0d6da-237f-49b0-9c06-162ddd65243f	12924fda-493a-40d8-94e5-abb656d9da40	64da40e7-6394-4df0-ac8e-8398df77c8f0	mdr	\N	2022-08-25 21:27:25.917791+02
+cb7b0cd4-5faf-44ec-92eb-54fa5ce478da	12924fda-493a-40d8-94e5-abb656d9da40	7bb45e1f-495b-449f-a195-2fc8b527234a	Salut tout le monde !	\N	2022-10-12 14:07:25.768992+02
+caebccb8-b63f-4028-8db9-928258b85c3d	12924fda-493a-40d8-94e5-abb656d9da40	a0b8aa26-9f48-4bc6-a068-f05b5870e254	mdr	\N	2022-10-12 14:08:04.16729+02
+5d269e09-84d3-4a4b-91c5-96dacd17154b	fbfd8610-7834-4927-9879-3567aaf80433	a0b8aa26-9f48-4bc6-a068-f05b5870e254	Il est mignon	\N	2022-10-12 14:08:21.66977+02
 \.
 
 
 --
--- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.posts (post_id, user_id, title, content, imageurl, likes, likeuserid, totalcomment, commentid, created_at) FROM stdin;
-196666e8-6f44-4bf1-aae7-85e17479d1cd	fbfd8610-7834-4927-9879-3567aaf80433	Bienvenue		http://localhost:3000/image/1661454948139.spongebob.jpeg	2	{afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b,12924fda-493a-40d8-94e5-abb656d9da40}	1	{bfcd924c-495b-4923-aad7-58cdcfed399c}	2022-08-25 21:15:06.744905+02
-64da40e7-6394-4df0-ac8e-8398df77c8f0	afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b	Mon nouvel assistant	Il fait moins de fautes d'orthographe que moi !	http://localhost:3000/image/1661455244739.dog_work.jpeg	2	{12924fda-493a-40d8-94e5-abb656d9da40,fbfd8610-7834-4927-9879-3567aaf80433}	2	{8f324ea8-be6f-4fee-85bc-db8f86cb66fc,e5686ea7-5742-4b2b-ab60-fff171032ce2,a2d0d6da-237f-49b0-9c06-162ddd65243f,990465fd-ec0c-4ed3-a842-3f1c8303183e,6986d30f-e405-48d8-ac70-1d84150e5c40,5d9e8e90-38f9-45b3-b5fd-c4da8abcce5f}	2022-08-25 21:20:44.748714+02
+a0b8aa26-9f48-4bc6-a068-f05b5870e254	afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b	Mon nouveau assistant	Il fait moins de fautes d'orthographe que moi	http://localhost:3000/image/1665576469346.dog_work.jpeg	2	{12924fda-493a-40d8-94e5-abb656d9da40,fbfd8610-7834-4927-9879-3567aaf80433}	2	{caebccb8-b63f-4028-8db9-928258b85c3d,5d269e09-84d3-4a4b-91c5-96dacd17154b}	2022-10-12 14:07:49.727618+02
+7bb45e1f-495b-449f-a195-2fc8b527234a	fbfd8610-7834-4927-9879-3567aaf80433	Bienvenue		http://localhost:3000/image/1665576428934.spongebob.jpeg	2	{12924fda-493a-40d8-94e5-abb656d9da40,afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b}	1	{cb7b0cd4-5faf-44ec-92eb-54fa5ce478da}	2022-10-12 14:07:09.304078+02
 \.
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.users (user_id, username, avatar_url, email, pw_hashed, admin, refresh_token) FROM stdin;
-afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b	Camille	http://localhost:3000/image/1663940263251.profile.jpeg	email@email.com	$2b$10$doufnGkOdQdTXBG1tqEq/.PbiIpJSsb5N0DMpisoLUmUsiTBUtN8O	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZmM0M2NhMi1hZTBlLTQyYzAtYThlZS1jNDhkNTMxYzJlM2IiLCJpYXQiOjE2NjM5NDAxMDYsImV4cCI6MTY5NTQ3NjEwNn0.d459GE_hzx3mxC9PCJAuOYu2vL3ozXXfw4jMXvaBi6Q
-fbfd8610-7834-4927-9879-3567aaf80433	Admin	http://localhost:3000/image/1661260920629.download.png	test@email.com	$2b$10$jqp6nIabeqLFmZH5UcpAKOznS8NXgBMvgG4koU9hJlapz8ZNhu1jK	t	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYmZkODYxMC03ODM0LTQ5MjctOTg3OS0zNTY3YWFmODA0MzMiLCJpYXQiOjE2NjQwMjM1MTMsImV4cCI6MTY5NTU1OTUxM30.7g5BwvV7BesgNmo2yvs7RgjSX8cX5BIhAjPx0fMzKNY
-60ae25cc-6774-46bf-b771-ad5e1d4279aa	user1	\N	newtest@test.com	$2b$10$HJCJV6Kk648RcdzGA2vir.z9fUxc2AZZZS.e5h2fvdRfFi1Fc1AAi	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlMjVjYy02Nzc0LTQ2YmYtYjc3MS1hZDVlMWQ0Mjc5YWEiLCJpYXQiOjE2NTU5OTAyODR9.9p7cVXIR9KTIMI2CWtLcIX_gaYwWiZ8bhBjc5FLr5Ug
-9dee48fc-e31b-469d-bfaa-394439902acf	user2	\N	newtest2@test.com	$2b$10$WeXgsUz9q9LEa32NCAVUjeEoBuG31UNo3tXaoV/U8ZFn0eqq1qYoq	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5ZGVlNDhmYy1lMzFiLTQ2OWQtYmZhYS0zOTQ0Mzk5MDJhY2YiLCJpYXQiOjE2NTU5OTAzNjd9.49LjjRpn2dNjhbVbzTKpJNMhsHpxbOJqnktwwTL6mBs
-12924fda-493a-40d8-94e5-abb656d9da40	Lucas	http://localhost:3000/image/1661455589969.wp10178937.jpeg	test@test.com	$2b$10$uvCufTNakSKvSmJrZ8tb0.415zcAJM441E3Loj5zrDervJm9HGuie	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjkyNGZkYS00OTNhLTQwZDgtOTRlNS1hYmI2NTZkOWRhNDAiLCJpYXQiOjE2NjE0NTg5NjEsImV4cCI6MTY5Mjk5NDk2MX0.wAs3QOfGwAZI6pblHX8_7qW009ckgIyVYPyMbyIcKOc
+afc43ca2-ae0e-42c0-a8ee-c48d531c2e3b	Camille	http://localhost:3000/image/1663940263251.profile.jpeg	email@email.com	$2b$10$doufnGkOdQdTXBG1tqEq/.PbiIpJSsb5N0DMpisoLUmUsiTBUtN8O	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZmM0M2NhMi1hZTBlLTQyYzAtYThlZS1jNDhkNTMxYzJlM2IiLCJpYXQiOjE2NjU1NzY0NTIsImV4cCI6MTY5NzExMjQ1Mn0.ImXSm2JQFVHAi_Ec17XYutV4kud4oCgGnQdJrQ3p-Wg
+12924fda-493a-40d8-94e5-abb656d9da40	Tom	http://localhost:3000/image/1661455589969.wp10178937.jpeg	test@test.com	$2b$10$uvCufTNakSKvSmJrZ8tb0.415zcAJM441E3Loj5zrDervJm9HGuie	f	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjkyNGZkYS00OTNhLTQwZDgtOTRlNS1hYmI2NTZkOWRhNDAiLCJpYXQiOjE2NjU1NzY0NzksImV4cCI6MTY5NzExMjQ3OX0.F8H2Xbkmya7p-yg_u35KaKcKu8qXfq62DROsP-0dgdc
+fbfd8610-7834-4927-9879-3567aaf80433	Admin	http://localhost:3000/image/1661260920629.download.png	test@email.com	$2b$10$jqp6nIabeqLFmZH5UcpAKOznS8NXgBMvgG4koU9hJlapz8ZNhu1jK	t	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYmZkODYxMC03ODM0LTQ5MjctOTg3OS0zNTY3YWFmODA0MzMiLCJpYXQiOjE2NjU1NzY0OTUsImV4cCI6MTY5NzExMjQ5NX0.V6b_prl1SIbBXjZLsPv3vf23MGPOWpJmnXMSejXgeWc
 \.
 
 
 --
--- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: comments comments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comments
@@ -126,7 +130,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.posts
@@ -134,7 +138,7 @@ ALTER TABLE ONLY public.posts
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -142,7 +146,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users
@@ -150,7 +154,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: comments comments_post_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: comments comments_post_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comments
@@ -158,7 +162,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: comments comments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: comments comments_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.comments
@@ -166,7 +170,7 @@ ALTER TABLE ONLY public.comments
 
 
 --
--- Name: posts posts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: posts posts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.posts
