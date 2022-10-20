@@ -36,7 +36,7 @@ Dans cette application, l'utilisateur peut créer, modifier et supprimer son com
 
 <ins>Base de données</ins>
 
-Créez une base de données dans PostgreSQL, puis importez le fichier `dump.sql` dans votre base de données. Votre BSD devrait se lancer sur le port `localhost:5432`
+Créez une base de données dans PostgreSQL en la nommant `groupomania`, puis importez le fichier `dump.sql` dans votre base de données. Votre BSD devrait se lancer sur le port `localhost:5432`
 
 <br />
 
@@ -45,15 +45,18 @@ Créez une base de données dans PostgreSQL, puis importez le fichier `dump.sql`
 Créez un fichier `.env` à la racine du dossier de backend, puis créez deux variables dans le fichier en les nommant `ACCESS_TOKEN` et `REFRESH_TOKEN` en tant que string.
 
 Ensuite, tapez ces commandes dans votre terminal pour lancer le serveur sur le port `localhost:3000`
+
 ```
 npm install
 npm run nodemon-ts
 ```
+
 <br />
 
 <ins>Frontend</ins>
 
 Tapez ces commandes dans votre terminal pour démarrer l'environnement front sur le port `localhost:3001`
+
 ```
 npm install
 npm run start
